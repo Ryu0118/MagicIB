@@ -8,7 +8,7 @@
 import Foundation
 
 class IBAttributeConverter: NSObject {
-    private var excludeProperty = ["fixedFrame", "customClass"]
+    private var excludeProperty = ["fixedFrame", "customClass", "id", "customModule"]
     private let attributes: [String: String]
     
     var viewID: String? {
@@ -17,6 +17,10 @@ class IBAttributeConverter: NSObject {
     
     var customClassName: String? {
         return attributes["customClass"]
+    }
+    
+    var customModuleName: String? {
+        return attributes["customModule"]
     }
     
     init(_ attributes: [String: String]) {
@@ -38,9 +42,6 @@ class IBAttributeConverter: NSObject {
         }
         else if value == "YES" || value == "NO" {
             return .bool
-        }
-        else if key == "id" {
-            return .id
         }
         else { //enum
             return .enum

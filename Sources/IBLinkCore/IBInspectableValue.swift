@@ -27,8 +27,6 @@ struct IBInspectableValue {
             return "\(key) = \(value)"
         case .enum:
             return "\(key) = .\(originalValue)"
-        default:
-            return nil
         }
     }
 }
