@@ -7,7 +7,7 @@
 #if os(macOS)
 import Foundation
 
-struct IBInspectableValue {
+struct IBInspectableProperty {
     let type: IBInspectableType
     let key: String
     let originalValue: String
