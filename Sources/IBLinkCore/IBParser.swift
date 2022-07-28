@@ -27,7 +27,10 @@ public class IBParser: NSObject {
 extension IBParser: XMLParserDelegate {
     
     public func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
-        print(elementName)
+        if let ibViewElement = IBViewCompatibleElement.init(rawValue: elementName) {
+            let ibView = IBView(attributes: attributeDict, ibViewCompatibleElement: ibViewElement)
+            print(ibViewElement.description)
+        }
         waitingElementList.append(elementName)
     }
     

@@ -23,7 +23,7 @@ struct IBInspectableValue {
         case .number:
             return "\(key) = \(originalValue)"
         case .bool:
-            let value = "YES" ? "true" : "false"
+            let value = originalValue == "YES" ? "true" : "false"
             return "\(key) = \(value)"
         case .enum:
             return "\(key) = .\(originalValue)"
