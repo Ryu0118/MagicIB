@@ -11,7 +11,7 @@ class IBView: NSObject {
     let id: String
     let customClassName: String?
     let ibViewCompatibleElement: IBViewCompatibleElement
-    let values: [IBInspectableValue]
+    let values: [IBInspectableProperty]
     let dependencies: IBViewDependencies
     
     var typeName: String {
@@ -32,10 +32,10 @@ class IBView: NSObject {
         self.ibViewCompatibleElement = ibViewCompatibleElement
         self.dependencies = IBViewDependencies(ibViewCompatibleElement: ibViewCompatibleElement)
         self.customClassName = converter.customClassName
-        self.values = converter.generateIBInspectableValue()
+        self.values = converter.generateIBInspectableProperty()
     }
     
-    func addValue(_ value: IBInspectableValue) {
+    func addValue(_ value: IBInspectableProperty) {
         
     }
 }

@@ -27,12 +27,12 @@ class IBAttributeConverter: NSObject {
         self.attributes = attributes
     }
     
-    func generateIBInspectableValue() -> [IBInspectableValue] {
+    func generateIBInspectableProperty() -> [IBInspectableProperty] {
         return attributes
             .filter({ key, value in !excludeProperties.contains(key) })
-            .map { key, value -> IBInspectableValue in
+            .map { key, value -> IBInspectableProperty in
             let type = getType(key: key, value: value)
-            return IBInspectableValue(type: type, key: key, value: value)
+            return IBInspectableProperty(type: type, key: key, value: value)
         }
     }
     
