@@ -11,7 +11,7 @@ import Foundation
 public class IBParser: NSObject {
 
     fileprivate var type: IBType?
-    private var waitingElementList = [String]()
+    private var waitingIBViewList = [String]()
     
     public func parse(_ absoluteURL: URL) throws {
         self.type = try IBType(url: absoluteURL)
@@ -29,14 +29,17 @@ extension IBParser: XMLParserDelegate {
     public func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
         if let ibViewElement = IBViewCompatibleElement.init(rawValue: elementName) {
             let ibView = IBView(attributes: attributeDict, ibViewCompatibleElement: ibViewElement)
-            print(ibViewElement.description)
+            //print(ibViewElement.description, ibView?.dependencies)
+            waitingIBViewList.append(elementName)
         }
-        waitingElementList.append(elementName)
+        else {
+            print(waitingIBViewList)
+        }
     }
     
     public func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-        if let lastIndex = waitingElementList.lastIndex(of: elementName) {
-            waitingElementList.remove(at: lastIndex)
+        if let lastIndex = waitingIBViewList.lastIndex(of: elementName) {
+            waitingIBViewList.remove(at: lastIndex)
         }
     }
     
