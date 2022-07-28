@@ -11,20 +11,30 @@ class IBViewController: NSObject {
     let id: String
     let customClassName: String?
     let customModuleName: String?
-    let ibVCElement: IBViewControllerCompatibleElement
+    let ibViewControllerElement: IBViewControllerCompatibleElement
     let dependencies: IBViewControllerDependencies
+    
+    var typeName: String {
+        if let name = customClassName {
+            return name
+        }
+        else {
+            return ibViewControllerElement.description
+        }
+    }
     
     var ibViews = [IBView]()
     
     init?(attributes: [String: String],
-          ibVCElement: IBViewControllerCompatibleElement
+          ibViewControllerElement: IBViewControllerCompatibleElement
     ) {
         let converter = IBAttributeConverter(attributes)
         guard let id = converter.viewID else { return nil }
+        self.id = id
         self.customClassName = converter.customClassName
         self.customModuleName = converter.customModuleName
-        self.ibVCElement = ibVCElement
-        self.dependencies = IBViewControllerDependencies(ibViewControllerCompatibleElement: ibVCElement)
+        self.ibViewControllerElement = ibViewControllerElement
+        self.dependencies = IBViewControllerDependencies(ibViewControllerCompatibleElement: ibViewControllerElement)
     }
     
     func appendView(_ ibView: IBView) {

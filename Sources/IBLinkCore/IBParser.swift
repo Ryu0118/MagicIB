@@ -12,6 +12,7 @@ public class IBParser: NSObject {
 
     fileprivate var type: IBType?
     private var waitingIBViewList = [String]()
+    private var ibViewControllers = [IBViewController]()
     
     public func parse(_ absoluteURL: URL) throws {
         self.type = try IBType(url: absoluteURL)
@@ -27,10 +28,16 @@ public class IBParser: NSObject {
 extension IBParser: XMLParserDelegate {
     
     public func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
-        if let ibViewElement = IBViewCompatibleElement.init(rawValue: elementName) {
-            let ibView = IBView(attributes: attributeDict, ibViewCompatibleElement: ibViewElement)
-            //print(ibViewElement.description, ibView?.dependencies)
+        if let ibViewElement = IBViewCompatibleElement.init(rawValue: elementName),
+           let ibView = IBView(attributes: attributeDict, ibViewCompatibleElement: ibViewElement)
+        {
             waitingIBViewList.append(elementName)
+            ibViewControllers.last?.appendView(ibView)
+        }
+        else if let ibViewControllerElement = IBViewControllerCompatibleElement.init(rawValue: elementName),
+                let ibViewController = IBViewController(attributes: attributeDict, ibViewControllerElement: ibViewControllerElement) {
+            print(ibViewController.typeName)
+            ibViewControllers.append(ibViewController)
         }
         else {
             print(waitingIBViewList)
@@ -46,7 +53,7 @@ extension IBParser: XMLParserDelegate {
 }
 
 // MARK: Enum
-public extension IBParser {
+extension IBParser {
     
     enum IBParserError: LocalizedError {
         case invalidExtension

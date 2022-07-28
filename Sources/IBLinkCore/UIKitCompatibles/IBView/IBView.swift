@@ -14,6 +14,15 @@ class IBView: NSObject {
     let values: [IBInspectableValue]
     let dependencies: IBViewDependencies
     
+    var typeName: String {
+        if let name = customClassName {
+            return name
+        }
+        else {
+            return ibViewCompatibleElement.description
+        }
+    }
+    
     init?(attributes: [String: String],
           ibViewCompatibleElement: IBViewCompatibleElement
     ) {

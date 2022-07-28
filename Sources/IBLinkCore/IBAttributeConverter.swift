@@ -8,7 +8,7 @@
 import Foundation
 
 class IBAttributeConverter: NSObject {
-    private var excludeProperty = ["fixedFrame", "customClass", "id", "customModule"]
+    private var excludeProperties = ["fixedFrame", "customClass", "id", "customModule"]
     private let attributes: [String: String]
     
     var viewID: String? {
@@ -29,7 +29,7 @@ class IBAttributeConverter: NSObject {
     
     func generateIBInspectableValue() -> [IBInspectableValue] {
         return attributes
-            .filter({ key, value in !excludeProperty.contains(key) })
+            .filter({ key, value in !excludeProperties.contains(key) })
             .map { key, value -> IBInspectableValue in
             let type = getType(key: key, value: value)
             return IBInspectableValue(type: type, key: key, value: value)
