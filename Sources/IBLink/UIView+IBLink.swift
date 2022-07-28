@@ -5,7 +5,7 @@
 //  Created by Ryu on 2022/07/28.
 //
 
-#if canImport(UIKit)
+#if os(iOS)
 import UIKit
 
 extension UIView {
@@ -15,9 +15,14 @@ extension UIView {
         set { self.hasAmbiguousLayout = newValue }
     }
     
-    var verticalHuggingPriority: NSLayoutPriority {
-        get { contentHuggingPriority(for: .vertical) }
-        set { let a = contentHuggingPriority(for: <#T##NSLayoutConstraint.Orientation#>) }
+    var verticalHuggingPriority: Float {
+        get { contentHuggingPriority(for: .vertical).rawValue }
+        set { setContentHuggingPriority(.init(rawValue: newValue), for: .vertical) }
+    }
+    
+    var horizontalHuggingPriority: Float {
+        get { contentHuggingPriority(for: .horizontal) }
+        set { setContentHuggingPriority(.init(rawValue: newValue), for: .vertical) }
     }
     
 }

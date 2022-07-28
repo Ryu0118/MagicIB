@@ -11,7 +11,6 @@ enum IBInspectableType: Equatable {
     case number
     case bool
     case `enum`
-    case function
     case id
 }
 #endif

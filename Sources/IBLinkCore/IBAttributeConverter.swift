@@ -9,7 +9,6 @@ import Foundation
 
 class IBAttributeConverter: NSObject {
     private var excludeProperty = ["fixedFrame", "customClass"]
-    private var functions = ["horizontalHuggingPriority", "verticalHuggingPriority"]
     private let attributes: [String: String]
     
     var viewID: String? {
@@ -39,9 +38,6 @@ class IBAttributeConverter: NSObject {
         }
         else if value == "YES" || value == "NO" {
             return .bool
-        }
-        else if functions.contains(key) {
-            return .function
         }
         else if key == "id" {
             return .id

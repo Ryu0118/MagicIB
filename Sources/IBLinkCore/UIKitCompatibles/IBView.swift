@@ -19,9 +19,5 @@ class IBView {
         self.customClassName = converter.customClassName
         self.values = converter.generateIBInspectableValue()
     }
-    
-    func appendAttributes(attributes: [String: String]) {
-        
-    }
 }
 #endif
