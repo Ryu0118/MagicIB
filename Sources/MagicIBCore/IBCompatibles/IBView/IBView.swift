@@ -10,8 +10,8 @@ import Foundation
 class IBView: NSObject {
     let id: String
     let customClassName: String?
-    let ibViewCompatibleElement: IBViewCompatibleElement
-    let values: [IBInspectableProperty]
+    let superClass: IBCompatibleView
+    let properties: [IBInspectableProperty]
     let dependencies: IBViewDependencies
     
     var typeName: String {
@@ -19,20 +19,20 @@ class IBView: NSObject {
             return name
         }
         else {
-            return ibViewCompatibleElement.description
+            return superClass.description
         }
     }
     
     init?(attributes: [String: String],
-          ibViewCompatibleElement: IBViewCompatibleElement
+          ibCompatibleView: IBCompatibleView
     ) {
         let converter = IBAttributeConverter(attributes)
         guard let id = converter.viewID else { return nil }
         self.id = id
-        self.ibViewCompatibleElement = ibViewCompatibleElement
-        self.dependencies = IBViewDependencies(ibViewCompatibleElement: ibViewCompatibleElement)
+        self.superClass = ibCompatibleView
+        self.dependencies = IBViewDependencies(ibCompatibleView: superClass)
         self.customClassName = converter.customClassName
-        self.values = converter.generateIBInspectableProperty()
+        self.properties = converter.generateIBInspectableProperty()
     }
     
     func addValue(_ value: IBInspectableProperty) {

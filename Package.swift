@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "IBLink",
+    name: "MagicIB",
     platforms: [
         .iOS(.v10),
         .macOS(.v10_12),
@@ -12,9 +12,9 @@ let package = Package(
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
-            name: "IBLinkCore",
-            targets: ["IBLinkCore"]),
-        .library(name: "IBLink", targets: ["IBLink"])
+            name: "MagicIBCore",
+            targets: ["MagicIBCore"]),
+        .library(name: "MagicIB", targets: ["MagicIB"])
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -25,14 +25,14 @@ let package = Package(
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .executableTarget(
-            name: "IBLinkCLI",
-            dependencies: ["IBLinkCore", .product(name: "ArgumentParser", package: "swift-argument-parser")]
+            name: "MagicIBCLI",
+            dependencies: ["MagicIBCore", .product(name: "ArgumentParser", package: "swift-argument-parser")]
         ),
-        .target(name: "IBLinkCore"),
-        .target(name: "IBLink"),
+        .target(name: "MagicIBCore"),
+        .target(name: "MagicIB"),
         
         .testTarget(
-            name: "IBLinkTests",
-            dependencies: ["IBLink"]),
+            name: "MagicIBTests",
+            dependencies: ["MagicIB"]),
     ]
 )

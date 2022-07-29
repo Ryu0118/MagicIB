@@ -8,10 +8,10 @@
 import Foundation
 
 struct IBViewControllerDependencies {
-    let ibViewControllerCompatibleElement: IBViewControllerCompatibleElement
+    let ibCompatibleViewController: IBCompatibleViewController
     
     var dependencies: [String] {
-        switch ibViewControllerCompatibleElement {
+        switch ibCompatibleViewController {
         case .glkViewController:
             return ["UIKit", "GLKit"]
         case .avPlayerViewController:

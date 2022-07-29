@@ -1,5 +1,5 @@
 //
-//  IBViewControllerCompatibleElement.swift
+//  IBCompatibleViewController.swift
 //  
 //
 //  Created by Ryu on 2022/07/29.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum IBViewControllerCompatibleElement: String, CaseIterable, CustomStringConvertible {
+enum IBCompatibleViewController: String, CaseIterable, CustomStringConvertible {
     case viewController
     case tableViewController
     case glkViewController

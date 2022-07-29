@@ -3,7 +3,7 @@
 
 import Foundation
 
-enum IBViewCompatibleElement: String, CaseIterable, CustomStringConvertible {
+enum IBCompatibleView: String, CaseIterable, CustomStringConvertible {
     case view
     case imageView
     case button

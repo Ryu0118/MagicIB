@@ -28,18 +28,19 @@ public class IBParser: NSObject {
 extension IBParser: XMLParserDelegate {
     
     public func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
-        if let ibViewElement = IBViewCompatibleElement.init(rawValue: elementName),
-           let ibView = IBView(attributes: attributeDict, ibViewCompatibleElement: ibViewElement)
+        if let ibViewElement = IBCompatibleView.init(rawValue: elementName),
+           let ibView = IBView(attributes: attributeDict, ibCompatibleView: ibViewElement)
         {
             waitingIBViewList.append(elementName)
             ibViewControllers.last?.appendView(ibView)
         }
-        else if let ibViewControllerElement = IBViewControllerCompatibleElement.init(rawValue: elementName),
-                let ibViewController = IBViewController(attributes: attributeDict, ibViewControllerElement: ibViewControllerElement) {
-            print(ibViewController.typeName)
+        else if let ibCompatibleViewController = IBCompatibleViewController.init(rawValue: elementName),
+                let ibViewController = IBViewController(attributes: attributeDict, ibCompatibleViewController: ibCompatibleViewController)
+        {
             ibViewControllers.append(ibViewController)
         }
         else {
+            print(waitingIBViewList.last)
         }
     }
     

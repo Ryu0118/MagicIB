@@ -8,10 +8,10 @@
 import Foundation
 
 struct IBViewDependencies {
-    let ibViewCompatibleElement: IBViewCompatibleElement
+    let ibCompatibleView: IBCompatibleView
     
     var dependencies: [String] {
-        switch ibViewCompatibleElement {
+        switch ibCompatibleView {
         case .mapView:
             return ["UIKit", "MapKit"]
         case .mtkView:
