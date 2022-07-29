@@ -1,5 +1,5 @@
 //
-//  UIView+IBLink.swift
+//  UIView+MagicIB.swift
 //  
 //
 //  Created by Ryu on 2022/07/28.
