@@ -40,7 +40,6 @@ extension IBParser: XMLParserDelegate {
             ibViewControllers.append(ibViewController)
         }
         else {
-            print(waitingIBViewList)
         }
     }
     
