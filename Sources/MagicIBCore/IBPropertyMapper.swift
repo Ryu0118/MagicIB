@@ -7,7 +7,7 @@
 #if os(macOS)
 import Foundation
 
-class IBPropertyMapping {
+class IBPropertyMapper {
     let ib: String
     let propertyName: String
     let type: IBInspectableType

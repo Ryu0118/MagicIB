@@ -7,7 +7,7 @@
 #if os(macOS)
 import Foundation
 
-struct IBFunctionMapping {
+struct IBFunctionMapper {
     //ex) setContentHuggingPriority(.init(rawValue: 256), for: .vertical)
     let ib: String
     let functionName: String //setContentHuggingPriority

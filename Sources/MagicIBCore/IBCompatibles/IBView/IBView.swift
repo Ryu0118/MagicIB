@@ -22,7 +22,7 @@ class IBView: IBAnyView {
     let superClass: IBCompatibleView
     let dependencies: IBViewDependencies
     
-    var properties: [IBPropertyMapping] {
+    var properties: [IBPropertyMapper] {
         [
             .init(ib: "hidden", propertyName: "isHidden", type: .bool),
             .init(ib: "clipsSubviews", propertyName: "clipsToBounds", type: .bool),
@@ -39,7 +39,7 @@ class IBView: IBAnyView {
         ]
     }
     
-    var functions: [IBFunctionMapping] {
+    var functions: [IBFunctionMapper] {
         [
             .init(ib: "horizontalHuggingPriority", functionName: "setContentHuggingPriority", argumentNames: ["", "for"]),
             .init(ib: "verticalHuggingPriority", functionName: "setContentHuggingPriority", argumentNames: ["", "for"]),
@@ -68,9 +68,19 @@ class IBView: IBAnyView {
         self.mapping(attributes: attributes)
     }
     
-    func getCustomizedProperties() -> [IBPropertyMapping] {
+    func getCustomizedProperties() -> [IBPropertyMapper] {
         properties
             .filter { $0.value != nil }
+    }
+    
+    func addValue(element: IBElementType, attributes: [String: String]) {
+        
+    }
+    
+    func addValue(ib: String, value: String) {
+        properties
+            .filter { $0.ib == ib }
+            .forEach { $0.addValue(value) }
     }
     
     private func mapping(attributes: [String: String]) {
@@ -88,16 +98,6 @@ class IBView: IBAnyView {
                     }
                 }
         }
-    }
-    
-    func addValue(element: IBElementType, attributes: [String: String]) {
-        
-    }
-    
-    func addValue(ib: String, value: String) {
-        properties
-            .filter { $0.ib == ib }
-            .forEach { $0.addValue(value) }
     }
     
 }

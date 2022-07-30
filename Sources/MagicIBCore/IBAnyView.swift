@@ -10,8 +10,8 @@ import Foundation
 
 protocol IBAnyView: AnyObject {
     associatedtype IBElementType
-    var properties: [IBPropertyMapping] { get }
-    var functions: [IBFunctionMapping] { get }
+    var properties: [IBPropertyMapper] { get }
+    var functions: [IBFunctionMapper] { get }
     func addValue(elementType: IBElementType, attributes: [String: String])
 }
 #endif
