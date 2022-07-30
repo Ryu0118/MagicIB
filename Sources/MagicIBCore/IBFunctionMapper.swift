@@ -42,7 +42,7 @@ class IBFunctionMapper {
     
     private func convertValue(value: Any, type: IBInspectableType) -> String? {
         switch type {
-        case .number, .initializer:
+        case .number, .initializer, .custom:
             guard let value = value as? String else { return nil }
             return value
         case .bool:

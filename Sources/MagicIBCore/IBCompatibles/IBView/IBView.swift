@@ -32,8 +32,9 @@ class IBView: IBAnyView {
             .init(ib: "autoresizingMask", propertyName: "autoresizingMask", type: .array),
             .init(ib: "contentMode", propertyName: "contentMode", type: .enum),
             .init(ib: "frame", propertyName: "frame", type: .initializer),
-            .init(ib: "backgroundColor", propertyName: "backgroundColor", type: .enum),
-            .init(ib: "tintColor", propertyName: "tintColor", type: .enum),
+            .init(ib: "backgroundColor", propertyName: "backgroundColor", type: .custom),
+            .init(ib: "tintColor", propertyName: "tintColor", type: .custom),
+            .init(ib: "opaque", propertyName: "isOpaque", type: .bool)
         ]
     }
     
@@ -75,6 +76,7 @@ class IBView: IBAnyView {
         guard let propertyName = attributes["key"] else { return }
         switch elementType {
         case .rect:
+            guard attributes["key"] == "frame" else { return }
             let rect = getCGRectFromAttributes(attributes: attributes)
             addValueToProperty(ib: propertyName, value: rect)
         case .autoresizingMask:
@@ -87,7 +89,6 @@ class IBView: IBAnyView {
     
     func getCGRectFromAttributes(attributes: [String: String]) -> String {
         return attributes
-            .filter { key, value in key == "frame" }
             .sorted(by: {
                 let priority = ["x": 0, "y": 1, "width": 2, "height": 3]
                 return priority[$0.key] ?? 0 < priority[$1.key] ?? 0

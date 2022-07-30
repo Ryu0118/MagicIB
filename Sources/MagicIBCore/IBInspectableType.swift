@@ -13,5 +13,6 @@ enum IBInspectableType: Equatable {
     case `enum`
     case initializer
     case array
+    case custom
 }
 #endif

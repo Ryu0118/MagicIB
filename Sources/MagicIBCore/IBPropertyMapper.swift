@@ -25,7 +25,7 @@ class IBPropertyMapper {
     
     func generateSwiftCode() -> String? {
         switch type {
-        case .number:
+        case .number, .initializer, .custom:
             guard let value = value as? String else { return nil }
             return "\(propertyName) = \(value)"
         case .bool:
@@ -35,9 +35,6 @@ class IBPropertyMapper {
         case .enum:
             guard let value = value as? String else { return nil }
             return "\(propertyName) = .\(value)"
-        case .initializer:
-            guard let value = value as? String else { return nil }
-            return "\(propertyName) = \(value)"
         case .array:
             guard let value = value as? [String] else { return nil }
             let array = value
