@@ -36,11 +36,15 @@ class IBPropertyMapper {
             guard let value = value as? String else { return nil }
             return "\(propertyName) = .\(value)"
         case .array:
-            guard let value = value as? [String] else { return nil }
-            let array = value
-                .joined(separator: ", ")
-                .appending(first: "[", last: "]")
-            return "\(propertyName) = \(array)"
+            if let value = value as? [String] {
+                let array =  value
+                    .joined(separator: ", ")
+                    .appending(first: "[", last: "]")
+                return "\(propertyName) = \(array)"
+            }
+            else if let value = value as? String {
+                return "\(propertyName) = .\(value)"
+            }
         }
     }
 }

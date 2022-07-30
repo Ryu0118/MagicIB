@@ -8,8 +8,9 @@
 import Foundation
 
 class IBView: IBAnyView {
+    typealias IBElementType = IBViewElementType
     
-    enum IBElementType: String {
+    enum IBViewElementType: String {
         case rect
         case autoresizingMask
         case color
@@ -34,7 +35,9 @@ class IBView: IBAnyView {
             .init(ib: "frame", propertyName: "frame", type: .initializer),
             .init(ib: "backgroundColor", propertyName: "backgroundColor", type: .custom),
             .init(ib: "tintColor", propertyName: "tintColor", type: .custom),
-            .init(ib: "opaque", propertyName: "isOpaque", type: .bool)
+            .init(ib: "opaque", propertyName: "isOpaque", type: .bool),
+            .init(ib: "tag", propertyName: "tag", type: .number),
+            .init(ib: "ambiguous", propertyName: "hasAmbiguousLayout", type: .bool),
         ]
     }
     
@@ -72,7 +75,7 @@ class IBView: IBAnyView {
             .filter { $0.value != nil }
     }
     
-    func addValueToProperties(elementType: IBElementType, attributes: [String: String]) {
+    func addValueToProperties(elementType: IBViewElementType, attributes: [String: String]) {
         guard let propertyName = attributes["key"] else { return }
         switch elementType {
         case .rect:
@@ -83,12 +86,14 @@ class IBView: IBAnyView {
             let autoresizingMask = getAutoresizingMaskFromAttributes(attributes: attributes)
             addValueToProperty(ib: propertyName, value: autoresizingMask)
         case .color:
-            <#code#>
+            let color = getColorFromAttributes(attributes: attributes)
+            addValueToProperty(ib: propertyName, value: color)
         }
     }
     
     func getCGRectFromAttributes(attributes: [String: String]) -> String {
         return attributes
+            .filter { key, _ in key != "key" }
             .sorted(by: {
                 let priority = ["x": 0, "y": 1, "width": 2, "height": 3]
                 return priority[$0.key] ?? 0 < priority[$1.key] ?? 0
@@ -105,6 +110,29 @@ class IBView: IBAnyView {
         return attributes
             .filter { key, value in key != "autoresizingMask" }
             .map { key, value in value }
+    }
+    
+    func getColorFromAttributes(attributes: [String: String]) -> String {
+        let attributes = attributes.filter { key, _ in key != "key" }
+        let isRGB = attributes.contains(where: { key, _ in
+            let colors = ["red", "green", "blue"]
+            return colors.contains(key)
+        })
+        let isSystemColor = attributes.contains(where: { key, _ in key == "systemColor" })
+        let isNamed = attributes.contains(where: { key, _ in key == "name" })
+        
+        if isRGB {
+            return "UIColor(red: \(attributes["red"] ?? "0"), green: \(attributes["green"] ?? "0"), blue: \(attributes["blue"] ?? "0"), alpha: \(attributes["alpha"] ?? "0")"
+        }
+        else if isSystemColor {
+            return ".\(attributes["systemColor"] ?? "white")"
+        }
+        else if isNamed {
+            return "UIColor(named: \"\(attributes["name"] ?? "AccentColor")\")"
+        }
+        else {
+            return ".clear"
+        }
     }
     
     func addValueToProperty(ib: String, value: Any) {
