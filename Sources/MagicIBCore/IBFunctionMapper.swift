@@ -20,7 +20,7 @@ class IBFunctionMapper {
         self.argumentNames = argumentNames
     }
     
-    func putArgument(_ value: String, type: IBInspectableType, at: Int) {
+    func putValueToArgument(_ value: String, type: IBInspectableType, at: Int) {
         argumentValues.insert((value, type), at: at)
     }
     

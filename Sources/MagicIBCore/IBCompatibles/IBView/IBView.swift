@@ -122,8 +122,8 @@ class IBView: IBAnyView {
                 .forEach {
                     if $0.ib.contains("vertical") || $0.ib.contains("horizontal") {
                         let axis = $0.ib.contains("vertical") ? "vertical" : "horizontal"
-                        $0.putArgument("init(rawValue: \(value)", type: .enum, at: 0)
-                        $0.putArgument(axis, type: .enum, at: 1)
+                        $0.putValueToArgument("init(rawValue: \(value)", type: .enum, at: 0)
+                        $0.putValueToArgument(axis, type: .enum, at: 1)
                     }
                 }
         }
