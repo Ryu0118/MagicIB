@@ -30,7 +30,7 @@ class IBButton: IBView {
         let buttonProperties: [IBPropertyMapper] = [
             .init(ib: "highlighted", propertyName: "isHighlighted", type: .bool),
             .init(ib: "selected", propertyName: "isSelected", type: .bool),
-            .init(ib: "buttonType", propertyName: "buttonType", type: .custom),
+            .init(ib: "buttonType", propertyName: "buttonType", type: .getonly),
             .init(ib: "showsMenuAsPrimaryAction", propertyName: "showsMenuAsPrimaryAction", type: .bool),
             .init(ib: "contentHorizontalAlignment", propertyName: "contentHorizontalAlignment", type: .enum),
             .init(ib: "contentVerticalAlignment", propertyName: "contentVerticalAlignment", type: .enum),
