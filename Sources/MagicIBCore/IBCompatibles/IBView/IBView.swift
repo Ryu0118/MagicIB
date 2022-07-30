@@ -7,11 +7,21 @@
 #if os(macOS)
 import Foundation
 
-class IBView: NSObject {
+class IBView: IBAnyView {
+    
+    enum IBElementType: String {
+        case rect
+        case autoresizingMask
+        case color
+        case variation
+        case size
+    }
+    
     let id: String
     let customClassName: String?
     let superClass: IBCompatibleView
     let dependencies: IBViewDependencies
+    
     var properties: [IBPropertyMapping] {
         [
             .init(ib: "hidden", propertyName: "isHidden", type: .bool),
@@ -26,6 +36,15 @@ class IBView: NSObject {
             .init(ib: "frame", propertyName: "frame", type: .initializer),
             .init(ib: "backgroundColor", propertyName: "backgroundColor", type: .enum),
             .init(ib: "tintColor", propertyName: "tintColor", type: .enum),
+        ]
+    }
+    
+    var functions: [IBFunctionMapping] {
+        [
+            .init(ib: "horizontalHuggingPriority", functionName: "setContentHuggingPriority", argumentNames: ["", "for"]),
+            .init(ib: "verticalHuggingPriority", functionName: "setContentHuggingPriority", argumentNames: ["", "for"]),
+            .init(ib: "horizontalCompressionResistancePriority", functionName: "setContentCompressionResistancePriority", argumentNames: ["", "for"]),
+            .init(ib: "verticalCompressionResistancePriority", functionName: "setContentCompressionResistancePriority", argumentNames: ["", "for"]),
         ]
     }
 
@@ -51,6 +70,10 @@ class IBView: NSObject {
     func getCustomizedProperties() -> [IBPropertyMapping] {
         properties
             .filter { $0.value != nil }
+    }
+    
+    func addValue(elementName: String, attributes: [String: String]) {
+        
     }
     
     func addValue(ib: String, value: String) {
