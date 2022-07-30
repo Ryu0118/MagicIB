@@ -9,13 +9,13 @@ import Foundation
 
 enum IBViewProvider {
     
-    static func addValueToProperties(ibView: IBView, elementType: Any, attributes: [String: String]) {
+    static func addValueToProperties(ibView: IBView, elementType: String, attributes: [String: String]) {
         switch ibView.superClass {
         case .view, .imageView, .tableView, .label, .progressView, .collectionView, .stackView, .segmentedControl, .slider, .switch, .activityIndicatorView, .pageControl, .stepper, .tableViewCell, .collectionViewCell, .textView, .scrollView, .pickerView, .visualEffectView, .mapView, .mtkView, .glkView, .sceneKitView, .skView, .arskView, .arscnView, .wkWebView, .webView, .arView, .clLocationButton, .navigationBar, .toolbar, .tabBar, .searchBar, .containerView:
-            guard let elementType = elementType as? IBView.IBElementType else { return }
+            guard let elementType: IBView.IBElementType = .init(rawValue: elementType) else { return }
             ibView.addValueToProperties(elementType: elementType, attributes: attributes)
         case .button:
-            guard let elementType = elementType as? IBButton.IBElementType,
+            guard let elementType: IBButton.IBElementType = .init(rawValue: elementType),
                   let ibButtonView = ibView as? IBButton
             else { return }
             ibButtonView.addValueToProperties(elementType: elementType, attributes: attributes)

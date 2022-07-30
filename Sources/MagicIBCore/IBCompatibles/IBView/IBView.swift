@@ -7,10 +7,6 @@
 #if os(macOS)
 import Foundation
 
-struct IBLayoutConstraint {
-    
-}
-
 class IBView: IBAnyView {
     typealias IBElementType = IBViewElementType
     

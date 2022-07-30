@@ -49,17 +49,27 @@ class IBButton: IBView {
     override func addValueToProperties(elementType: IBView.IBElementType, attributes: [String : String]) { }
     
     func addValueToProperties(elementType: IBElementType, attributes: [String: String]) {
+        guard let propertyName = attributes["key"] else { return }
         switch elementType {
         case .rect:
+            guard attributes["key"] == "frame" else { return }
+            let rect = getCGRectFromAttributes(attributes: attributes)
+            addValueToProperty(ib: propertyName, value: rect)
         case .autoresizingMask:
+            let autoresizingMask = getAutoresizingMaskFromAttributes(attributes: attributes)
+            addValueToProperty(ib: propertyName, value: autoresizingMask)
         case .color:
-        case .buttonConfiguration:
-        case .backgroundConfiguration:
-        case .preferredSymbolConfiguration:
-        case .attributedString:
-        case .font:
-        case .paragraphStyle:
-        case .directionalEdgeInsets:
+            let color = getColorFromAttributes(attributes: attributes)
+            addValueToProperty(ib: propertyName, value: color)
+        default:
+            break
+//        case .buttonConfiguration:
+//        case .backgroundConfiguration:
+//        case .preferredSymbolConfiguration:
+//        case .attributedString:
+//        case .font:
+//        case .paragraphStyle:
+//        case .directionalEdgeInsets:
         }
     }
     

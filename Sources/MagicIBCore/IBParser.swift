@@ -50,7 +50,7 @@ extension IBParser: XMLParserDelegate {
         }
         else {
             guard let lastIBView = waitingIBViewList.last else { return }
-            let a = IBViewProvider.cast(type: Swift.type(of: lastIBView), any: lastIBView)
+            IBViewProvider.addValueToProperties(ibView: lastIBView, elementType: lastIBView.superClass, attributes: <#T##[String : String]#>)
             //castted.addValueToProperties(elementType: IBButton.IBButtonElementType.autoresizingMask, attributes: <#T##[String : String]#>)
         }
     }
