@@ -62,7 +62,7 @@ extension IBParser: XMLParserDelegate {
     
     public func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
         
-        if let lastIndex = waitingIBViewList.lastIndex(where: { $0.superClass.rawValue == elementName }) {
+        if let lastIndex = waitingIBViewList.lastIndex(where: { $0.classType.rawValue == elementName }) {
             waitingIBViewList.remove(at: lastIndex)
         }
         if let lastIndex = waitingElementList.lastIndex(of: elementName) {

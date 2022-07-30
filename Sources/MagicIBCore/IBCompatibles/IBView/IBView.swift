@@ -19,7 +19,7 @@ class IBView: IBAnyView {
     
     let id: String
     let customClassName: String?
-    let superClass: IBCompatibleView
+    let classType: IBCompatibleView
     let dependencies: IBViewDependencies
     
     var constraints = [IBLayoutConstraint]()
@@ -59,7 +59,7 @@ class IBView: IBAnyView {
             return name
         }
         else {
-            return superClass.description
+            return classType.description
         }
     }
     
@@ -68,8 +68,8 @@ class IBView: IBAnyView {
     ) {
         guard let id = attributes["id"] else { return nil }
         self.id = id
-        self.superClass = ibCompatibleView
-        self.dependencies = IBViewDependencies(ibCompatibleView: superClass)
+        self.classType = ibCompatibleView
+        self.dependencies = IBViewDependencies(ibCompatibleView: classType)
         self.customClassName = attributes["customClass"]
         self.mapping(attributes: attributes)
     }
