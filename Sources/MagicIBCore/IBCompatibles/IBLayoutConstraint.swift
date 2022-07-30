@@ -31,12 +31,8 @@ struct IBLayoutConstraint {
         else {
             self.firstItem = parentViewID
         }
-        if let secondAttribute = attributes["secondAttribute"] {
-            self.secondAttribute = .init(rawValue: secondAttribute)
-        }
-        if let multiplier = attributes["multiplier"] {
-            self.multiplier = .init(multiplier)
-        }
+        self.secondAttribute = .init(rawValue: attributes["secondAttribute"] ?? "")
+        self.multiplier = .init(attributes["multiplier"] ?? "")
         self.id = id
         self.firstAttribute = firstAttribute
         self.secondItem = attributes["secondItem"]
