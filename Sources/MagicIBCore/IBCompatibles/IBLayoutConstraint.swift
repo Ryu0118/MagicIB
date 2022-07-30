@@ -25,7 +25,7 @@ struct IBLayoutConstraint {
               let firstAttribute: Attribute = .init(rawValue: firstAttributeString)
         else { return nil }
         
-        if let firstItem = attributes["firstAttribute"] {
+        if let firstItem = attributes["firstItem"] {
             self.firstItem = firstItem
         }
         else {
