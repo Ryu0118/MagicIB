@@ -11,7 +11,7 @@ class IBPropertyMapping {
     let ib: String
     let propertyName: String
     let type: IBInspectableType
-    var value: String?
+    var value: Any?
     
     init(ib: String, propertyName: String, type: IBInspectableType) {
         self.ib = ib
@@ -24,17 +24,26 @@ class IBPropertyMapping {
     }
     
     func generateSwiftCode() -> String? {
-        guard let value = value else { return nil }
         switch type {
         case .number:
+            guard let value = value as? String else { return nil }
             return "\(propertyName) = \(value)"
         case .bool:
+            guard let value = value as? String else { return nil }
             let convertedString = value == "YES" ? "true" : "false"
             return "\(propertyName) = \(convertedString)"
         case .enum:
+            guard let value = value as? String else { return nil }
             return "\(propertyName) = .\(value)"
         case .initializer:
+            guard let value = value as? String else { return nil }
             return "\(propertyName) = \(value)"
+        case .array:
+            guard let value = value as? [String] else { return nil }
+            let array = value
+                .joined(separator: ", ")
+                .appending(first: "[", last: "]")
+            return "\(propertyName) = \(array)"
         }
     }
 }
