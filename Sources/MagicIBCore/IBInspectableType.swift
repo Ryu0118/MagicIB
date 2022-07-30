@@ -11,5 +11,7 @@ enum IBInspectableType: Equatable {
     case number
     case bool
     case `enum`
+    case initializer
+    case array
 }
 #endif

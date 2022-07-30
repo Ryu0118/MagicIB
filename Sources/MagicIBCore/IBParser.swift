@@ -11,8 +11,9 @@ import Foundation
 public class IBParser: NSObject {
 
     fileprivate var type: IBType?
-    private var waitingIBViewList = [String]()
+    private var waitingIBViewList = [IBView]()
     private var ibViewControllers = [IBViewController]()
+    private var waitingElementList = [String]()
     
     public func parse(_ absoluteURL: URL) throws {
         self.type = try IBType(url: absoluteURL)
@@ -28,13 +29,14 @@ public class IBParser: NSObject {
 extension IBParser: XMLParserDelegate {
     
     public func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
+        waitingElementList.append(elementName)
         if let ibViewElement = IBCompatibleView.init(rawValue: elementName),
            let ibView = IBView(attributes: attributeDict, ibCompatibleView: ibViewElement)
         {
-            waitingIBViewList.append(elementName)
+            waitingIBViewList.append(ibView)
             ibViewControllers.last?.appendView(ibView)
         }
-        else if let ibCompatibleViewController = IBCompatibleViewController.init(rawValue: elementName),
+        else if let ibCompatibleViewController: IBCompatibleViewController = .init(rawValue: elementName),
                 let ibViewController = IBViewController(attributes: attributeDict, ibCompatibleViewController: ibCompatibleViewController)
         {
             ibViewControllers.append(ibViewController)
@@ -45,8 +47,12 @@ extension IBParser: XMLParserDelegate {
     }
     
     public func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-        if let lastIndex = waitingIBViewList.lastIndex(of: elementName) {
+        
+        if let lastIndex = waitingIBViewList.lastIndex(where: { $0.superClass.rawValue == elementName }) {
             waitingIBViewList.remove(at: lastIndex)
+        }
+        if let lastIndex = waitingElementList.lastIndex(of: elementName) {
+            waitingElementList.remove(at: lastIndex)
         }
     }
     
