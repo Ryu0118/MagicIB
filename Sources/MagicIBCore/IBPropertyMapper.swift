@@ -11,7 +11,7 @@ class IBPropertyMapper {
     let ib: String
     let propertyName: String
     let type: IBInspectableType
-    var value: Any?
+    var value: Any = ""
     
     init(ib: String, propertyName: String, type: IBInspectableType) {
         self.ib = ib

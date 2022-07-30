@@ -115,8 +115,8 @@ class IBView: IBAnyView {
     
     func getAutoresizingMaskFromAttributes(attributes: [String: String]) -> [String] {
         return attributes
-            .filter { key, value in key != "autoresizingMask" }
-            .map { key, value in value }
+            .filter { key, value in key != "key" }
+            .map { key, value in "." + key }
     }
     
     func getColorFromAttributes(attributes: [String: String]) -> String {
