@@ -48,6 +48,8 @@ class IBPropertyMapper {
             else {
                 return nil
             }
+        case .getonly:
+            return value as? String
         }
     }
 }

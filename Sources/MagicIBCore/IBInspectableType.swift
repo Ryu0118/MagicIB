@@ -14,5 +14,6 @@ enum IBInspectableType: Equatable {
     case initializer
     case array
     case custom
+    case getonly
 }
 #endif

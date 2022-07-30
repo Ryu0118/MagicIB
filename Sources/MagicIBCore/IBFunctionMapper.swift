@@ -43,8 +43,7 @@ class IBFunctionMapper {
     private func convertValue(value: Any, type: IBInspectableType) -> String? {
         switch type {
         case .number, .initializer, .custom:
-            guard let value = value as? String else { return nil }
-            return value
+            return value as? String
         case .bool:
             guard let value = value as? String else { return nil }
             let convertedString = value == "YES" ? "true" : "false"
@@ -53,10 +52,16 @@ class IBFunctionMapper {
             guard let value = value as? String else { return nil }
             return ".\(value)"
         case .array:
-            guard let value = value as? [String] else { return nil }
-            return value
-                .joined(separator: ", ")
-                .appending(first: "[", last: "]")
+            if let value = value as? [String] {
+                return value
+                    .joined(separator: ", ")
+                    .appending(first: "[", last: "]")
+            }
+            else {
+                return value as? String
+            }
+        case .getonly:
+            return nil
         }
     }
     
