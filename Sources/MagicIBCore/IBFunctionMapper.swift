@@ -7,14 +7,20 @@
 #if os(macOS)
 import Foundation
 
-struct IBFunctionMapper {
+class IBFunctionMapper {
     //ex) setContentHuggingPriority(.init(rawValue: 256), for: .vertical)
     let ib: String
     let functionName: String //setContentHuggingPriority
     let argumentNames: [String] //["", for]
     var argumentValues = [(argument: Any, type: IBInspectableType)]()
     
-    mutating func putArgument(_ value: String, type: IBInspectableType, at: Int) {
+    init(ib: String, functionName: String, argumentNames: [String]) {
+        self.ib = ib
+        self.functionName = functionName
+        self.argumentNames = argumentNames
+    }
+    
+    func putArgument(_ value: String, type: IBInspectableType, at: Int) {
         argumentValues.insert((value, type), at: at)
     }
     

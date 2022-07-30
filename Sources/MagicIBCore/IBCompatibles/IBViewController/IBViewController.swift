@@ -28,11 +28,10 @@ class IBViewController: NSObject {
     init?(attributes: [String: String],
           ibCompatibleViewController: IBCompatibleViewController
     ) {
-        let converter = IBAttributeConverter(attributes)
-        guard let id = converter.viewID else { return nil }
+        guard let id = attributes["id"] else { return nil }
         self.id = id
-        self.customClassName = converter.customClassName
-        self.customModuleName = converter.customModuleName
+        self.customClassName = attributes["customClass"]
+        self.customModuleName = attributes["customModule"]
         self.superClass = ibCompatibleViewController
         self.dependencies = IBViewControllerDependencies(ibCompatibleViewController: superClass)
     }

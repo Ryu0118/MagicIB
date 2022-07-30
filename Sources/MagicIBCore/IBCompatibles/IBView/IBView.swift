@@ -73,7 +73,7 @@ class IBView: IBAnyView {
             .filter { $0.value != nil }
     }
     
-    func addValue(element: IBElementType, attributes: [String: String]) {
+    func addValue(elementType: IBElementType, attributes: [String: String]) {
         
     }
     
