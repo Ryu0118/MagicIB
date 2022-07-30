@@ -13,7 +13,6 @@ protocol IBAnyView: AnyObject {
     var properties: [IBPropertyMapper] { get }
     var functions: [IBFunctionMapper] { get }
     var typeName: String { get }
-    var subviews: [IBView] { get set }
     func addValueToProperties(elementType: IBElementType, attributes: [String: String])
 }
 

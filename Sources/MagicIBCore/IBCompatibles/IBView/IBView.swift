@@ -21,9 +21,9 @@ class IBView: IBAnyView {
     let customClassName: String?
     let superClass: IBCompatibleView
     let dependencies: IBViewDependencies
-    let constraints = [IBLayoutConstraint]()
     
-    var subviews = [IBView]()
+    private(set) var constraints = [IBLayoutConstraint]()
+    private(set) var subviews = [IBView]()
     
     var properties: [IBPropertyMapper] {
         [
@@ -93,7 +93,8 @@ class IBView: IBAnyView {
             let color = getColorFromAttributes(attributes: attributes)
             addValueToProperty(ib: propertyName, value: color)
         case .constraint:
-            
+            guard let constraint = IBLayoutConstraint(attributes, parentViewID: id) else { return }
+            constraints.append(constraint)
         }
     }
     

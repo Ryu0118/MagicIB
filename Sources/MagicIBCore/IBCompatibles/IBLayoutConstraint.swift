@@ -9,7 +9,44 @@
 import Foundation
 
 struct IBLayoutConstraint {
+    let id: String
+    let firstItem: String
+    let firstAttribute: Attribute
+    let secondItem: String?
+    let secondAttribute: Attribute?
+    let multiplier: Multiplier?// ex) 1.1 or 2:3
+    let priority: Int?
+    let constant: Double?
+    let relation: Relation?
     
+    init?(_ attributes: [String: String], parentViewID: String) {
+        guard let id = attributes["id"],
+              let firstAttributeString = attributes["firstAttribute"],
+              let firstAttribute: Attribute = .init(rawValue: firstAttributeString)
+        else { return nil }
+        
+        if let firstItem = attributes["firstAttribute"] {
+            self.firstItem = firstItem
+        }
+        else {
+            self.firstItem = parentViewID
+        }
+        if let secondAttribute = attributes["secondAttribute"] {
+            self.secondAttribute = .init(rawValue: secondAttribute)
+        }
+        if let multiplier = attributes["multiplier"] {
+            self.multiplier = .init(multiplier)
+        }
+        self.id = id
+        self.firstAttribute = firstAttribute
+        self.secondItem = attributes["secondItem"]
+        self.priority = Int(attributes["priority"] ?? "")
+        self.constant = Double(attributes["constant"] ?? "")
+        self.relation = .init(rawValue: attributes["relation"] ?? "")
+    }
+}
+//MARK: Declare Enum
+extension IBLayoutConstraint {
     enum Attribute: String {
         case top
         case bottom
@@ -45,38 +82,6 @@ struct IBLayoutConstraint {
             }
         }
     }
-    
-    let id: String
-    let firstItem: String
-    let firstAttribute: Attribute
-    let secondItem: String?
-    let secondAttribute: Attribute?
-    let multiplier: Multiplier?// ex) 1.1 2:3
-    let priority: Int?
-    let constant: Double?
-    let relation: Relation?
-    
-    init?(_ attributes: [String: String], parentViewID: String) {
-        guard let id = attributes["id"],
-              let firstAttributeString = attributes["firstAttribute"],
-              let firstAttribute: Attribute = .init(rawValue: firstAttributeString)
-        else { return nil }
-        
-        if let firstItem = attributes["firstAttribute"] {
-            self.firstItem = firstItem
-        }
-        else {
-            self.firstItem = parentViewID
-        }
-        if let secondAttribute = attributes["secondAttribute"] {
-            self.secondAttribute = .init(rawValue: secondAttribute)
-        }
-        if let multiplier = attributes["multiplier"] {
-            self.multiplier = .init(multiplier)
-        }
-        self.id = id
-        self.firstAttribute = firstAttribute
-        self.secondItem = attributes["secondItem"]
-    }
 }
+
 #endif

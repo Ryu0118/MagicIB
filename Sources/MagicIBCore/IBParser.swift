@@ -15,7 +15,7 @@ public class IBParser: NSObject {
     private var waitingElementList = [String]()
     private var ibViewControllers = [IBViewController]()
     private var ibViews = [IBView]()
-    private var parentViews = [IBView]()
+    private(set) var parentViews = [IBView]()
     
     public func parse(_ absoluteURL: URL) throws {
         self.type = try IBType(url: absoluteURL)
@@ -39,9 +39,6 @@ extension IBParser: XMLParserDelegate {
             waitingIBViewList.append(ibView)
             ibViews.append(ibView)
             ibViewControllers.last?.appendView(ibView)
-            if elementName == "subviews" {
-                parentViews.append(ibView)
-            }
         }
         else if let ibCompatibleViewController: IBCompatibleViewController = .init(rawValue: elementName),
                 let ibViewController = IBViewController(attributes: attributeDict, ibCompatibleViewController: ibCompatibleViewController)
@@ -50,8 +47,7 @@ extension IBParser: XMLParserDelegate {
         }
         else {
             guard let lastIBView = waitingIBViewList.last else { return }
-            IBViewProvider.addValueToProperties(ibView: lastIBView, elementType: lastIBView.superClass, attributes: <#T##[String : String]#>)
-            //castted.addValueToProperties(elementType: IBButton.IBButtonElementType.autoresizingMask, attributes: <#T##[String : String]#>)
+            IBViewProvider.addValueToProperties(ibView: lastIBView, elementType: elementName, attributes: attributeDict)
         }
     }
     
