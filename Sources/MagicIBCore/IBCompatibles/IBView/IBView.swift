@@ -80,21 +80,27 @@ class IBView: IBAnyView {
     }
     
     func addValueToProperties(elementType: IBElementType, attributes: [String: String]) {
-        guard let propertyName = attributes["key"] else { return }
-        switch elementType {
-        case .rect:
-            guard attributes["key"] == "frame" else { return }
-            let rect = getCGRectFromAttributes(attributes: attributes)
-            addValueToProperty(ib: propertyName, value: rect)
-        case .autoresizingMask:
-            let autoresizingMask = getAutoresizingMaskFromAttributes(attributes: attributes)
-            addValueToProperty(ib: propertyName, value: autoresizingMask)
-        case .color:
-            let color = getColorFromAttributes(attributes: attributes)
-            addValueToProperty(ib: propertyName, value: color)
-        case .constraint:
-            guard let constraint = IBLayoutConstraint(attributes, parentViewID: id) else { return }
-            constraints.append(constraint)
+        if let propertyName = attributes["key"] { //properties
+            switch elementType {
+            case .rect:
+                guard attributes["key"] == "frame" else { return }
+                let rect = getCGRectFromAttributes(attributes: attributes)
+                addValueToProperty(ib: propertyName, value: rect)
+            case .autoresizingMask:
+                let autoresizingMask = getAutoresizingMaskFromAttributes(attributes: attributes)
+                addValueToProperty(ib: propertyName, value: autoresizingMask)
+            case .color:
+                let color = getColorFromAttributes(attributes: attributes)
+                addValueToProperty(ib: propertyName, value: color)
+            default:
+                break
+            }
+        }
+        else {
+            if elementType == .constraint {
+                guard let constraint = IBLayoutConstraint(attributes, parentViewID: id) else { return }
+                constraints.append(constraint)
+            }
         }
     }
     

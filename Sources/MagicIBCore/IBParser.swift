@@ -55,7 +55,7 @@ extension IBParser: XMLParserDelegate {
                 if parentView == nil { parentView = lastIBView }
             }
             else {
-                IBViewProvider.addValueToProperties(ibView: lastIBView, elementType: elementName, attributes: attributeDict)
+                IBViewProvider.addValueToProperties(ibView: lastIBView, elementName: elementName, attributes: attributeDict)
             }
         }
     }
