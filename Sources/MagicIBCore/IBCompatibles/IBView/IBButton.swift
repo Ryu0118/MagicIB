@@ -15,6 +15,7 @@ class IBButton: IBView {
         case rect
         case autoresizingMask
         case color
+        case constraint
         case buttonConfiguration
         case backgroundConfiguration
         case preferredSymbolConfiguration
@@ -61,6 +62,9 @@ class IBButton: IBView {
         case .color:
             let color = getColorFromAttributes(attributes: attributes)
             addValueToProperty(ib: propertyName, value: color)
+        case .constraint:
+            guard let constraint = IBLayoutConstraint(attributes, parentViewID: id) else { return }
+            constraints.append(constraint)
         default:
             break
 //        case .buttonConfiguration:

@@ -14,7 +14,7 @@ public class IBParser: NSObject {
     private var waitingIBViewList = [IBView]()
     private var waitingElementList = [String]()
     private var ibViewControllers = [IBViewController]()
-    private var ibViews = [IBView]()
+    private var subviewsFlags = [IBView]()
     private(set) var parentViews = [IBView]()
     
     public func parse(_ absoluteURL: URL) throws {
@@ -37,8 +37,10 @@ extension IBParser: XMLParserDelegate {
            let ibView = IBView(attributes: attributeDict, ibCompatibleView: ibViewElement)
         {
             waitingIBViewList.append(ibView)
-            ibViews.append(ibView)
             ibViewControllers.last?.appendView(ibView)
+            if let parentView = subviewsFlags.last {
+                parentView.subviews.append(ibView)
+            }
         }
         else if let ibCompatibleViewController: IBCompatibleViewController = .init(rawValue: elementName),
                 let ibViewController = IBViewController(attributes: attributeDict, ibCompatibleViewController: ibCompatibleViewController)
@@ -47,7 +49,12 @@ extension IBParser: XMLParserDelegate {
         }
         else {
             guard let lastIBView = waitingIBViewList.last else { return }
-            IBViewProvider.addValueToProperties(ibView: lastIBView, elementType: elementName, attributes: attributeDict)
+            if elementName == "subviews" {
+                subviewsFlags.append(lastIBView)
+            }
+            else {
+                IBViewProvider.addValueToProperties(ibView: lastIBView, elementType: elementName, attributes: attributeDict)
+            }
         }
     }
     
@@ -58,6 +65,9 @@ extension IBParser: XMLParserDelegate {
         }
         if let lastIndex = waitingElementList.lastIndex(of: elementName) {
             waitingElementList.remove(at: lastIndex)
+        }
+        if elementName == "subviews" {
+            subviewsFlags.removeLast()
         }
     }
     

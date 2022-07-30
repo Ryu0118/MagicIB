@@ -22,8 +22,8 @@ class IBView: IBAnyView {
     let superClass: IBCompatibleView
     let dependencies: IBViewDependencies
     
-    private(set) var constraints = [IBLayoutConstraint]()
-    private(set) var subviews = [IBView]()
+    var constraints = [IBLayoutConstraint]()
+    var subviews = [IBView]()
     
     var properties: [IBPropertyMapper] {
         [
