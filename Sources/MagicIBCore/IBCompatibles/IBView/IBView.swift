@@ -13,8 +13,6 @@ class IBView: IBAnyView {
         case rect
         case autoresizingMask
         case color
-        case variation
-        case size
     }
     
     let id: String
@@ -73,11 +71,42 @@ class IBView: IBAnyView {
             .filter { $0.value != nil }
     }
     
-    func addValue(elementType: IBElementType, attributes: [String: String]) {
-        
+    func addValueToProperties(elementType: IBElementType, attributes: [String: String]) {
+        guard let propertyName = attributes["key"] else { return }
+        switch elementType {
+        case .rect:
+            let rect = getCGRectFromAttributes(attributes: attributes)
+            addValueToProperty(ib: propertyName, value: rect)
+        case .autoresizingMask:
+            let autoresizingMask = getAutoresizingMaskFromAttributes(attributes: attributes)
+            addValueToProperty(ib: propertyName, value: autoresizingMask)
+        case .color:
+            <#code#>
+        }
     }
     
-    func addValue(ib: String, value: String) {
+    func getCGRectFromAttributes(attributes: [String: String]) -> String {
+        return attributes
+            .filter { key, value in key == "frame" }
+            .sorted(by: {
+                let priority = ["x": 0, "y": 1, "width": 2, "height": 3]
+                return priority[$0.key] ?? 0 < priority[$1.key] ?? 0
+            })
+            .compactMap{
+                guard let _ = Double($1) else { return nil }
+                return "\($0): \($1)"
+            }
+            .joined(separator: ", ")
+            .appending(first: "CGRect(", last: ")")
+    }
+    
+    func getAutoresizingMaskFromAttributes(attributes: [String: String]) -> [String] {
+        return attributes
+            .filter { key, value in key != "autoresizingMask" }
+            .map { key, value in value }
+    }
+    
+    func addValueToProperty(ib: String, value: Any) {
         properties
             .filter { $0.ib == ib }
             .forEach { $0.addValue(value) }

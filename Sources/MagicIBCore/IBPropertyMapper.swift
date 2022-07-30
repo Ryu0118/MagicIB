@@ -19,7 +19,7 @@ class IBPropertyMapper {
         self.type = type
     }
     
-    func addValue(_ value: String) {
+    func addValue(_ value: Any) {
         self.value = value
     }
     

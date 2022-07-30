@@ -12,6 +12,6 @@ protocol IBAnyView: AnyObject {
     associatedtype IBElementType
     var properties: [IBPropertyMapper] { get }
     var functions: [IBFunctionMapper] { get }
-    func addValue(elementType: IBElementType, attributes: [String: String])
+    func addValueToProperties(elementType: IBElementType, attributes: [String: String])
 }
 #endif
