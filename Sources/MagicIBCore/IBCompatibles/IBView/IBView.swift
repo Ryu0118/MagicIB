@@ -7,6 +7,10 @@
 #if os(macOS)
 import Foundation
 
+struct IBLayoutConstraint {
+    
+}
+
 class IBView: IBAnyView {
     typealias IBElementType = IBViewElementType
     
@@ -14,12 +18,16 @@ class IBView: IBAnyView {
         case rect
         case autoresizingMask
         case color
+        case constraint
     }
     
     let id: String
     let customClassName: String?
     let superClass: IBCompatibleView
     let dependencies: IBViewDependencies
+    let constraints = [IBLayoutConstraint]()
+    
+    var subviews: [IBView]()
     
     var properties: [IBPropertyMapper] {
         [
@@ -88,6 +96,8 @@ class IBView: IBAnyView {
         case .color:
             let color = getColorFromAttributes(attributes: attributes)
             addValueToProperty(ib: propertyName, value: color)
+        case .constraint:
+            
         }
     }
     

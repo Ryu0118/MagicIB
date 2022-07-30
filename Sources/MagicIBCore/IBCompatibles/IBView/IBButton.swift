@@ -25,7 +25,7 @@ class IBButton: IBView {
     }
     
     override var properties: [IBPropertyMapper] {
-        var viewProperties = super.properties
+        let viewProperties = super.properties
         let buttonProperties: [IBPropertyMapper] = [
             .init(ib: "highlighted", propertyName: "isHighlighted", type: .bool),
             .init(ib: "selected", propertyName: "isSelected", type: .bool),
@@ -43,6 +43,10 @@ class IBButton: IBView {
             .init(ib: "role", propertyName: "role", type: .bool),
         ]
         return viewProperties + buttonProperties
+    }
+    
+    func addValueToProperties(elementType: IBButtonElementType, attributes: [String: String]) {
+        
     }
     
 }

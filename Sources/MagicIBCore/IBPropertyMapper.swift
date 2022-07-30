@@ -45,6 +45,9 @@ class IBPropertyMapper {
             else if let value = value as? String {
                 return "\(propertyName) = .\(value)"
             }
+            else {
+                return nil
+            }
         }
     }
 }

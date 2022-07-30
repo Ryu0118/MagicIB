@@ -12,8 +12,10 @@ public class IBParser: NSObject {
 
     fileprivate var type: IBType?
     private var waitingIBViewList = [IBView]()
-    private var ibViewControllers = [IBViewController]()
     private var waitingElementList = [String]()
+    private var ibViewControllers = [IBViewController]()
+    private var ibViews = [IBView]()
+    private var parentViews = [IBView]()
     
     public func parse(_ absoluteURL: URL) throws {
         self.type = try IBType(url: absoluteURL)
@@ -30,11 +32,16 @@ extension IBParser: XMLParserDelegate {
     
     public func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
         waitingElementList.append(elementName)
+
         if let ibViewElement = IBCompatibleView.init(rawValue: elementName),
            let ibView = IBView(attributes: attributeDict, ibCompatibleView: ibViewElement)
         {
             waitingIBViewList.append(ibView)
+            ibViews.append(ibView)
             ibViewControllers.last?.appendView(ibView)
+            if elementName == "subviews" {
+                parentViews.append(ibView)
+            }
         }
         else if let ibCompatibleViewController: IBCompatibleViewController = .init(rawValue: elementName),
                 let ibViewController = IBViewController(attributes: attributeDict, ibCompatibleViewController: ibCompatibleViewController)
