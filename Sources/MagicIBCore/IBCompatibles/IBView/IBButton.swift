@@ -45,8 +45,22 @@ class IBButton: IBView {
         return viewProperties + buttonProperties
     }
     
-    func addValueToProperties(elementType: IBButtonElementType, attributes: [String: String]) {
-        
+    @available(*, unavailable)
+    override func addValueToProperties(elementType: IBView.IBElementType, attributes: [String : String]) { }
+    
+    func addValueToProperties(elementType: IBElementType, attributes: [String: String]) {
+        switch elementType {
+        case .rect:
+        case .autoresizingMask:
+        case .color:
+        case .buttonConfiguration:
+        case .backgroundConfiguration:
+        case .preferredSymbolConfiguration:
+        case .attributedString:
+        case .font:
+        case .paragraphStyle:
+        case .directionalEdgeInsets:
+        }
     }
     
 }

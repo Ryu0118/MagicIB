@@ -27,7 +27,7 @@ class IBView: IBAnyView {
     let dependencies: IBViewDependencies
     let constraints = [IBLayoutConstraint]()
     
-    var subviews: [IBView]()
+    var subviews = [IBView]()
     
     var properties: [IBPropertyMapper] {
         [
@@ -83,7 +83,7 @@ class IBView: IBAnyView {
             .filter { $0.value != nil }
     }
     
-    func addValueToProperties(elementType: IBViewElementType, attributes: [String: String]) {
+    func addValueToProperties(elementType: IBElementType, attributes: [String: String]) {
         guard let propertyName = attributes["key"] else { return }
         switch elementType {
         case .rect:

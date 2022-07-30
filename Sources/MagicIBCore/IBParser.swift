@@ -49,7 +49,9 @@ extension IBParser: XMLParserDelegate {
             ibViewControllers.append(ibViewController)
         }
         else {
-            print(waitingIBViewList.last)
+            guard let lastIBView = waitingIBViewList.last else { return }
+            let a = IBViewProvider.cast(type: Swift.type(of: lastIBView), any: lastIBView)
+            //castted.addValueToProperties(elementType: IBButton.IBButtonElementType.autoresizingMask, attributes: <#T##[String : String]#>)
         }
     }
     
