@@ -15,16 +15,4 @@ protocol IBAnyView: AnyObject {
     var typeName: String { get }
     func addValueToProperties(elementType: IBElementType, attributes: [String: String])
 }
-
-extension IBAnyView {
-    
-    func cast<T>(to type: T) -> T? {
-        return self as? T
-    }
-    
-    var type: Self {
-        self.self
-    }
-    
-}
 #endif
