@@ -130,30 +130,4 @@ class IBView: IBAnyView {
     }
     
 }
-/*
- func generateIBInspectableProperty() -> [IBInspectableProperty] {
-     let attributesProperty = attributes
-         .filter({ key, value in !excludeProperties.contains(key) })
-         .map { key, value -> IBInspectableProperty in
-         let type = getType(key: key, value: value)
-         return IBInspectableProperty(type: type, key: key, value: value)
-     }
-     
-     let cgRect = cgRect
-         .filter { key, value in key == "frame" }
-         .sorted(by: {
-             let priority = ["x": 0, "y": 1, "width": 2, "height": 3]
-             return priority[$0.key] ?? 0 < priority[$1.key] ?? 0
-         })
-         .compactMap{
-             guard let value = Double($1) else { return nil }
-             return "\($0): \(value)"
-         }
-         .joined(separator: ", ")
-         .appending(first: "CGRect(", last: ")")
-         .as { IBInspectableProperty(type: .initializer, key: "frame", value: $0) }
-     
-     return attributesProperty + cgRect
- }
- */
 #endif
