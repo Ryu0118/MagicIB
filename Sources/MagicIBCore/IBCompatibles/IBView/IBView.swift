@@ -65,6 +65,7 @@ class IBView: IBAnyView {
         self.superClass = ibCompatibleView
         self.dependencies = IBViewDependencies(ibCompatibleView: superClass)
         self.customClassName = attributes["customClass"]
+        self.mapping(attributes: attributes)
     }
     
     func getCustomizedProperties() -> [IBPropertyMapping] {
@@ -72,7 +73,24 @@ class IBView: IBAnyView {
             .filter { $0.value != nil }
     }
     
-    func addValue(elementName: String, attributes: [String: String]) {
+    private func mapping(attributes: [String: String]) {
+        attributes.forEach { key, value in
+            properties
+                .filter { $0.ib == key }
+                .forEach { $0.addValue(value) }
+            functions
+                .filter { $0.ib == key }
+                .forEach {
+                    if $0.ib.contains("vertical") || $0.ib.contains("horizontal") {
+                        let axis = $0.ib.contains("vertical") ? "vertical" : "horizontal"
+                        $0.putArgument("init(rawValue: \(value)", type: .enum, at: 0)
+                        $0.putArgument(axis, type: .enum, at: 1)
+                    }
+                }
+        }
+    }
+    
+    func addValue(element: IBElementType, attributes: [String: String]) {
         
     }
     

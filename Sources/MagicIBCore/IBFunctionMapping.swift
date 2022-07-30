@@ -12,7 +12,7 @@ struct IBFunctionMapping {
     let ib: String
     let functionName: String //setContentHuggingPriority
     let argumentNames: [String] //["", for]
-    var argumentValues = [(argument: String, value: IBInspectableType)]()
+    var argumentValues = [(argument: Any, type: IBInspectableType)]()
     
     mutating func putArgument(_ value: String, type: IBInspectableType, at: Int) {
         argumentValues.insert((value, type), at: at)
@@ -21,16 +21,37 @@ struct IBFunctionMapping {
     func generateSwiftCode() throws -> String { //setContentHuggingPriority(.init(rawValue: 256), for: .vertical)
         guard argumentValues.count == argumentNames.count else { throw "Number of argumentNames and argumentValues do not match" }
         return zip(argumentNames, argumentValues)
-            .map { name, value in
+            .map { name, argumentValue in
+                let value = convertValue(value: argumentValue.argument, type: argumentValue.type)
                 if name.isEmpty {
-                    return value.argument
+                    return value ?? ""
                 }
                 else {
-                    return name + ": " + value.argument
+                    return name + ": " + (value ?? "")
                 }
             }
             .joined(separator: ", ")
             .appending(first: "\(functionName)(", last: ")")
+    }
+    
+    private func convertValue(value: Any, type: IBInspectableType) -> String? {
+        switch type {
+        case .number, .initializer:
+            guard let value = value as? String else { return nil }
+            return value
+        case .bool:
+            guard let value = value as? String else { return nil }
+            let convertedString = value == "YES" ? "true" : "false"
+            return convertedString
+        case .enum:
+            guard let value = value as? String else { return nil }
+            return ".\(value)"
+        case .array:
+            guard let value = value as? [String] else { return nil }
+            return value
+                .joined(separator: ", ")
+                .appending(first: "[", last: "]")
+        }
     }
     
 }
