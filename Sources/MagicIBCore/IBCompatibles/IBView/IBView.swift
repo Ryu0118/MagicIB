@@ -76,7 +76,7 @@ class IBView: IBAnyView {
     
     func getCustomizedProperties() -> [IBPropertyMapper] {
         properties
-            .filter { $0.value != nil }
+            .filter { $0.generateSwiftCode() != nil }
     }
     
     func addValueToProperties(elementType: IBElementType, attributes: [String: String]) {
