@@ -13,10 +13,6 @@ class IBPropertyMapper {
     let type: IBInspectableType
     var value: Any = ""
     
-    /*
-     {{VARIABLE_NAME}}, which may be in value, must be replaced by the name of the variable being set
-     */
-    
     init(ib: String, propertyName: String, type: IBInspectableType) {
         self.ib = ib
         self.propertyName = propertyName
@@ -27,33 +23,38 @@ class IBPropertyMapper {
         self.value = value
     }
     
-    func generateSwiftCode() -> String? {
+    func generateSwiftCode(variableName: String) -> String? {
         switch type {
         case .number, .initializer, .dynamicCode:
             guard let value = value as? String else { return nil }
-            return "\(propertyName) = \(value)"
+            return "\(variableName).\(propertyName) = \(value)"
         case .bool:
             guard let value = value as? String else { return nil }
             let convertedString = value == "YES" ? "true" : "false"
-            return "\(propertyName) = \(convertedString)"
+            return "\(variableName).\(propertyName) = \(convertedString)"
         case .enum:
             guard let value = value as? String else { return nil }
-            return "\(propertyName) = .\(value)"
+            return "\(variableName).\(propertyName) = .\(value)"
         case .array:
             if let value = value as? [String] {
                 let array =  value
                     .joined(separator: ", ")
                     .appending(first: "[", last: "]")
-                return "\(propertyName) = \(array)"
+                return "\(variableName).\(propertyName) = \(array)"
             }
             else if let value = value as? String {
-                return "\(propertyName) = .\(value)"
+                return "\(variableName).\(propertyName) = .\(value)"
             }
             else {
                 return nil
             }
         case .fullCustom:
-            return value as? String
+            guard let value = value as? String else { return nil }
+            /*
+             {{VARIABLE_NAME}}, which may be in value,
+             must be replaced by the name of the variable being set
+             */
+            return value.replacingOccurrences(of: "{{VARIABLE_NAME}}", with: variableName)
         }
     }
 }
