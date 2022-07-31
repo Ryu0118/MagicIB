@@ -102,12 +102,12 @@ class IBButton: IBView {
     }
     
     @discardableResult
-    private func appendConfiguration(_ configuration: String) -> String {
+    private func appendConfiguration(_ configuration: String) -> String? {
         guard let property = properties.first(where: { $0.ib == "configuration" }),
               let buttonConfiguration = property.value as? String
-        else { return }
+        else { return nil }
         
-        var lines = backgroundConfiguration.components(separatedBy: "\n")
+        var lines = buttonConfiguration.components(separatedBy: "\n")
         //lines[lines.count - 2] is before "{{VARIABLE_NAME}}.configuration = \(variableName)"
         lines[lines.count - 2].append(configuration)
         let newConfiguration = lines.joined(separator: "\n")
@@ -117,7 +117,7 @@ class IBButton: IBView {
     
     private func insertColorAtButtonConfiguration(attributes: [String: String], propertyName: String, variableName: String) {
         guard let property = properties.first(where: { $0.ib == "configuration" }),
-              let buttonConfiguration = property.value as? String
+              let _ = property.value as? String
         else { return }
         let color = getColorFromAttributes(attributes: attributes)
         let colorConfiguration = "\(variableName).\(propertyName) = \(color)"
@@ -128,31 +128,40 @@ class IBButton: IBView {
     private func setButtonBackgroundConfigurationFromAttributes(attributes: [String: String]) {
         let attributes = attributes.filter {  key, _ in key != "key" }
         guard let property = properties.first(where: { $0.ib == "configuration" }),
-              let buttonConfiguration = property.value as? String
-        else { return nil }
+              let _ = property.value as? String
+        else { return }
         let variableName = "backgroundConfiguration"
         var backgroundConfiguration = "var \(variableName): UIBackgroundConfiguration = .clear()"
         
-        if let imageConstructor = getImageConstructorFromAttributes(attributes: attributes) {
-            let imageConfiguration = "\(variableName).image = \(imageConstructor)"
-            backgroundConfiguration.addLine(imageConfiguration)
-        }
-        if let imageContentMode = attributes["imageContentMode"] {
-            let imageContentModeConfiguration = "\(variableName).imageContentMode = .\(imageContentMode)"
-            backgroundConfiguration.addLine(imageContentModeConfiguration)
-        }
-        if let strokeWidth = attributes["strokeWidth"] {
-            let strokeWidthConfiguration = "\(variableName).strokeWidth = \(strokeWidth)"
-            backgroundConfiguration.addLine(strokeWidthConfiguration)
-        }
-        if let strokeOutset = attributes["strokeOutset"] {
-            let strokeOutsetConfiguration = "\(variableName).strokeOutset = \(strokeOutset)"
-            backgroundConfiguration.addLine(strokeOutset)
+        let dic = [
+            (key: "image", value: getImageConstructorFromAttributes(attributes: attributes)),
+            (key: "imageContentMode", value: attributes["imageContentMode"]),
+            (key: "strokeWidth", value: attributes["strokeWidth"]),
+            (key: "strokeOutset", value: attributes["strokeOutset"]),
+        ]
+        
+        for (key, value) in dic {
+            if let code = generateSwiftCode(variableName: variableName, propertyName: key, value: value) {
+                backgroundConfiguration.addLine(code)
+            }
         }
         
         backgroundConfiguration.addLine("buttonConfiguration.background = \(variableName)")
-        
         appendConfiguration(backgroundConfiguration)
+    }
+    
+    private func generateSwiftCode(variableName: String, propertyName: String, value: String?) -> String? {
+        guard let value = value else { return nil }
+        if value == "YES" || value == "NO" {
+            let bool = value == "YES" ? "true" : "false"
+            return "\(variableName).\(propertyName) = \(bool)"
+        }
+        else if Double(value) != nil || propertyName == "title" {
+            return "\(variableName).\(propertyName) = \(value)"
+        }
+        else {
+            return "\(variableName).\(propertyName) = .\(value)"
+        }
     }
     
     private func getButtonConfigurationFromAttributes(attributes: [String: String]) -> String? {
@@ -163,39 +172,23 @@ class IBButton: IBView {
         var constructButtonConfiguration = "var \(variableName): UIButton.Configuration = .\(style)()"
         
         //options
-        if let constructor = getImageConstructorFromAttributes(attributes: attributes) {
-            let imageConfiguration = "\(variableName).image = \(constructor)"
-            constructButtonConfiguration.addLine(imageConfiguration)
+        let dic = [
+            (key: "image", value: getImageConstructorFromAttributes(attributes: attributes)),
+            (key: "imagePlacement", value: attributes["imagePlacement"]),
+            (key: "imagePadding", value: attributes["imagePadding"]),
+            (key: "title", value: attributes["title"]),
+            (key: "titlePadding", value: attributes["titlePadding"]),
+            (key: "leading", value: attributes["leading"]),
+            (key: "cornerStyle", value: attributes["cornerStyle"]),
+            (key: "showsActivityIndicator", value: attributes["showsActivityIndicator"]),
+        ]
+        
+        for (key, value) in dic {
+            if let code = generateSwiftCode(variableName: variableName, propertyName: key, value: value) {
+                constructButtonConfiguration.addLine(code)
+            }
         }
-        if let imagePlacement = attributes["imagePlacement"] {
-            let imagePlacementCode = "\(variableName).imagePlacement = .\(imagePlacement)"
-            constructButtonConfiguration.addLine(imagePlacementCode)
-        }
-        if let imagePadding = attributes["imagePadding"] {
-            let imagePaddingCode = "\(variableName).imagePadding = \(imagePadding)"
-            constructButtonConfiguration.addLine(imagePaddingCode)
-        }
-        if let title = attributes["title"] {
-            let titleCode = "\(variableName).title = \(title)"
-            constructButtonConfiguration.addLine(titleCode)
-        }
-        if let titlePadding = attributes["titlePadding"] {
-            let titlePaddingCode = "\(variableName).titlePadding = \(titlePadding)"
-            constructButtonConfiguration.addLine(titlePaddingCode)
-        }
-        if let titleAlignment = attributes["leading"] {
-            let titleAlignmentCode = "\(variableName).titleAlignment = .\(titleAlignment)"
-            constructButtonConfiguration.addLine(titleAlignmentCode)
-        }
-        if let cornerStyle = attributes["cornerStyle"] {
-            let cornerStyleCode = "\(variableName).cornerStyle = .\(cornerStyle)"
-            constructButtonConfiguration.addLine(cornerStyleCode)
-        }
-        if let showsActivityIndicator = attributes["showsActivityIndicator"] {
-            let bool = showsActivityIndicator == "YES" ? "true" : "false"
-            let showsActivityIndicatorCode = "\(variableName).showsActivityIndicator = \(bool)"
-            constructButtonConfiguration.addLine(showsActivityIndicatorCode)
-        }
+        
         let buttonAssgined = "{{VARIABLE_NAME}}.configuration = \(variableName)"
         constructButtonConfiguration.addLine(buttonAssgined)
         return constructButtonConfiguration
