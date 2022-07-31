@@ -70,7 +70,8 @@ class IBButton: IBView {
             constraints.append(constraint)
         case .buttonConfiguration:
             let configuration = getButtonConfigurationFromAttributes(attributes: attributes)
-            addValueToProperty(ib: propertyName, value: configuration)
+            let property = addValueToProperty(ib: propertyName, value: configuration)
+            property.imageName = imageName
         case .backgroundConfiguration:
         case .preferredSymbolConfiguration:
         case .attributedString:
@@ -85,14 +86,49 @@ class IBButton: IBView {
         let attributes = attributes.filter { key, _ in key != "key" }
         guard let style = attributes["style"] else { return nil }
         let variableName = "buttonConfiguration"
-        let constructButtonConfiguration = "let \(variableName): UIButton.Configuration = .\(style)()"
+        var constructButtonConfiguration = "var \(variableName): UIButton.Configuration = .\(style)()"
         
         //options
         if let image = attributes["image"] {
-            IBImageBuffer.shared.append(image)
-            //{{IBImageBuffer}} is replaced by IBPropertyMapper when the catalog value of the image in the IB xml is known.
-            "buffonConfiguration.image = {{IBImageBuffer:\(image)}}"
+            var uiImageConstructor: String
+            if let _ = attributes["catalog"] {
+                uiImageConstructor = "UIImage(systemName: \(image))"
+            }
+            else {
+                uiImageConstructor = "UIImage(named: \(image))"
+            }
+            let imageConfiguration = "\(variableName).image = \(uiImageConstructor)"
+            constructButtonConfiguration.addLine(imageConfiguration)
         }
+        if let imagePlacement = attributes["imagePlacement"] {
+            let imagePlacementCode = "\(variableName).imagePlacement = .\(imagePlacement)"
+            constructButtonConfiguration.addLine(imagePlacementCode)
+        }
+        if let imagePadding = attributes["imagePadding"] {
+            let imagePaddingCode = "\(variableName).imagePadding = \(imagePadding)"
+            constructButtonConfiguration.addLine(imagePaddingCode)
+        }
+        if let titlePadding = attributes["titlePadding"] {
+            let titlePaddingCode = "\(variableName).titlePadding = \(titlePadding)"
+            constructButtonConfiguration.addLine(titlePaddingCode)
+        }
+        if let titleAlignment = attributes["leading"] {
+            let titleAlignmentCode = "\(variableName).titleAlignment = .\(titleAlignment)"
+            constructButtonConfiguration.addLine(titleAlignmentCode)
+        }
+        if let cornerStyle = attributes["cornerStyle"] {
+            let cornerStyleCode = "\(variableName).cornerStyle = .\(cornerStyle)"
+            constructButtonConfiguration.addLine(cornerStyleCode)
+        }
+        if let showsActivityIndicator = attributes["showsActivityIndicator"] {
+            let bool = showsActivityIndicator == "YES" ? "true" : "false"
+            let showsActivityIndicatorCode = "\(variableName).showsActivityIndicator = \(bool)"
+            constructButtonConfiguration.addLine(showsActivityIndicatorCode)
+        }
+        let buttonAssgined = "{{VARIABLE_NAME}}.configuration = \(variableName)"
+        constructButtonConfiguration.addLine(buttonAssgined)
+        return constructButtonConfiguration
+        
     }
     
 }

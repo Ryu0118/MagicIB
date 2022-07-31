@@ -17,4 +17,8 @@ extension String: LocalizedError {
         try [self].map { try transform($0) }
     }
     
+    mutating func addLine(_ string: String, newLineCount: Int = 1, indentCount: Int = 0) {
+        self += String(repeating: "\n", count: newLineCount) + String(repeating: "    ", count: indentCount) + string
+    }
+    
 }

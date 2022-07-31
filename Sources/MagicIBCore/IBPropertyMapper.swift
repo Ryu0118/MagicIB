@@ -12,7 +12,10 @@ class IBPropertyMapper {
     let propertyName: String
     let type: IBInspectableType
     var value: Any = ""
-    var imageNames: String?
+    
+    /*
+     {{VARIABLE_NAME}}, which may be in value, must be replaced by the name of the variable being set
+     */
     
     init(ib: String, propertyName: String, type: IBInspectableType) {
         self.ib = ib
@@ -50,10 +53,7 @@ class IBPropertyMapper {
                 return nil
             }
         case .fullCustom:
-            guard let value = value as? String else { return nil}
-            if value.contains("{{IBImageBuffer:") {
-                value.replacingOccurrences(of: "{{IBImageBuffer}}", with: "\(IBImageBuffer)")
-            }
+            return value as? String
         }
     }
 }
