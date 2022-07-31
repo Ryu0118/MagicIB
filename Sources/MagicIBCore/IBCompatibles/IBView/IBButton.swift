@@ -72,6 +72,7 @@ class IBButton: IBView {
             let configuration = getButtonConfigurationFromAttributes(attributes: attributes)
             let property = addValueToProperty(ib: propertyName, value: configuration)
         case .backgroundConfiguration:
+            
         case .preferredSymbolConfiguration:
         case .attributedString:
         case .font:

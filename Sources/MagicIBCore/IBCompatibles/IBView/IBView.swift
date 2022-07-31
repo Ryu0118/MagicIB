@@ -116,7 +116,7 @@ class IBView: IBAnyView {
                 return "\($0): \($1)"
             }
             .joined(separator: ", ")
-            .appending(first: "CGRect(", last: ")")
+            .insert(first: "CGRect(", last: ")")
     }
     
     func getAutoresizingMaskFromAttributes(attributes: [String: String]) -> [String] {

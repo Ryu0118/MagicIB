@@ -37,7 +37,7 @@ class IBFunctionMapper {
                 }
             }
             .joined(separator: ", ")
-            .appending(first: "\(functionName)(", last: ")")
+            .insert(first: "\(functionName)(", last: ")")
     }
     
     private func convertValue(value: Any, type: IBInspectableType) -> String? {
@@ -55,7 +55,7 @@ class IBFunctionMapper {
             if let value = value as? [String] {
                 return value
                     .joined(separator: ", ")
-                    .appending(first: "[", last: "]")
+                    .insert(first: "[", last: "]")
             }
             else {
                 return value as? String

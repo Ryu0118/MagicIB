@@ -9,7 +9,7 @@ import Foundation
 
 extension String: LocalizedError {
     
-    func appending(first: String = "", last: String = "") -> String {
+    func insert(first: String = "", last: String = "") -> String {
         return first + self + last
     }
     

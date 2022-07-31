@@ -39,7 +39,7 @@ class IBPropertyMapper {
             if let value = value as? [String] {
                 let array =  value
                     .joined(separator: ", ")
-                    .appending(first: "[", last: "]")
+                    .insert(first: "[", last: "]")
                 return "\(variableName).\(propertyName) = \(array)"
             }
             else if let value = value as? String {
