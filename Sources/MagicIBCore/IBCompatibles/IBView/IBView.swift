@@ -24,6 +24,7 @@ class IBView: IBAnyView {
     
     var constraints = [IBLayoutConstraint]()
     var subviews = [IBView]()
+    var parentElement: String?
     
     var properties: [IBPropertyMapper] {
         [
@@ -76,7 +77,7 @@ class IBView: IBAnyView {
     
     func getCustomizedProperties() -> [IBPropertyMapper] {
         properties
-            .filter { $0.generateSwiftCode() != nil }
+            .filter { $0.generateSwiftCode(variableName: "") != nil }
     }
     
     func addValueToProperties(elementType: IBElementType, attributes: [String: String]) {
@@ -102,6 +103,19 @@ class IBView: IBAnyView {
                 constraints.append(constraint)
             }
         }
+    }
+    
+    func getImageConstructorFromAttributes(attributes: [String: String]) -> String? {
+        guard let image = attributes["image"] else { return nil }
+        
+        var uiImageConstructor: String
+        if let _ = attributes["catalog"] {
+            uiImageConstructor = "UIImage(systemName: \(image))"
+        }
+        else {
+            uiImageConstructor = "UIImage(named: \(image))"
+        }
+        return uiImageConstructor
     }
     
     func getCGRectFromAttributes(attributes: [String: String]) -> String {
