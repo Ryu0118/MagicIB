@@ -25,7 +25,7 @@ class IBPropertyMapper {
     
     func generateSwiftCode() -> String? {
         switch type {
-        case .number, .initializer, .custom:
+        case .number, .initializer, .dynamicCode:
             guard let value = value as? String else { return nil }
             return "\(propertyName) = \(value)"
         case .bool:
@@ -48,8 +48,11 @@ class IBPropertyMapper {
             else {
                 return nil
             }
-        case .getonly:
-            return value as? String
+        case .fullCustom:
+            guard let value = value as? String else { return nil}
+            if value.contains("{{IBImageBuffer:") {
+                value.replacingOccurrences(of: "{{IBImageBuffer}}", with: "\(IBImageBuffer)")
+            }
         }
     }
 }

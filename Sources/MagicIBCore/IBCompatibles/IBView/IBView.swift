@@ -37,8 +37,8 @@ class IBView: IBAnyView {
             .init(ib: "autoresizingMask", propertyName: "autoresizingMask", type: .array),
             .init(ib: "contentMode", propertyName: "contentMode", type: .enum),
             .init(ib: "frame", propertyName: "frame", type: .initializer),
-            .init(ib: "backgroundColor", propertyName: "backgroundColor", type: .custom),
-            .init(ib: "tintColor", propertyName: "tintColor", type: .custom),
+            .init(ib: "backgroundColor", propertyName: "backgroundColor", type: .dynamicCode),
+            .init(ib: "tintColor", propertyName: "tintColor", type: .dynamicCode),
             .init(ib: "opaque", propertyName: "isOpaque", type: .bool),
             .init(ib: "tag", propertyName: "tag", type: .number),
             .init(ib: "ambiguous", propertyName: "hasAmbiguousLayout", type: .bool),
@@ -138,13 +138,19 @@ class IBView: IBAnyView {
             return "UIColor(red: \(attributes["red"] ?? "0"), green: \(attributes["green"] ?? "0"), blue: \(attributes["blue"] ?? "0"), alpha: \(attributes["alpha"] ?? "0")"
         }
         else if isSystemColor {
+            var systemColor = attributes["systemColor"] ?? "white"
+            // ex) systemPurpleColor
+            if systemColor.lowercased().contains("color") {
+                let colorIndex = systemColor.index(systemColor.endIndex, offsetBy: -5)
+                systemColor.remove(at: colorIndex) //ex) systemPurple
+            }
             return ".\(attributes["systemColor"] ?? "white")"
         }
         else if isNamed {
             return "UIColor(named: \"\(attributes["name"] ?? "AccentColor")\")"
         }
         else {
-            return ".clear"
+            return ".white"
         }
     }
     

@@ -13,7 +13,7 @@ enum IBInspectableType: Equatable {
     case `enum`
     case initializer
     case array
-    case custom
-    case getonly
+    case dynamicCode
+    case fullCustom
 }
 #endif

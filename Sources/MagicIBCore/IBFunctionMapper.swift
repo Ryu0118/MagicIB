@@ -42,7 +42,7 @@ class IBFunctionMapper {
     
     private func convertValue(value: Any, type: IBInspectableType) -> String? {
         switch type {
-        case .number, .initializer, .custom:
+        case .number, .initializer, .dynamicCode:
             return value as? String
         case .bool:
             guard let value = value as? String else { return nil }
@@ -60,7 +60,7 @@ class IBFunctionMapper {
             else {
                 return value as? String
             }
-        case .getonly:
+        case .fullCustom:
             return nil
         }
     }
