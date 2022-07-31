@@ -71,7 +71,6 @@ class IBButton: IBView {
         case .buttonConfiguration:
             let configuration = getButtonConfigurationFromAttributes(attributes: attributes)
             let property = addValueToProperty(ib: propertyName, value: configuration)
-            property.imageName = imageName
         case .backgroundConfiguration:
         case .preferredSymbolConfiguration:
         case .attributedString:
