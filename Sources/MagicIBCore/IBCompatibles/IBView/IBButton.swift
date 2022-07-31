@@ -78,6 +78,8 @@ class IBButton: IBView {
             addValueToProperty(ib: propertyName, value: buttonConfiguration ?? "")
         case .backgroundConfiguration:
             setButtonBackgroundConfigurationFromAttributes(attributes: attributes)
+        case .imageReference:
+            
         case .preferredSymbolConfiguration:
             setPreferredSymbolConfiguration(attributes: attributes)
         case .attributedString:
@@ -87,14 +89,17 @@ class IBButton: IBView {
         case .directionalEdgeInsets:
         }
     }
+}
+
+private extension IBButton {
     
-    private func setPreferredSymbolConfiguration(attributes: [String: String]) {
+    func setPreferredSymbolConfiguration(attributes: [String: String]) {
         let attributes = attributes.filter {  key, _ in key != "key" }
         guard let configurationType = attributes["configurationType"] else { return }
         if configurationType == "pointSize",
-            let pointSize = attributes["pointSize"],
-            let scale = attributes["scale"],
-            let weight = attributes["weight"]
+           let pointSize = attributes["pointSize"],
+           let scale = attributes["scale"],
+           let weight = attributes["weight"]
         {
             let code = "buttonConfiguration.preferredSymbolConfigurationForImage = .init(pointSize: \(pointSize), weight: .\(weight), scale: .\(scale))"
             appendConfiguration(code)
@@ -102,7 +107,7 @@ class IBButton: IBView {
     }
     
     @discardableResult
-    private func appendConfiguration(_ configuration: String) -> String? {
+    func appendConfiguration(_ configuration: String) -> String? {
         guard let property = properties.first(where: { $0.ib == "configuration" }),
               let buttonConfiguration = property.value as? String
         else { return nil }
@@ -115,7 +120,7 @@ class IBButton: IBView {
         return configuration
     }
     
-    private func insertColorAtButtonConfiguration(attributes: [String: String], propertyName: String, variableName: String) {
+    func insertColorAtButtonConfiguration(attributes: [String: String], propertyName: String, variableName: String) {
         guard let property = properties.first(where: { $0.ib == "configuration" }),
               let _ = property.value as? String
         else { return }
@@ -125,7 +130,7 @@ class IBButton: IBView {
         appendConfiguration(colorConfiguration)
     }
     
-    private func setButtonBackgroundConfigurationFromAttributes(attributes: [String: String]) {
+    func setButtonBackgroundConfigurationFromAttributes(attributes: [String: String]) {
         let attributes = attributes.filter {  key, _ in key != "key" }
         guard let property = properties.first(where: { $0.ib == "configuration" }),
               let _ = property.value as? String
@@ -133,14 +138,14 @@ class IBButton: IBView {
         let variableName = "backgroundConfiguration"
         var backgroundConfiguration = "var \(variableName): UIBackgroundConfiguration = .clear()"
         
-        let dic = [
+        let options = [
             (key: "image", value: getImageConstructorFromAttributes(attributes: attributes)),
             (key: "imageContentMode", value: attributes["imageContentMode"]),
             (key: "strokeWidth", value: attributes["strokeWidth"]),
             (key: "strokeOutset", value: attributes["strokeOutset"]),
         ]
         
-        for (key, value) in dic {
+        for (key, value) in options {
             if let code = generateSwiftCode(variableName: variableName, propertyName: key, value: value) {
                 backgroundConfiguration.addLine(code)
             }
@@ -150,7 +155,7 @@ class IBButton: IBView {
         appendConfiguration(backgroundConfiguration)
     }
     
-    private func generateSwiftCode(variableName: String, propertyName: String, value: String?) -> String? {
+    func generateSwiftCode(variableName: String, propertyName: String, value: String?) -> String? {
         guard let value = value else { return nil }
         if value == "YES" || value == "NO" {
             let bool = value == "YES" ? "true" : "false"
@@ -164,7 +169,7 @@ class IBButton: IBView {
         }
     }
     
-    private func getButtonConfigurationFromAttributes(attributes: [String: String]) -> String? {
+    func getButtonConfigurationFromAttributes(attributes: [String: String]) -> String? {
         let attributes = attributes.filter { key, _ in key != "key" }
         guard let style = attributes["style"] else { return nil }
         
@@ -172,7 +177,7 @@ class IBButton: IBView {
         var constructButtonConfiguration = "var \(variableName): UIButton.Configuration = .\(style)()"
         
         //options
-        let dic = [
+        let options = [
             (key: "image", value: getImageConstructorFromAttributes(attributes: attributes)),
             (key: "imagePlacement", value: attributes["imagePlacement"]),
             (key: "imagePadding", value: attributes["imagePadding"]),
@@ -183,7 +188,7 @@ class IBButton: IBView {
             (key: "showsActivityIndicator", value: attributes["showsActivityIndicator"]),
         ]
         
-        for (key, value) in dic {
+        for (key, value) in options {
             if let code = generateSwiftCode(variableName: variableName, propertyName: key, value: value) {
                 constructButtonConfiguration.addLine(code)
             }
