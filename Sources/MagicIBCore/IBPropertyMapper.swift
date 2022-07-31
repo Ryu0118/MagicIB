@@ -12,6 +12,7 @@ class IBPropertyMapper {
     let propertyName: String
     let type: IBInspectableType
     var value: Any = ""
+    var imageNames: String?
     
     init(ib: String, propertyName: String, type: IBInspectableType) {
         self.ib = ib

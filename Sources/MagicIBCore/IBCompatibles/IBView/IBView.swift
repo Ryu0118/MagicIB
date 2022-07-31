@@ -154,10 +154,13 @@ class IBView: IBAnyView {
         }
     }
     
-    func addValueToProperty(ib: String, value: Any) {
-        properties
+    @discardableResult
+    func addValueToProperty(ib: String, value: Any) -> IBPropertyMapper? {
+        let properties = properties
             .filter { $0.ib == ib }
+        properties
             .forEach { $0.addValue(value) }
+        return properties.last
     }
     
     private func mapping(attributes: [String: String]) {
