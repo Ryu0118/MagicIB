@@ -18,6 +18,7 @@ class IBButton: IBView {
         case constraint
         case buttonConfiguration
         case backgroundConfiguration
+        case imageReference
         case preferredSymbolConfiguration
         case attributedString
         case font
@@ -44,7 +45,6 @@ class IBButton: IBView {
             .init(ib: "changesSelectionAsPrimaryAction", propertyName: "changesSelectionAsPrimaryAction", type: .bool),
             .init(ib: "role", propertyName: "role", type: .bool),
             .init(ib: "configuration", propertyName: "configuration", type: .fullCustom),
-            .init(ib: "background", propertyName: "background", type: .fullCustom),
         ]
         return viewProperties + buttonProperties
     }
@@ -63,8 +63,8 @@ class IBButton: IBView {
             let autoresizingMask = getAutoresizingMaskFromAttributes(attributes: attributes)
             addValueToProperty(ib: propertyName, value: autoresizingMask)
         case .color:
-            if let property = properties.first(where: { $0.ib == "configuration" }), parentElement == "backgroundConfiguration" {
-                insertColorAtButtonConfiguration(property: property, propertyName: propertyName)
+            if let parentElement = parentElement {
+                insertColorAtButtonConfiguration(attributes: attributes, propertyName: propertyName, variableName: parentElement)
             }
             else {
                 let color = getColorFromAttributes(attributes: attributes)
@@ -77,10 +77,9 @@ class IBButton: IBView {
             let buttonConfiguration = getButtonConfigurationFromAttributes(attributes: attributes)
             addValueToProperty(ib: propertyName, value: buttonConfiguration ?? "")
         case .backgroundConfiguration:
-            let backgroundConfiguration = getButtonBackgroundConfigurationFromAttributes(attributes: attributes)
-            addValueToProperty(ib: propertyName, value: backgroundConfiguration ?? "")
+            setButtonBackgroundConfigurationFromAttributes(attributes: attributes)
         case .preferredSymbolConfiguration:
-            
+            setPreferredSymbolConfiguration(attributes: attributes)
         case .attributedString:
         case .font:
         case .size:
@@ -89,22 +88,48 @@ class IBButton: IBView {
         }
     }
     
-    private func insertColorAtButtonConfiguration(property: IBPropertyMapper, propertyName: String) {
-        guard let buttonConfiguration  = property.value as? String else { return }
-        let color = getColorFromAttributes(attributes: attributes)
-        let colorConfiguration = "backgroundConfiguration.\(propertyName) = \(color)"
-        var lines = backgroundConfiguration.components(separatedBy: "\n")
-        lines[lines.count - 2].append(colorConfiguration)
-        
-        property.value = lines.joined(separator: "\n")
+    private func setPreferredSymbolConfiguration(attributes: [String: String]) {
+        let attributes = attributes.filter {  key, _ in key != "key" }
+        guard let configurationType = attributes["configurationType"] else { return }
+        if configurationType == "pointSize",
+            let pointSize = attributes["pointSize"],
+            let scale = attributes["scale"],
+            let weight = attributes["weight"]
+        {
+            let code = "buttonConfiguration.preferredSymbolConfigurationForImage = .init(pointSize: \(pointSize), weight: .\(weight), scale: .\(scale))"
+            appendConfiguration(code)
+        }
     }
     
-    private func getButtonBackgroundConfigurationFromAttributes(attributes: [String: String]) -> String? {
+    @discardableResult
+    private func appendConfiguration(_ configuration: String) -> String {
+        guard let property = properties.first(where: { $0.ib == "configuration" }),
+              let buttonConfiguration = property.value as? String
+        else { return }
+        
+        var lines = backgroundConfiguration.components(separatedBy: "\n")
+        //lines[lines.count - 2] is before "{{VARIABLE_NAME}}.configuration = \(variableName)"
+        lines[lines.count - 2].append(configuration)
+        let newConfiguration = lines.joined(separator: "\n")
+        property.value = newConfiguration
+        return configuration
+    }
+    
+    private func insertColorAtButtonConfiguration(attributes: [String: String], propertyName: String, variableName: String) {
+        guard let property = properties.first(where: { $0.ib == "configuration" }),
+              let buttonConfiguration = property.value as? String
+        else { return }
+        let color = getColorFromAttributes(attributes: attributes)
+        let colorConfiguration = "\(variableName).\(propertyName) = \(color)"
+        
+        appendConfiguration(colorConfiguration)
+    }
+    
+    private func setButtonBackgroundConfigurationFromAttributes(attributes: [String: String]) {
         let attributes = attributes.filter {  key, _ in key != "key" }
         guard let property = properties.first(where: { $0.ib == "configuration" }),
               let buttonConfiguration = property.value as? String
         else { return nil }
-        var lines = buttonConfiguration.components(separatedBy: ".")
         let variableName = "backgroundConfiguration"
         var backgroundConfiguration = "var \(variableName): UIBackgroundConfiguration = .clear()"
         
@@ -124,13 +149,10 @@ class IBButton: IBView {
             let strokeOutsetConfiguration = "\(variableName).strokeOutset = \(strokeOutset)"
             backgroundConfiguration.addLine(strokeOutset)
         }
-        //lines[lines.count - 2] is before "{{VARIABLE_NAME}}.configuration = \(variableName)"
-        lines[lines.count - 2].append(backgroundConfiguration)
         
-        let buttonConfiguration = lines.joined(separator: "\n")
-        property.value = buttonConfiguration
+        backgroundConfiguration.addLine("buttonConfiguration.background = \(variableName)")
         
-        return buttonConfiguration
+        appendConfiguration(backgroundConfiguration)
     }
     
     private func getButtonConfigurationFromAttributes(attributes: [String: String]) -> String? {
@@ -152,6 +174,10 @@ class IBButton: IBView {
         if let imagePadding = attributes["imagePadding"] {
             let imagePaddingCode = "\(variableName).imagePadding = \(imagePadding)"
             constructButtonConfiguration.addLine(imagePaddingCode)
+        }
+        if let title = attributes["title"] {
+            let titleCode = "\(variableName).title = \(title)"
+            constructButtonConfiguration.addLine(titleCode)
         }
         if let titlePadding = attributes["titlePadding"] {
             let titlePaddingCode = "\(variableName).titlePadding = \(titlePadding)"
