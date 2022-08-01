@@ -35,7 +35,7 @@ extension IBParser: XMLParserDelegate {
         waitingElementList.append(elementName)
 
         if let ibViewElement = IBCompatibleView.init(rawValue: elementName),
-           let ibView = IBView(attributes: attributeDict, ibCompatibleView: ibViewElement)
+           let ibView = IBViewProvider.instance(attributes: attributeDict, ibCompatibleView: ibViewElement)
         {
             waitingIBViewList.append(ibView)
             ibViewControllers.last?.appendView(ibView)
