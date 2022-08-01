@@ -77,12 +77,14 @@ class IBButton: IBView {
             let buttonConfiguration = getButtonConfigurationFromAttributes(attributes: attributes)
             addValueToProperty(ib: propertyName, value: buttonConfiguration ?? "")
         case .backgroundConfiguration:
-            setButtonBackgroundConfigurationFromAttributes(attributes: attributes)
+            let backgroundConfiguration = getBackgroundConfiguration(attributes: attributes)
+            appendConfiguration(backgroundConfiguration)
         case .imageReference:
-            
+            setImageReference(attributes: attributes)
         case .preferredSymbolConfiguration:
             setPreferredSymbolConfiguration(attributes: attributes)
         case .attributedString:
+            
         case .font:
         case .size:
         case .paragraphStyle:
@@ -92,19 +94,6 @@ class IBButton: IBView {
 }
 
 private extension IBButton {
-    
-    func setPreferredSymbolConfiguration(attributes: [String: String]) {
-        let attributes = attributes.filter {  key, _ in key != "key" }
-        guard let configurationType = attributes["configurationType"] else { return }
-        if configurationType == "pointSize",
-           let pointSize = attributes["pointSize"],
-           let scale = attributes["scale"],
-           let weight = attributes["weight"]
-        {
-            let code = "buttonConfiguration.preferredSymbolConfigurationForImage = .init(pointSize: \(pointSize), weight: .\(weight), scale: .\(scale))"
-            appendConfiguration(code)
-        }
-    }
     
     @discardableResult
     func appendConfiguration(_ configuration: String) -> String? {
@@ -120,6 +109,26 @@ private extension IBButton {
         return configuration
     }
     
+    func setImageReference(attributes: [String: String]) {
+        let attributes = attributes.filter { $0.key != "key" }
+        if let code = generateSwiftCode(variableName: "backgroundConfiguration", propertyName: "image", value: attributes["image"]) {
+            appendConfiguration(code)
+        }
+    }
+    
+    func setPreferredSymbolConfiguration(attributes: [String: String]) {
+        let attributes = attributes.filter {  key, _ in key != "key" }
+        guard let configurationType = attributes["configurationType"] else { return }
+        if configurationType == "pointSize",
+           let pointSize = attributes["pointSize"],
+           let scale = attributes["scale"],
+           let weight = attributes["weight"]
+        {
+            let code = "buttonConfiguration.preferredSymbolConfigurationForImage = .init(pointSize: \(pointSize), weight: .\(weight), scale: .\(scale))"
+            appendConfiguration(code)
+        }
+    }
+    
     func insertColorAtButtonConfiguration(attributes: [String: String], propertyName: String, variableName: String) {
         guard let property = properties.first(where: { $0.ib == "configuration" }),
               let _ = property.value as? String
@@ -130,7 +139,7 @@ private extension IBButton {
         appendConfiguration(colorConfiguration)
     }
     
-    func setButtonBackgroundConfigurationFromAttributes(attributes: [String: String]) {
+    func getBackgroundConfiguration(attributes: [String: String]) {
         let attributes = attributes.filter {  key, _ in key != "key" }
         guard let property = properties.first(where: { $0.ib == "configuration" }),
               let _ = property.value as? String
@@ -152,7 +161,7 @@ private extension IBButton {
         }
         
         backgroundConfiguration.addLine("buttonConfiguration.background = \(variableName)")
-        appendConfiguration(backgroundConfiguration)
+        return backgroundConfiguration
     }
     
     func generateSwiftCode(variableName: String, propertyName: String, value: String?) -> String? {
