@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum IBViewProvider {
+extension IBView {
     
     static func instance(attributes: [String: String], ibCompatibleView: IBCompatibleView) -> IBView? {
         switch ibCompatibleView {

@@ -7,13 +7,14 @@
 #if os(macOS)
 import Foundation
 
-enum IBInspectableType: Equatable {
+enum IBInspectableType {
     case number
     case bool
-    case `enum`
-    case initializer
+    case `enum`//or static let
     case array
-    case dynamicCode
-    case fullCustom
+    case color
+    case cgRect
+    case image
+    case configuration
 }
 #endif

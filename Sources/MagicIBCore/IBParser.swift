@@ -35,7 +35,7 @@ extension IBParser: XMLParserDelegate {
         waitingElementList.append(elementName)
 
         if let ibViewElement = IBCompatibleView.init(rawValue: elementName),
-           let ibView = IBViewProvider.instance(attributes: attributeDict, ibCompatibleView: ibViewElement)
+           let ibView = IBView.instance(attributes: attributeDict, ibCompatibleView: ibViewElement)
         {
             waitingIBViewList.append(ibView)
             ibViewControllers.last?.appendView(ibView)
@@ -55,7 +55,7 @@ extension IBParser: XMLParserDelegate {
                 if parentView == nil { parentView = lastIBView }
             }
             else {
-                IBViewProvider.addValueToProperties(ibView: lastIBView, elementName: elementName, parentElement: waitingElementList.last, attributes: attributeDict)
+                IBView.addValueToProperties(ibView: lastIBView, elementName: elementName, parentElement: waitingElementList.last, attributes: attributeDict)
             }
         }
     }
