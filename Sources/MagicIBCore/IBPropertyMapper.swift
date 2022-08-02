@@ -36,7 +36,7 @@ class IBPropertyMapper {
     
     var isRequireInitializer: Bool {
         switch type {
-        case .font, .color, .cgRect, .image, .configuration, .paragraphStyle:
+        case .font, .color, .cgRect, .image, .configuration, .paragraphStyle, .autoresizingMask:
             return true
         default:
             return false
