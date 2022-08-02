@@ -10,12 +10,32 @@ import Foundation
 protocol IBCompatibleObject {
     var properties: [IBPropertyMapper] { get }
     var functions: [IBFunctionMapper] { get }
+    var activatedProperties: [IBPropertyMapper] { get }
     func mapping(_ attributes: [String: String])
 }
 
 extension IBCompatibleObject {
     var functions: [IBFunctionMapper] { [] }
-    func mapping(attributes: [String: String]) {
+    
+    var activatedProperties: [IBPropertyMapper] {
+        properties
+            .filter { !($0.value as? String)?.isEmpty }
+    }
+    
+    var isAllPropertiesValid: Bool {
+        activatedProperties.count == properties.count
+    }
+    
+    @discardableResult
+    func addValueToProperty(ib: String, value: Any) -> IBPropertyMapper? {
+        let properties = properties
+            .filter { $0.ib == ib }
+        properties
+            .forEach { $0.addValue(value) }
+        return properties.last
+    }
+    
+    func mapping(_ attributes: [String: String]) {
         attributes.forEach { key, value in
             properties
                 .filter { $0.ib == key }

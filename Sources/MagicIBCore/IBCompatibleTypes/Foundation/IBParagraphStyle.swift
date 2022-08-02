@@ -30,7 +30,7 @@ struct IBParagraphStyle: IBCompatibleObject {
     }
     
     init(_ attributes: [String: String]) {
-        mapping(attributes: attributes)
+        mapping(attributes)
     }
     
 }

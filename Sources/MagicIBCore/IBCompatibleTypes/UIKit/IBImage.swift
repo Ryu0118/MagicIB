@@ -7,17 +7,21 @@
 
 import Foundation
 
-struct IBImage {
-    private(set) var systemName: String?
-    private(set) var name: String?
+struct IBImage: IBCompatibleObject {
+    var properties: [IBPropertyMapper] {
+        [
+            .init(propertyName: "systemName", type: .string),
+            .init(propertyName: "name", type: .string)
+        ]
+    }
     
     init?(attributes: [String: String]) {
         guard let image = attributes["image"] else { return nil }
         if let _ = attributes["catalog"] {
-            self.systemName = image
+            addValueToProperty(ib: "systemName", value: image)
         }
         else {
-            self.name = image
+            addValueToProperty(ib: "name", value: image)
         }
     }
 }

@@ -11,6 +11,7 @@ struct IBFont {
     enum FontType: String {
         case system
         case italicSystem
+        case boldSystem
     }
     
     private(set) var size: String?
