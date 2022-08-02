@@ -26,9 +26,20 @@ class IBPropertyMapper {
                 if value as? IBButtonConfiguration == nil { fatalError("Different data type") }
             case .paragraphStyle:
                 if value as? IBParagraphStyle == nil { fatalError("Different data type") }
+            case .autoresizingMask:
+                if value as? IBAutoresizingMask == nil { fatalError("Different data type") }
             default:
                 break
             }
+        }
+    }
+    
+    var isRequireInitializer: Bool {
+        switch type {
+        case .font, .color, .cgRect, .image, .configuration, .paragraphStyle:
+            return true
+        default:
+            return false
         }
     }
     
@@ -50,7 +61,7 @@ class IBPropertyMapper {
     
     func generateSwiftCode(variableName: String) -> String? {
         switch type {
-        case .number, .initializer, .dynamicCode:
+        case .number:
             guard let value = value as? String else { return nil }
             return "\(variableName).\(propertyName) = \(value)"
         case .bool:
@@ -60,26 +71,28 @@ class IBPropertyMapper {
         case .enum:
             guard let value = value as? String else { return nil }
             return "\(variableName).\(propertyName) = .\(value)"
-        case .array:
-            if let value = value as? [String] {
-                let array =  value
-                    .joined(separator: ", ")
-                    .insert(first: "[", last: "]")
-                return "\(variableName).\(propertyName) = \(array)"
-            }
-            else if let value = value as? String {
-                return "\(variableName).\(propertyName) = .\(value)"
-            }
-            else {
-                return nil
-            }
-        case .fullCustom:
-            guard let value = value as? String else { return nil }
-            /*
-             {{VARIABLE_NAME}}, which may be in value,
-             must be replaced by the name of the variable being set
-             */
-            return value.replacingOccurrences(of: "{{VARIABLE_NAME}}", with: variableName)
+//        case .array:
+//            if let value = value as? [String] {
+//                let array =  value
+//                    .joined(separator: ", ")
+//                    .insert(first: "[", last: "]")
+//                return "\(variableName).\(propertyName) = \(array)"
+//            }
+//            else if let value = value as? String {
+//                return "\(variableName).\(propertyName) = .\(value)"
+//            }
+//            else {
+//                return nil
+//            }
+        default:
+            return nil
+//        case .fullCustom:
+//            guard let value = value as? String else { return nil }
+//            /*
+//             {{VARIABLE_NAME}}, which may be in value,
+//             must be replaced by the name of the variable being set
+//             */
+//            return value.replacingOccurrences(of: "{{VARIABLE_NAME}}", with: variableName)
         }
     }
 }

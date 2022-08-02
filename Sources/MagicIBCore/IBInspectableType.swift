@@ -11,9 +11,9 @@ enum IBInspectableType {
     case number
     case bool
     case `enum`//enum or static let
-    case array
     case string
     case font
+    case autoresizingMask
     case color
     case cgRect
     case image
