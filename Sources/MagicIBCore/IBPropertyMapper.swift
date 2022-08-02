@@ -19,6 +19,12 @@ class IBPropertyMapper {
         self.type = type
     }
     
+    init(propertyName: String, type: IBInspectableType) {
+        self.propertyName = propertyName
+        self.ib = propertyName
+        self.type = type
+    }
+    
     func addValue(_ value: Any) {
         self.value = value
     }

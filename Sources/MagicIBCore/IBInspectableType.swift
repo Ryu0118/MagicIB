@@ -16,5 +16,6 @@ enum IBInspectableType {
     case cgRect
     case image
     case configuration
+    case paragraphStyle
 }
 #endif
