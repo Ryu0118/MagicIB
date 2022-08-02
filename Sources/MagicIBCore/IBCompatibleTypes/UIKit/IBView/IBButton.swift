@@ -57,17 +57,17 @@ class IBButton: IBView {
         switch elementType {
         case .rect:
             guard attributes["key"] == "frame" else { return }
-            let rect = getCGRectFromAttributes(attributes: attributes)
+            let rect = IBRect(attributes: attributes)
             addValueToProperty(ib: propertyName, value: rect)
         case .autoresizingMask:
-            let autoresizingMask = getAutoresizingMaskFromAttributes(attributes: attributes)
+            let autoresizingMask = IBAutoresizingMask(attributes: attributes)
             addValueToProperty(ib: propertyName, value: autoresizingMask)
         case .color:
             if let parentElement = parentElement {
                 insertColorAtButtonConfiguration(attributes: attributes, propertyName: propertyName, variableName: parentElement)
             }
             else {
-                let color = getColorFromAttributes(attributes: attributes)
+                let color = IBColor(attributes: attributes)
                 addValueToProperty(ib: propertyName, value: color)
             }
         case .constraint:
@@ -93,121 +93,121 @@ class IBButton: IBView {
     }
 }
 
-private extension IBButton {
-    
-    @discardableResult
-    func appendConfiguration(_ configuration: String) -> String? {
-        guard let property = properties.first(where: { $0.ib == "configuration" }),
-              let buttonConfiguration = property.value as? String
-        else { return nil }
-        
-        var lines = buttonConfiguration.components(separatedBy: "\n")
-        //lines[lines.count - 2] is before "{{VARIABLE_NAME}}.configuration = \(variableName)"
-        lines[lines.count - 2].append(configuration)
-        let newConfiguration = lines.joined(separator: "\n")
-        property.value = newConfiguration
-        return configuration
-    }
-    
-    func setImageReference(attributes: [String: String]) {
-        let attributes = attributes.filter { $0.key != "key" }
-        if let code = generateSwiftCode(variableName: "backgroundConfiguration", propertyName: "image", value: attributes["image"]) {
-            appendConfiguration(code)
-        }
-    }
-    
-    func setPreferredSymbolConfiguration(attributes: [String: String]) {
-        let attributes = attributes.filter {  key, _ in key != "key" }
-        guard let configurationType = attributes["configurationType"] else { return }
-        if configurationType == "pointSize",
-           let pointSize = attributes["pointSize"],
-           let scale = attributes["scale"],
-           let weight = attributes["weight"]
-        {
-            let code = "buttonConfiguration.preferredSymbolConfigurationForImage = .init(pointSize: \(pointSize), weight: .\(weight), scale: .\(scale))"
-            appendConfiguration(code)
-        }
-    }
-    
-    func insertColorAtButtonConfiguration(attributes: [String: String], propertyName: String, variableName: String) {
-        guard let property = properties.first(where: { $0.ib == "configuration" }),
-              let _ = property.value as? String
-        else { return }
-        let color = getColorFromAttributes(attributes: attributes)
-        let colorConfiguration = "\(variableName).\(propertyName) = \(color)"
-        
-        appendConfiguration(colorConfiguration)
-    }
-    
-    func getBackgroundConfiguration(attributes: [String: String]) {
-        let attributes = attributes.filter {  key, _ in key != "key" }
-        guard let property = properties.first(where: { $0.ib == "configuration" }),
-              let _ = property.value as? String
-        else { return }
-        let variableName = "backgroundConfiguration"
-        var backgroundConfiguration = "var \(variableName): UIBackgroundConfiguration = .clear()"
-        
-        let options = [
-            (key: "image", value: getImageConstructorFromAttributes(attributes: attributes)),
-            (key: "imageContentMode", value: attributes["imageContentMode"]),
-            (key: "strokeWidth", value: attributes["strokeWidth"]),
-            (key: "strokeOutset", value: attributes["strokeOutset"]),
-        ]
-        
-        for (key, value) in options {
-            if let code = generateSwiftCode(variableName: variableName, propertyName: key, value: value) {
-                backgroundConfiguration.addLine(code)
-            }
-        }
-        
-        backgroundConfiguration.addLine("buttonConfiguration.background = \(variableName)")
-        return backgroundConfiguration
-    }
-    
-    func generateSwiftCode(variableName: String, propertyName: String, value: String?) -> String? {
-        guard let value = value else { return nil }
-        if value == "YES" || value == "NO" {
-            let bool = value == "YES" ? "true" : "false"
-            return "\(variableName).\(propertyName) = \(bool)"
-        }
-        else if Double(value) != nil || propertyName == "title" {
-            return "\(variableName).\(propertyName) = \(value)"
-        }
-        else {
-            return "\(variableName).\(propertyName) = .\(value)"
-        }
-    }
-    
-    func getButtonConfigurationFromAttributes(attributes: [String: String]) -> String? {
-        let attributes = attributes.filter { key, _ in key != "key" }
-        guard let style = attributes["style"] else { return nil }
-        
-        let variableName = "buttonConfiguration"
-        var constructButtonConfiguration = "var \(variableName): UIButton.Configuration = .\(style)()"
-        
-        //options
-        let options = [
-            (key: "image", value: getImageConstructorFromAttributes(attributes: attributes)),
-            (key: "imagePlacement", value: attributes["imagePlacement"]),
-            (key: "imagePadding", value: attributes["imagePadding"]),
-            (key: "title", value: attributes["title"]),
-            (key: "titlePadding", value: attributes["titlePadding"]),
-            (key: "leading", value: attributes["leading"]),
-            (key: "cornerStyle", value: attributes["cornerStyle"]),
-            (key: "showsActivityIndicator", value: attributes["showsActivityIndicator"]),
-        ]
-        
-        for (key, value) in options {
-            if let code = generateSwiftCode(variableName: variableName, propertyName: key, value: value) {
-                constructButtonConfiguration.addLine(code)
-            }
-        }
-        
-        let buttonAssgined = "{{VARIABLE_NAME}}.configuration = \(variableName)"
-        constructButtonConfiguration.addLine(buttonAssgined)
-        return constructButtonConfiguration
-        
-    }
-    
-}
+//private extension IBButton {
+//
+//    @discardableResult
+//    func appendConfiguration(_ configuration: String) -> String? {
+//        guard let property = properties.first(where: { $0.ib == "configuration" }),
+//              let buttonConfiguration = property.value as? String
+//        else { return nil }
+//
+//        var lines = buttonConfiguration.components(separatedBy: "\n")
+//        //lines[lines.count - 2] is before "{{VARIABLE_NAME}}.configuration = \(variableName)"
+//        lines[lines.count - 2].append(configuration)
+//        let newConfiguration = lines.joined(separator: "\n")
+//        property.value = newConfiguration
+//        return configuration
+//    }
+//
+//    func setImageReference(attributes: [String: String]) {
+//        let attributes = attributes.filter { $0.key != "key" }
+//        if let code = generateSwiftCode(variableName: "backgroundConfiguration", propertyName: "image", value: attributes["image"]) {
+//            appendConfiguration(code)
+//        }
+//    }
+//
+//    func setPreferredSymbolConfiguration(attributes: [String: String]) {
+//        let attributes = attributes.filter {  key, _ in key != "key" }
+//        guard let configurationType = attributes["configurationType"] else { return }
+//        if configurationType == "pointSize",
+//           let pointSize = attributes["pointSize"],
+//           let scale = attributes["scale"],
+//           let weight = attributes["weight"]
+//        {
+//            let code = "buttonConfiguration.preferredSymbolConfigurationForImage = .init(pointSize: \(pointSize), weight: .\(weight), scale: .\(scale))"
+//            appendConfiguration(code)
+//        }
+//    }
+//
+//    func insertColorAtButtonConfiguration(attributes: [String: String], propertyName: String, variableName: String) {
+//        guard let property = properties.first(where: { $0.ib == "configuration" }),
+//              let _ = property.value as? String
+//        else { return }
+//        let color = getColorFromAttributes(attributes: attributes)
+//        let colorConfiguration = "\(variableName).\(propertyName) = \(color)"
+//
+//        appendConfiguration(colorConfiguration)
+//    }
+//
+//    func getBackgroundConfiguration(attributes: [String: String]) {
+//        let attributes = attributes.filter {  key, _ in key != "key" }
+//        guard let property = properties.first(where: { $0.ib == "configuration" }),
+//              let _ = property.value as? String
+//        else { return }
+//        let variableName = "backgroundConfiguration"
+//        var backgroundConfiguration = "var \(variableName): UIBackgroundConfiguration = .clear()"
+//
+//        let options = [
+//            (key: "image", value: getImageConstructorFromAttributes(attributes: attributes)),
+//            (key: "imageContentMode", value: attributes["imageContentMode"]),
+//            (key: "strokeWidth", value: attributes["strokeWidth"]),
+//            (key: "strokeOutset", value: attributes["strokeOutset"]),
+//        ]
+//
+//        for (key, value) in options {
+//            if let code = generateSwiftCode(variableName: variableName, propertyName: key, value: value) {
+//                backgroundConfiguration.addLine(code)
+//            }
+//        }
+//
+//        backgroundConfiguration.addLine("buttonConfiguration.background = \(variableName)")
+//        return backgroundConfiguration
+//    }
+//
+//    func generateSwiftCode(variableName: String, propertyName: String, value: String?) -> String? {
+//        guard let value = value else { return nil }
+//        if value == "YES" || value == "NO" {
+//            let bool = value == "YES" ? "true" : "false"
+//            return "\(variableName).\(propertyName) = \(bool)"
+//        }
+//        else if Double(value) != nil || propertyName == "title" {
+//            return "\(variableName).\(propertyName) = \(value)"
+//        }
+//        else {
+//            return "\(variableName).\(propertyName) = .\(value)"
+//        }
+//    }
+//
+//    func getButtonConfigurationFromAttributes(attributes: [String: String]) -> String? {
+//        let attributes = attributes.filter { key, _ in key != "key" }
+//        guard let style = attributes["style"] else { return nil }
+//
+//        let variableName = "buttonConfiguration"
+//        var constructButtonConfiguration = "var \(variableName): UIButton.Configuration = .\(style)()"
+//
+//        //options
+//        let options = [
+//            (key: "image", value: getImageConstructorFromAttributes(attributes: attributes)),
+//            (key: "imagePlacement", value: attributes["imagePlacement"]),
+//            (key: "imagePadding", value: attributes["imagePadding"]),
+//            (key: "title", value: attributes["title"]),
+//            (key: "titlePadding", value: attributes["titlePadding"]),
+//            (key: "leading", value: attributes["leading"]),
+//            (key: "cornerStyle", value: attributes["cornerStyle"]),
+//            (key: "showsActivityIndicator", value: attributes["showsActivityIndicator"]),
+//        ]
+//
+//        for (key, value) in options {
+//            if let code = generateSwiftCode(variableName: variableName, propertyName: key, value: value) {
+//                constructButtonConfiguration.addLine(code)
+//            }
+//        }
+//
+//        let buttonAssgined = "{{VARIABLE_NAME}}.configuration = \(variableName)"
+//        constructButtonConfiguration.addLine(buttonAssgined)
+//        return constructButtonConfiguration
+//
+//    }
+//
+//}
 #endif

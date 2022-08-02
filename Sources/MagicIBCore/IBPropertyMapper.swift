@@ -7,32 +7,11 @@
 #if os(macOS)
 import Foundation
 
-class IBPropertyMapper {
+class IBPropertyMapper<T: IBSwiftSourceGeneratable> {
     let ib: String
     let propertyName: String
-    let type: IBInspectableType
-    var value: Any = "" {
-        didSet {
-            switch type {
-            case .font:
-                if value as? IBFont == nil { fatalError("Different data type") }
-            case .color:
-                if value as? IBColor == nil { fatalError("Different data type") }
-            case .cgRect:
-                if value as? IBRect == nil { fatalError("Different data type") }
-            case .image:
-                if value as? IBImage == nil { fatalError("Different data type") }
-            case .configuration:
-                if value as? IBButtonConfiguration == nil { fatalError("Different data type") }
-            case .paragraphStyle:
-                if value as? IBParagraphStyle == nil { fatalError("Different data type") }
-            case .autoresizingMask:
-                if value as? IBAutoresizingMask == nil { fatalError("Different data type") }
-            default:
-                break
-            }
-        }
-    }
+    let type: T.Type
+    var value: T?
     
     var isRequireInitializer: Bool {
         switch type {
