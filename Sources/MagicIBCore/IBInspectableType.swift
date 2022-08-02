@@ -19,5 +19,9 @@ enum IBInspectableType {
     case image
     case configuration
     case paragraphStyle
+    case backgroundConfiguration
+    case symbolConfiguration
+    case attributedString
+    case edgeInsets
 }
 #endif

@@ -18,9 +18,7 @@ struct IBRect: IBCompatibleObject {
     }
     
     init?(attributes: [String: String]) {
-        mapping(attributes: attributes)
-        if isAllPropertiesValid {
-            return nil
-        }
+        mapping(attributes)
+        if !isAllPropertiesValid { return nil }
     }
 }
