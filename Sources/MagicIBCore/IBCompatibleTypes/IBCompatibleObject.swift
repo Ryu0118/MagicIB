@@ -20,8 +20,10 @@ extension IBCompatibleObject {
     var functions: [IBFunctionMapper] { [] }
     
     var activatedProperties: [IBPropertyMapper] {
-        properties
-            .filter { !($0.value as? String)?.isEmpty }
+        properties.filter {
+            guard let value = $0.value as? String else { return false }
+            return !value.isEmpty
+        }
     }
     
     var isAllPropertiesValid: Bool {
@@ -35,6 +37,10 @@ extension IBCompatibleObject {
         properties
             .forEach { $0.addValue(value) }
         return properties.last
+    }
+    
+    func findProperty(ib: String) -> IBPropertyMapper? {
+        properties.first(where: { $0.ib == ib })
     }
     
     func mapping(_ attributes: [String: String]) {

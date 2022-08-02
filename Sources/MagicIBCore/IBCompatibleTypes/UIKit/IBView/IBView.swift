@@ -74,11 +74,7 @@ class IBView: IBAnyView, IBCompatibleObject {
         self.customClass = attributes["customClass"]
         self.mapping(attributes)
     }
-    
-    func getCustomizedProperties() -> [IBPropertyMapper] {
-        properties.filter { !($0.value as? String)?.isEmpty  }
-    }
-    
+
     func addValueToProperties(elementType: IBElementType, attributes: [String: String]) {
         if let propertyName = attributes["key"] { //properties
             switch elementType {

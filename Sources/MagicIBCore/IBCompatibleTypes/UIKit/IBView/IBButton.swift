@@ -27,6 +27,8 @@ class IBButton: IBView {
         case directionalEdgeInsets
     }
     
+    var buttonConfiguration: IBButtonConfiguration?
+    
     override var properties: [IBPropertyMapper] {
         let viewProperties = super.properties
         let buttonProperties: [IBPropertyMapper] = [
@@ -63,8 +65,11 @@ class IBButton: IBView {
             let autoresizingMask = IBAutoresizingMask(attributes: attributes)
             addValueToProperty(ib: propertyName, value: autoresizingMask)
         case .color:
-            if let parentElement = parentElement {
-                insertColorAtButtonConfiguration(attributes: attributes, propertyName: propertyName, variableName: parentElement)
+            if let parentElement = parentElement,
+               let backgroundConfiguration = buttonConfiguration?.findProperty(ib: "background"),
+               parentElement == "backgroundConfiguration"
+            {
+                backgroundConfiguration
             }
             else {
                 let color = IBColor(attributes: attributes)
@@ -74,11 +79,8 @@ class IBButton: IBView {
             guard let constraint = IBLayoutConstraint(attributes, parentViewID: id) else { return }
             constraints.append(constraint)
         case .buttonConfiguration:
-            let buttonConfiguration = getButtonConfigurationFromAttributes(attributes: attributes)
-            addValueToProperty(ib: propertyName, value: buttonConfiguration ?? "")
-        case .backgroundConfiguration:
-            let backgroundConfiguration = getBackgroundConfiguration(attributes: attributes)
-            appendConfiguration(backgroundConfiguration)
+            buttonConfiguration = IBButtonConfiguration(attributes: attributes)
+            addValueToProperty(ib: propertyName, value: buttonConfiguration!)
         case .imageReference:
             setImageReference(attributes: attributes)
         case .preferredSymbolConfiguration:
