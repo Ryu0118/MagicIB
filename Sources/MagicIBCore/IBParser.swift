@@ -55,7 +55,7 @@ extension IBParser: XMLParserDelegate {
                 if parentView == nil { parentView = lastIBView }
             }
             else {
-                IBView.addValueToProperties(ibView: lastIBView, elementName: elementName, parentElement: waitingElementList.last, attributes: attributeDict)
+                IBView.addValueToProperties(ibView: lastIBView, elementName: elementName, waitingElementList: waitingElementList, attributes: attributeDict)
             }
         }
     }
@@ -67,6 +67,7 @@ extension IBParser: XMLParserDelegate {
         }
         if let lastIndex = waitingElementList.lastIndex(of: elementName) {
             waitingElementList.remove(at: lastIndex)
+            waitingIBViewList.last?.waitingElementList = waitingElementList
         }
         if elementName == "subviews" {
             subviewsFlags.removeLast()

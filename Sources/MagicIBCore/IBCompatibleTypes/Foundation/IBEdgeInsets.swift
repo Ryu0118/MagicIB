@@ -16,7 +16,7 @@ struct IBEdgeInsets: IBCompatibleObject {
             .init(propertyName: "trailing", type: .number),
         ]
     }
-    init(attributes: [String: String]) {
+    init?(attributes: [String: String]) {
         mapping(attributes)
         if !isAllPropertiesValid { return nil }
     }

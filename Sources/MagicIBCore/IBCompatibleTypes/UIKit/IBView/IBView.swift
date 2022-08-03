@@ -8,14 +8,6 @@
 import Foundation
 
 class IBView: IBAnyView, IBCompatibleObject {
-    typealias IBElementType = IBViewElementType
-    
-    enum IBViewElementType: String {
-        case rect
-        case autoresizingMask
-        case color
-        case constraint
-    }
     
     let id: String
     let customClass: String?
@@ -24,7 +16,28 @@ class IBView: IBAnyView, IBCompatibleObject {
     
     var constraints = [IBLayoutConstraint]()
     var subviews = [IBView]()
-    var parentElement: String?
+    var parentElement: String? {
+        waitingElementList[safe: waitingElementList.count - 2]
+    }
+    private(set) var relation: String! {//ex) attributedString->fragment->attributes->color
+        didSet {
+            print(relation ?? "")
+        }
+    }
+    var waitingElementList = [String]() {
+        didSet {
+            var lastViewIndex: Int?
+            for (i, element) in waitingElementList.reversed().enumerated() {
+                if let _ = IBCompatibleView.init(rawValue: element) {
+                    lastViewIndex = i
+                    break
+                }
+            }
+            relation = waitingElementList
+                .suffix(lastViewIndex ?? 1)
+                .joined(separator: "->")
+        }
+    }
     
     var properties: [IBPropertyMapper] {
         [
@@ -75,121 +88,28 @@ class IBView: IBAnyView, IBCompatibleObject {
         self.mapping(attributes)
     }
 
-    func addValueToProperties(elementType: IBElementType, attributes: [String: String]) {
-        if let propertyName = attributes["key"] { //properties
-            switch elementType {
-            case .rect:
-                guard attributes["key"] == "frame" else { return }
-                guard let rect = IBRect(attributes: attributes) else { return }
-                addValueToProperty(ib: propertyName, value: rect)
-            case .autoresizingMask:
-                let autoresizingMask = IBAutoresizingMask(attributes: attributes)
-                addValueToProperty(ib: propertyName, value: autoresizingMask)
-            case .color:
-                guard let color = IBColor(attributes: attributes) else { return }
-                addValueToProperty(ib: propertyName, value: color)
-            default:
-                break
-            }
-        }
-        else {
-            if elementType == .constraint {
-                guard let constraint = IBLayoutConstraint(attributes, parentViewID: id) else { return }
-                constraints.append(constraint)
-            }
+    func addValueToProperties(attributes: [String: String]) {
+        switch relation {
+        case "rect":
+            guard let propertyName = attributes["key"] else { return }
+            guard propertyName == "frame" else { return }
+            guard let rect = IBRect(attributes: attributes) else { return }
+            addValueToProperty(ib: propertyName, value: rect)
+        case "autoresizingMask":
+            guard let propertyName = attributes["key"] else { return }
+            let autoresizingMask = IBAutoresizingMask(attributes: attributes)
+            addValueToProperty(ib: propertyName, value: autoresizingMask)
+        case "color":
+            guard let propertyName = attributes["key"] else { return }
+            guard let color = IBColor(attributes: attributes) else { return }
+            addValueToProperty(ib: propertyName, value: color)
+        case "constraints->constraint":
+            guard let constraint = IBLayoutConstraint(attributes, parentViewID: id) else { return }
+            constraints.append(constraint)
+        default:
+            break
         }
     }
     
 }
 #endif
-/*
- 
- func getImageConstructorFromAttributes(attributes: [String: String]) -> String? {
-     guard let image = attributes["image"] else { return nil }
-     
-     var uiImageConstructor: String
-     if let _ = attributes["catalog"] {
-         uiImageConstructor = "UIImage(systemName: \(image))"
-     }
-     else {
-         uiImageConstructor = "UIImage(named: \(image))"
-     }
-     return uiImageConstructor
- }
- 
- func getCGRectFromAttributes(attributes: [String: String]) -> String {
-     return attributes
-         .filter { key, _ in key != "key" }
-         .sorted(by: {
-             let priority = ["x": 0, "y": 1, "width": 2, "height": 3]
-             return priority[$0.key] ?? 0 < priority[$1.key] ?? 0
-         })
-         .compactMap{
-             guard let _ = Double($1) else { return nil }
-             return "\($0): \($1)"
-         }
-         .joined(separator: ", ")
-         .insert(first: "CGRect(", last: ")")
- }
- 
- func getAutoresizingMaskFromAttributes(attributes: [String: String]) -> [String] {
-     return attributes
-         .filter { key, value in key != "key" }
-         .map { key, value in "." + key }
- }
- 
- func getColorFromAttributes(attributes: [String: String]) -> String {
-     let attributes = attributes.filter { key, _ in key != "key" }
-     let isRGB = attributes.contains(where: { key, _ in
-         let colors = ["red", "green", "blue"]
-         return colors.contains(key)
-     })
-     let isSystemColor = attributes.contains(where: { key, _ in key == "systemColor" })
-     let isNamed = attributes.contains(where: { key, _ in key == "name" })
-     
-     if isRGB {
-         return "UIColor(red: \(attributes["red"] ?? "0"), green: \(attributes["green"] ?? "0"), blue: \(attributes["blue"] ?? "0"), alpha: \(attributes["alpha"] ?? "0")"
-     }
-     else if isSystemColor {
-         var systemColor = attributes["systemColor"] ?? "white"
-         // ex) systemPurpleColor
-         if systemColor.lowercased().contains("color") {
-             let colorIndex = systemColor.index(systemColor.endIndex, offsetBy: -5)
-             systemColor.remove(at: colorIndex) //ex) systemPurple
-         }
-         return ".\(attributes["systemColor"] ?? "white")"
-     }
-     else if isNamed {
-         return "UIColor(named: \"\(attributes["name"] ?? "AccentColor")\")"
-     }
-     else {
-         return ".white"
-     }
- }
- 
- @discardableResult
- func addValueToProperty(ib: String, value: Any) -> IBPropertyMapper? {
-     let properties = properties
-         .filter { $0.ib == ib }
-     properties
-         .forEach { $0.addValue(value) }
-     return properties.last
- }
- 
- private func mapping(attributes: [String: String]) {
-     attributes.forEach { key, value in
-         properties
-             .filter { $0.ib == key }
-             .forEach { $0.addValue(value) }
-         functions
-             .filter { $0.ib == key }
-             .forEach {
-                 if $0.ib.contains("vertical") || $0.ib.contains("horizontal") {
-                     let axis = $0.ib.contains("vertical") ? "vertical" : "horizontal"
-                     $0.putValueToArgument("init(rawValue: \(value)", type: .enum, at: 0)
-                     $0.putValueToArgument(axis, type: .enum, at: 1)
-                 }
-             }
-     }
- }
- */
