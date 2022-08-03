@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  IBParser.swift
 //  
 //
 //  Created by Ryu on 2022/07/28.
@@ -35,7 +35,7 @@ extension IBParser: XMLParserDelegate {
         waitingElementList.append(elementName)
 
         if let ibViewElement = IBCompatibleView.init(rawValue: elementName),
-           let ibView = IBView(attributes: attributeDict, ibCompatibleView: ibViewElement)
+           let ibView = IBView.instance(attributes: attributeDict, ibCompatibleView: ibViewElement)
         {
             waitingIBViewList.append(ibView)
             ibViewControllers.last?.appendView(ibView)
@@ -55,7 +55,7 @@ extension IBParser: XMLParserDelegate {
                 if parentView == nil { parentView = lastIBView }
             }
             else {
-                IBViewProvider.addValueToProperties(ibView: lastIBView, elementName: elementName, parentElement: waitingElementList.last, attributes: attributeDict)
+                IBView.addValueToProperties(ibView: lastIBView, elementName: elementName, waitingElementList: waitingElementList, attributes: attributeDict)
             }
         }
     }
@@ -67,6 +67,7 @@ extension IBParser: XMLParserDelegate {
         }
         if let lastIndex = waitingElementList.lastIndex(of: elementName) {
             waitingElementList.remove(at: lastIndex)
+            waitingIBViewList.last?.waitingElementList = waitingElementList
         }
         if elementName == "subviews" {
             subviewsFlags.removeLast()
