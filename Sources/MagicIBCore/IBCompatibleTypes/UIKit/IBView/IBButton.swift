@@ -34,7 +34,7 @@ class IBButton: IBView {
         let buttonProperties: [IBPropertyMapper] = [
             .init(ib: "highlighted", propertyName: "isHighlighted", type: .bool),
             .init(ib: "selected", propertyName: "isSelected", type: .bool),
-            .init(ib: "buttonType", propertyName: "buttonType", type: .fullCustom),
+            .init(ib: "buttonType", propertyName: "buttonType", type: .enum),
             .init(ib: "showsMenuAsPrimaryAction", propertyName: "showsMenuAsPrimaryAction", type: .bool),
             .init(ib: "contentHorizontalAlignment", propertyName: "contentHorizontalAlignment", type: .enum),
             .init(ib: "contentVerticalAlignment", propertyName: "contentVerticalAlignment", type: .enum),
@@ -46,7 +46,7 @@ class IBButton: IBView {
             .init(ib: "pointerInteraction", propertyName: "isPointerInteractionEnabled", type: .bool),
             .init(ib: "changesSelectionAsPrimaryAction", propertyName: "changesSelectionAsPrimaryAction", type: .bool),
             .init(ib: "role", propertyName: "role", type: .bool),
-            .init(ib: "configuration", propertyName: "configuration", type: .fullCustom),
+            .init(ib: "configuration", propertyName: "configuration", type: .configuration),
         ]
         return viewProperties + buttonProperties
     }
@@ -65,15 +65,23 @@ class IBButton: IBView {
             let autoresizingMask = IBAutoresizingMask(attributes: attributes)
             addValueToProperty(ib: propertyName, value: autoresizingMask)
         case .color:
+            guard let color = IBColor(attributes: attributes) else { return }
             if let parentElement = parentElement,
-               let backgroundConfiguration = buttonConfiguration?.findProperty(ib: "background"),
+               let backgroundProperty = buttonConfiguration?.findProperty(ib: "background"),
+               let backgroundConfiguration = backgroundProperty.value as? IBBackgroundConfiguration,
+               let key = attributes["key"],
                parentElement == "backgroundConfiguration"
             {
-                backgroundConfiguration
+                backgroundConfiguration.addValueToProperty(ib: key, value: color)
             }
             else {
-                let color = IBColor(attributes: attributes)
                 addValueToProperty(ib: propertyName, value: color)
+            }
+        case .backgroundConfiguration:
+            if let parentElement = parentElement,
+               parentElement == "buttonConfiguration" {
+                let backgroundConfiguration = IBBackgroundConfiguration(attributes: attributes)
+                buttonConfiguration?.addValueToProperty(ib: "background", value: backgroundConfiguration)
             }
         case .constraint:
             guard let constraint = IBLayoutConstraint(attributes, parentViewID: id) else { return }
@@ -82,10 +90,22 @@ class IBButton: IBView {
             buttonConfiguration = IBButtonConfiguration(attributes: attributes)
             addValueToProperty(ib: propertyName, value: buttonConfiguration!)
         case .imageReference:
-            setImageReference(attributes: attributes)
+            guard let image = IBImage(attributes: attributes) else { return }
+            if let parentElement = parentElement,
+               let backgroundProperty = buttonConfiguration?.findProperty(ib: "background"),
+               let backgroundConfiguration = backgroundProperty.value as? IBBackgroundConfiguration,
+               let key = attributes["key"],
+               parentElement == "backgroundConfiguration" {
+                backgroundConfiguration.addValueToProperty(ib: key, value: image)
+            }
         case .preferredSymbolConfiguration:
-            setPreferredSymbolConfiguration(attributes: attributes)
+            guard let key = attributes["key"],
+                  let buttonConfiguration = buttonConfiguration
+            else { return }
+            let configuration = IBImageSymbolConfiguration(attributes: attributes)
+            buttonConfiguration.addValueToProperty(ib: key, value: configuration)
         case .attributedString:
+            guard let key = attributes["key"] else { return }
             
         case .font:
         case .size:
@@ -93,6 +113,8 @@ class IBButton: IBView {
         case .directionalEdgeInsets:
         }
     }
+    
+    
 }
 
 //private extension IBButton {

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct IBAttributedString {
+class IBAttributedString {
     var fragments = [Fragment]()
     
     init() {}
@@ -28,7 +28,7 @@ struct IBAttributedString {
 
 extension IBAttributedString {
     
-    struct Fragment: IBCompatibleObject {
+    class Fragment: IBCompatibleObject {
         var properties: [IBPropertyMapper] {
             [
                 .init(propertyName: "content", type: .string),
@@ -42,16 +42,16 @@ extension IBAttributedString {
             addValueToProperty(ib: "content", value: content)
         }
         
-        mutating func addColor(attributes: [String: String]) {
+        func addColor(attributes: [String: String]) {
             if let ib = attributes["key"] {
-                let color = IBColor(attributes: attributes)
+                guard let color = IBColor(attributes: attributes)
                 addValueToProperty(ib: ib, value: color)
             }
         }
         
-        mutating func addFont(attributes: [String: String]) {
+        func addFont(attributes: [String: String]) {
             if let ib = attributes["key"] {
-                let color = IBColor(attributes: attributes)
+                guard let color = IBColor(attributes: attributes)
                 addValueToProperty(ib: ib, value: color)
             }
         }

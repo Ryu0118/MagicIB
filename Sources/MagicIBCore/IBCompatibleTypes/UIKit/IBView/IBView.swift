@@ -80,13 +80,13 @@ class IBView: IBAnyView, IBCompatibleObject {
             switch elementType {
             case .rect:
                 guard attributes["key"] == "frame" else { return }
-                let rect = IBRect(attributes: attributes)
+                guard let rect = IBRect(attributes: attributes) else { return }
                 addValueToProperty(ib: propertyName, value: rect)
             case .autoresizingMask:
                 let autoresizingMask = IBAutoresizingMask(attributes: attributes)
                 addValueToProperty(ib: propertyName, value: autoresizingMask)
             case .color:
-                let color = IBColor(attributes: attributes)
+                guard let color = IBColor(attributes: attributes) else { return }
                 addValueToProperty(ib: propertyName, value: color)
             default:
                 break
