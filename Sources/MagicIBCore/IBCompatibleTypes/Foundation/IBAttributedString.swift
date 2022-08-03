@@ -33,15 +33,14 @@ class IBAttributedString {
 extension IBAttributedString {
     
     class Fragment: IBCompatibleObject {
-        var properties: [IBPropertyMapper] {
-            [
-                .init(propertyName: "content", type: .string),
-                .init(ib: "NSBackgroundColor", propertyName: "backgroundColor", type: .color),
-                .init(ib: "NSColor", propertyName: "foregroundColor", type: .color),
-                .init(ib: "NSFont", propertyName: "font", type: .font),
-                .init(ib: "NSParagraphStyle", propertyName: "paragraphStyle", type: .paragraphStyle)
-            ]
-        }
+        var properties: [IBPropertyMapper] =
+        [
+            .init(propertyName: "content", type: .string),
+            .init(ib: "NSBackgroundColor", propertyName: "backgroundColor", type: .color),
+            .init(ib: "NSColor", propertyName: "foregroundColor", type: .color),
+            .init(ib: "NSFont", propertyName: "font", type: .font),
+            .init(ib: "NSParagraphStyle", propertyName: "paragraphStyle", type: .paragraphStyle)
+        ]
         
         init(_ content: String) {
             addValueToProperty(ib: "content", value: content)

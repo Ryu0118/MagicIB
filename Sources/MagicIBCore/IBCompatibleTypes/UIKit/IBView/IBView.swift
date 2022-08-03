@@ -21,7 +21,7 @@ class IBView: IBAnyView, IBCompatibleObject {
     }
     private(set) var relation: String! {//ex) attributedString->fragment->attributes->color
         didSet {
-            print(relation ?? "")
+            //print(relation ?? "")
         }
     }
     var waitingElementList = [String]() {
@@ -39,33 +39,37 @@ class IBView: IBAnyView, IBCompatibleObject {
         }
     }
     
+    var baseProperties: [IBPropertyMapper] = [
+        .init(ib: "hidden", propertyName: "isHidden", type: .bool),
+        .init(ib: "clipsSubviews", propertyName: "clipsToBounds", type: .bool),
+        .init(ib: "multipleTouchEnabled", propertyName: "isMultipleTouchEnabled", type: .bool),
+        .init(ib: "alpha", propertyName: "alpha", type: .number),
+        .init(ib: "semanticContentAttribute", propertyName: "semanticContentAttribute", type: .bool),
+        .init(ib: "multipleTouchEnabled", propertyName: "isMultipleTouchEnabled", type: .bool),
+        .init(ib: "translatesAutoresizingMaskIntoConstraints", propertyName: "translatesAutoresizingMaskIntoConstraints", type: .bool),
+        .init(ib: "autoresizingMask", propertyName: "autoresizingMask", type: .autoresizingMask),
+        .init(ib: "contentMode", propertyName: "contentMode", type: .enum),
+        .init(ib: "frame", propertyName: "frame", type: .cgRect),
+        .init(ib: "backgroundColor", propertyName: "backgroundColor", type: .color),
+        .init(ib: "tintColor", propertyName: "tintColor", type: .color),
+        .init(ib: "opaque", propertyName: "isOpaque", type: .bool),
+        .init(ib: "tag", propertyName: "tag", type: .number),
+        .init(ib: "ambiguous", propertyName: "hasAmbiguousLayout", type: .bool),
+    ]
+        
+    private var baseFunctions: [IBFunctionMapper] = [
+        .init(ib: "horizontalHuggingPriority", functionName: "setContentHuggingPriority", argumentNames: ["", "for"]),
+        .init(ib: "verticalHuggingPriority", functionName: "setContentHuggingPriority", argumentNames: ["", "for"]),
+        .init(ib: "horizontalCompressionResistancePriority", functionName: "setContentCompressionResistancePriority", argumentNames: ["", "for"]),
+        .init(ib: "verticalCompressionResistancePriority", functionName: "setContentCompressionResistancePriority", argumentNames: ["", "for"]),
+    ]
+    
     var properties: [IBPropertyMapper] {
-        [
-            .init(ib: "hidden", propertyName: "isHidden", type: .bool),
-            .init(ib: "clipsSubviews", propertyName: "clipsToBounds", type: .bool),
-            .init(ib: "multipleTouchEnabled", propertyName: "isMultipleTouchEnabled", type: .bool),
-            .init(ib: "alpha", propertyName: "alpha", type: .number),
-            .init(ib: "semanticContentAttribute", propertyName: "semanticContentAttribute", type: .bool),
-            .init(ib: "multipleTouchEnabled", propertyName: "isMultipleTouchEnabled", type: .bool),
-            .init(ib: "translatesAutoresizingMaskIntoConstraints", propertyName: "translatesAutoresizingMaskIntoConstraints", type: .bool),
-            .init(ib: "autoresizingMask", propertyName: "autoresizingMask", type: .autoresizingMask),
-            .init(ib: "contentMode", propertyName: "contentMode", type: .enum),
-            .init(ib: "frame", propertyName: "frame", type: .cgRect),
-            .init(ib: "backgroundColor", propertyName: "backgroundColor", type: .color),
-            .init(ib: "tintColor", propertyName: "tintColor", type: .color),
-            .init(ib: "opaque", propertyName: "isOpaque", type: .bool),
-            .init(ib: "tag", propertyName: "tag", type: .number),
-            .init(ib: "ambiguous", propertyName: "hasAmbiguousLayout", type: .bool),
-        ]
+        baseProperties
     }
     
     var functions: [IBFunctionMapper] {
-        [
-            .init(ib: "horizontalHuggingPriority", functionName: "setContentHuggingPriority", argumentNames: ["", "for"]),
-            .init(ib: "verticalHuggingPriority", functionName: "setContentHuggingPriority", argumentNames: ["", "for"]),
-            .init(ib: "horizontalCompressionResistancePriority", functionName: "setContentCompressionResistancePriority", argumentNames: ["", "for"]),
-            .init(ib: "verticalCompressionResistancePriority", functionName: "setContentCompressionResistancePriority", argumentNames: ["", "for"]),
-        ]
+        baseFunctions
     }
 
     var typeName: String {

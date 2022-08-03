@@ -9,25 +9,25 @@ import Foundation
 
 struct IBParagraphStyle: IBCompatibleObject {
     
-    var properties: [IBPropertyMapper] {
-        [
-            .init(propertyName: "alignment", type: .enum),
-            .init(propertyName: "lineBreakMode", type: .enum),
-            .init(propertyName: "baseWritingDirection", type: .enum),
-            .init(propertyName: "lineSpacing", type: .number),
-            .init(propertyName: "paragraphSpacing", type: .number),
-            .init(propertyName: "paragraphSpacingBefore", type: .number),
-            .init(propertyName: "firstLineHeadIndent", type: .number),
-            .init(propertyName: "lineHeightMultiple", type: .number),
-            .init(propertyName: "headIndent", type: .number),
-            .init(propertyName: "minimumLineHeight", type: .number),
-            .init(propertyName: "maximumLineHeight", type: .number),
-            .init(propertyName: "defaultTabInterval", type: .number),
-            .init(propertyName: "hyphenationFactor", type: .number),
-            .init(propertyName: "tighteningFactorForTruncation", type: .number),
-            .init(propertyName: "headerLevel", type: .number),
-        ]
-    }
+    var properties: [IBPropertyMapper] =
+    [
+        .init(propertyName: "alignment", type: .enum),
+        .init(propertyName: "lineBreakMode", type: .enum),
+        .init(propertyName: "baseWritingDirection", type: .enum),
+        .init(propertyName: "lineSpacing", type: .number),
+        .init(propertyName: "paragraphSpacing", type: .number),
+        .init(propertyName: "paragraphSpacingBefore", type: .number),
+        .init(propertyName: "firstLineHeadIndent", type: .number),
+        .init(propertyName: "lineHeightMultiple", type: .number),
+        .init(propertyName: "headIndent", type: .number),
+        .init(propertyName: "minimumLineHeight", type: .number),
+        .init(propertyName: "maximumLineHeight", type: .number),
+        .init(propertyName: "defaultTabInterval", type: .number),
+        .init(propertyName: "hyphenationFactor", type: .number),
+        .init(propertyName: "tighteningFactorForTruncation", type: .number),
+        .init(propertyName: "headerLevel", type: .number),
+    ]
+    
     
     init(attributes: [String: String]) {
         mapping(attributes)

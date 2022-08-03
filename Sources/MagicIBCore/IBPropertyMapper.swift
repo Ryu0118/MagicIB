@@ -6,12 +6,19 @@
 //
 #if os(macOS)
 import Foundation
+import ObjectiveC
 
 class IBPropertyMapper {
     let ib: String
     let propertyName: String
     let type: IBInspectableType
-    var value: Any = "" {
+    var value: Any! {
+//        get {
+//            objc_getAssociatedObject(self, &_value)
+//        }
+//        set {
+//            objc_setAssociatedObject(self, &_value, newValue.debugDescription, objc_AssociationPolicy.OBJC_ASSOCIATION_COPY_NONATOMIC)
+//        }
         didSet {
 //            switch type {
 //            case .font:
