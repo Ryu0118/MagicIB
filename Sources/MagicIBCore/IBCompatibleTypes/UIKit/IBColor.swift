@@ -9,7 +9,7 @@ import Foundation
 import OpenGL
 
 struct IBColor: IBCompatibleObject {
-    var properties: [IBPropertyMapper] =
+    let properties: [IBPropertyMapper] =
     [
         .init(propertyName: "red", type: .number),
         .init(propertyName: "green", type: .number),

@@ -8,7 +8,7 @@
 import Foundation
 
 struct IBEdgeInsets: IBCompatibleObject {
-    var properties: [IBPropertyMapper] =
+    let properties: [IBPropertyMapper] =
     [
         .init(propertyName: "top", type: .number),
         .init(propertyName: "leading", type: .number),

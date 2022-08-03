@@ -33,7 +33,7 @@ class IBAttributedString {
 extension IBAttributedString {
     
     class Fragment: IBCompatibleObject {
-        var properties: [IBPropertyMapper] =
+        let properties: [IBPropertyMapper] =
         [
             .init(propertyName: "content", type: .string),
             .init(ib: "NSBackgroundColor", propertyName: "backgroundColor", type: .color),

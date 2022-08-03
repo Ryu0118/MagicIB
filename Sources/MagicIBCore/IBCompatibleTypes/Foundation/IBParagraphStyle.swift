@@ -9,7 +9,7 @@ import Foundation
 
 struct IBParagraphStyle: IBCompatibleObject {
     
-    var properties: [IBPropertyMapper] =
+    let properties: [IBPropertyMapper] =
     [
         .init(propertyName: "alignment", type: .enum),
         .init(propertyName: "lineBreakMode", type: .enum),
