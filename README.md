@@ -1,1 +1,1 @@
-# IBLink
+# MagicIB
