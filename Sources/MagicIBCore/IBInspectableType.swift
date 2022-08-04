@@ -15,6 +15,7 @@ enum IBInspectableType {
     case font
     case autoresizingMask
     case color
+    case size
     case cgRect
     case image
     case configuration

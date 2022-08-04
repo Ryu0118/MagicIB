@@ -18,6 +18,6 @@ struct IBEdgeInsets: IBCompatibleObject {
     
     init?(attributes: [String: String]) {
         mapping(attributes)
-        if !isAllPropertiesValid { return nil }
+        if !isAllPropertiesActivated { return nil }
     }
 }
