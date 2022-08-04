@@ -37,7 +37,7 @@ final class IBButton: IBView {
     
     override func addValueToProperties(attributes: [String: String]) {
         super.addValueToProperties(attributes: attributes)
-        switch relation {
+        switch elementTree {
         case "buttonConfiguration":
             guard let propertyName = attributes["key"] else { return }
             buttonConfiguration = IBButtonConfiguration(attributes: attributes)

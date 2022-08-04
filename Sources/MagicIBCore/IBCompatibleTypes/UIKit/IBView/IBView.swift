@@ -20,7 +20,7 @@ class IBView: IBAnyView, IBCompatibleObject {
     }
     
     private(set) var constraints = [IBLayoutConstraint]()
-    private(set) var relation: String!//ex) attributedString->fragment->attributes->color
+    private(set) var elementTree: String!//ex) attributedString->fragment->attributes->color
     
     var waitingElementList = [String]() {
         didSet {
@@ -31,7 +31,7 @@ class IBView: IBAnyView, IBCompatibleObject {
                     break
                 }
             }
-            relation = waitingElementList
+            elementTree = waitingElementList
                 .suffix(lastViewIndex ?? 1)
                 .joined(separator: "->")
         }
@@ -87,7 +87,7 @@ class IBView: IBAnyView, IBCompatibleObject {
     }
 
     func addValueToProperties(attributes: [String: String]) {
-        switch relation {
+        switch elementTree {
         case "rect":
             guard let propertyName = attributes["key"] else { return }
             guard propertyName == "frame" else { return }

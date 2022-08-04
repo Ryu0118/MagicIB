@@ -29,7 +29,7 @@ class IBScrollView: IBView {
     
     override func addValueToProperties(attributes: [String : String]) {
         super.addValueToProperties(attributes: attributes)
-        switch relation {
+        switch elementTree {
         case "directionalEdgeInsets":
             guard let propertyName = attributes["key"],
                   let edgeInsets = IBEdgeInsets(attributes: attributes)

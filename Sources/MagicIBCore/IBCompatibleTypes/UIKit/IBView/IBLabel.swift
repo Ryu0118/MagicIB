@@ -29,7 +29,7 @@ final class IBLabel: IBView {
     
     override func addValueToProperties(attributes: [String : String]) {
         super.addValueToProperties(attributes: attributes)
-        switch relation {
+        switch elementTree {
         case "size":
             guard let propertyName = attributes["key"],
                   let size = IBSize(attributes: attributes)

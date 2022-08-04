@@ -23,7 +23,7 @@ final class IBImageView: IBView {
     
     override func addValueToProperties(attributes: [String : String]) {
         super.addValueToProperties(attributes: attributes)
-        switch relation {
+        switch elementTree {
         case "imageReference":
             guard let propertyName = attributes["key"],
                   let image = IBImage(attributes: attributes)
