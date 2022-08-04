@@ -4,7 +4,7 @@
 //
 //  Created by Ryu on 2022/07/28.
 //
-#if os(macOS)
+
 import CoreGraphics
 import Foundation
 
@@ -15,8 +15,8 @@ public class IBParser: NSObject {
     private var waitingElementList = [String]()
     private var ibViewControllers = [IBViewController]()
     private var subviewsFlags = [IBView]()
+    private var prototypesFlag: IBPrototypeContainable?
     private var parentView: IBView?
-    private(set) var parentViews = [IBView]()
     
     public func parse(_ absoluteURL: URL) throws {
         self.type = try IBType(url: absoluteURL)
@@ -39,7 +39,11 @@ extension IBParser: XMLParserDelegate {
         {
             waitingIBViewList.append(ibView)
             ibViewControllers.last?.appendView(ibView)
-            if let parentView = subviewsFlags.last {
+            if let prototypesFlag = prototypesFlag,
+                    let cell = ibView as? IBCell {
+                prototypesFlag.prototypes.append(cell)
+            }
+            else if let parentView = subviewsFlags.last {
                 parentView.subviews.append(ibView)
             }
         }
@@ -54,8 +58,12 @@ extension IBParser: XMLParserDelegate {
                 subviewsFlags.append(lastIBView)
                 if parentView == nil { parentView = lastIBView }
             }
+            else if elementName == "prototypes" {
+                prototypesFlag = lastIBView as? IBPrototypeContainable
+            }
             else {
-                IBView.addValueToProperties(ibView: lastIBView, elementName: elementName, waitingElementList: waitingElementList, attributes: attributeDict)
+                lastIBView.waitingElementList = waitingElementList
+                lastIBView.addValueToProperties(attributes: attributeDict)
             }
         }
     }
@@ -72,10 +80,13 @@ extension IBParser: XMLParserDelegate {
         if elementName == "subviews" {
             subviewsFlags.removeLast()
         }
+        else if elementName == "prototypes" {
+            prototypesFlag = nil
+        }
     }
     
     public func parserDidEndDocument(_ parser: XMLParser) {
-        
+        print("parse end")
     }
     
 }
@@ -106,4 +117,4 @@ extension IBParser {
     }
     
 }
-#endif 
+ 

@@ -4,7 +4,7 @@
 //
 //  Created by Ryu on 2022/07/30.
 //
-#if os(macOS)
+
 import Foundation
 
 class IBPropertyMapper {
@@ -13,9 +13,6 @@ class IBPropertyMapper {
     let type: IBInspectableType
     var value: Any? {
         didSet {
-            if let value = value as? IBBackgroundConfiguration {
-                print(value.activatedProperties.map { $0.propertyName })
-            }
 //            switch type {
 //            case .font:
 //                if value as? IBFont == nil { fatalError("Different data type") }
@@ -63,4 +60,4 @@ class IBPropertyMapper {
     }
 }
 
-#endif
+

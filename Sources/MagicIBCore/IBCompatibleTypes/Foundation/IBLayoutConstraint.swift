@@ -5,7 +5,7 @@
 //  Created by Ryu on 2022/07/31.
 //
 
-#if os(macOS)
+
 import Foundation
 
 struct IBLayoutConstraint {
@@ -80,4 +80,4 @@ extension IBLayoutConstraint {
     }
 }
 
-#endif
+

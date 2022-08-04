@@ -18,22 +18,23 @@ final class IBImageView: IBView {
     ]
     
     override var properties: [IBPropertyMapper] {
-        baseProperties + imageProperties
+        super.properties + imageProperties
     }
     
     override func addValueToProperties(attributes: [String : String]) {
         super.addValueToProperties(attributes: attributes)
-        switch relation {
+        switch elementTree {
         case "imageReference":
             guard let propertyName = attributes["key"],
                   let image = IBImage(attributes: attributes)
             else { return }
             addValueToProperty(ib: propertyName, value: image)
         case "preferredSymbolConfiguration":
-            guard let propertyName = attributes["key"],
-                  let symbolConfiguration = IBImageSymbolConfiguration(attributes: attributes)
-            else { return }
+            guard let propertyName = attributes["key"] else { return }
+            let symbolConfiguration = IBImageSymbolConfiguration(attributes: attributes)
             addValueToProperty(ib: propertyName, value: symbolConfiguration)
+        default:
+            break
         }
     }
 }

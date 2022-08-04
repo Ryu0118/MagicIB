@@ -5,7 +5,7 @@
 //  Created by Ryu on 2022/07/30.
 //
 
-#if os(macOS)
+
 import Foundation
 
 protocol IBAnyView: AnyObject {
@@ -14,4 +14,4 @@ protocol IBAnyView: AnyObject {
     var typeName: String { get }
     func addValueToProperties(attributes: [String: String])
 }
-#endif
+

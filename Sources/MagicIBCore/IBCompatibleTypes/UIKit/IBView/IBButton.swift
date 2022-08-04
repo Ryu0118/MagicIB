@@ -5,7 +5,7 @@
 //  Created by Ryu on 2022/07/30.
 //
 
-#if os(macOS)
+
 import Foundation
 
 final class IBButton: IBView {
@@ -32,12 +32,12 @@ final class IBButton: IBView {
     ]
     
     override var properties: [IBPropertyMapper] {
-        return baseProperties + buttonProperties
+        super.properties + buttonProperties
     }
     
     override func addValueToProperties(attributes: [String: String]) {
         super.addValueToProperties(attributes: attributes)
-        switch relation {
+        switch elementTree {
         case "buttonConfiguration":
             guard let propertyName = attributes["key"] else { return }
             buttonConfiguration = IBButtonConfiguration(attributes: attributes)
@@ -96,4 +96,4 @@ final class IBButton: IBView {
         }
     }
 }
-#endif
+
