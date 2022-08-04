@@ -32,7 +32,7 @@ final class IBButton: IBView {
     ]
     
     override var properties: [IBPropertyMapper] {
-        return baseProperties + buttonProperties
+        super.properties + buttonProperties
     }
     
     override func addValueToProperties(attributes: [String: String]) {

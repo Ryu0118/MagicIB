@@ -14,10 +14,15 @@ struct IBEdgeInsets: IBCompatibleObject {
         .init(propertyName: "leading", type: .number),
         .init(propertyName: "bottom", type: .number),
         .init(propertyName: "trailing", type: .number),
+        .init(ib: "minY", propertyName: "top", type: .number),
+        .init(ib: "maxY", propertyName: "bottom", type: .number),
+        .init(ib: "minX", propertyName: "left", type: .number),
+        .init(ib: "maxX", propertyName: "right", type: .number),
     ]
-    
     init?(attributes: [String: String]) {
         mapping(attributes)
-        if !isAllPropertiesActivated { return nil }
+        if activatedProperties.count != 4 {
+            return nil
+        }
     }
 }

@@ -24,7 +24,7 @@ final class IBLabel: IBView {
     private var attributedString: IBAttributedString?
     
     override var properties: [IBPropertyMapper] {
-        baseProperties + labelProperties
+        super.properties + labelProperties
     }
     
     override func addValueToProperties(attributes: [String : String]) {
