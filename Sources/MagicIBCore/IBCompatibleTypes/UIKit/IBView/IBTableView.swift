@@ -10,6 +10,14 @@ import Foundation
 class IBTableView: IBScrollView {
     let tableViewProperties: [IBPropertyMapper] = [
         .init(propertyName: "dataMode", type: .enum),
+        .init(propertyName: "style", type: .enum),
+        .init(propertyName: "separatorStyle", type: .enum),
+        .init(propertyName: "rowHeight", type: .number),
+        .init(propertyName: "estimatedRowHeight", type: .number),
+        .init(propertyName: "sectionHeaderHeight", type: .number),
+        .init(propertyName: "estimatedSectionHeaderHeight", type: .number),
+        .init(propertyName: "sectionFooterHeight", type: .number),
+        .init(propertyName: "estimatedSectionFooterHeight", type: .number),
     ]
     override var properties: [IBPropertyMapper] {
         super.properties + tableViewProperties
