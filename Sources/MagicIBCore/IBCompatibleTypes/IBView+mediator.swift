@@ -15,14 +15,18 @@ extension IBView {
             return IBView(attributes: attributes, ibCompatibleView: ibCompatibleView)
         case .button:
             return IBButton(attributes: attributes, ibCompatibleView: ibCompatibleView)
+        case .imageView:
+            return IBImageView(attributes: attributes, ibCompatibleView: ibCompatibleView)
+        case .tableView:
+            return IBTableView(attributes: attributes, ibCompatibleView: ibCompatibleView)
+        case .label:
+            return IBLabel(attributes: attributes, ibCompatibleView: ibCompatibleView)
+        case .scrollView:
+            return IBScrollView(attributes: attributes, ibCompatibleView: ibCompatibleView)
+        case .tableViewCell:
+            return IBTableViewCell(attributes: attributes, ibCompatibleView: ibCompatibleView)
         default:
             return IBView(attributes: attributes, ibCompatibleView: ibCompatibleView)
-//        case .imageView:
-//            <#code#>
-//        case .tableView:
-//            <#code#>
-//        case .label:
-//            <#code#>
 //        case .progressView:
 //            <#code#>
 //        case .collectionView:
@@ -46,8 +50,6 @@ extension IBView {
 //        case .collectionViewCell:
 //            <#code#>
 //        case .textView:
-//            <#code#>
-//        case .scrollView:
 //            <#code#>
 //        case .pickerView:
 //            <#code#>
@@ -87,83 +89,4 @@ extension IBView {
 //            <#code#>
         }
     }
-    
-    static func addValueToProperties(ibView: IBView, elementName: String, waitingElementList: [String], attributes: [String: String]) {
-        switch ibView.classType {
-        case .view, .imageView, .tableView, .label, .progressView, .collectionView, .stackView, .segmentedControl, .slider, .switch, .activityIndicatorView, .pageControl, .stepper, .tableViewCell, .collectionViewCell, .textView, .scrollView, .pickerView, .visualEffectView, .mapView, .mtkView, .glkView, .sceneKitView, .skView, .arskView, .arscnView, .wkWebView, .webView, .arView, .clLocationButton, .navigationBar, .toolbar, .tabBar, .searchBar, .containerView:
-            ibView.waitingElementList = waitingElementList
-            ibView.addValueToProperties(attributes: attributes)
-        case .button:
-            guard let ibButtonView = ibView as? IBButton else { return }
-            ibButtonView.waitingElementList = waitingElementList
-            ibButtonView.addValueToProperties(attributes: attributes)
-//        case .tableView:
-//            <#code#>
-//        case .label:
-//            <#code#>
-//        case .progressView:
-//            <#code#>
-//        case .collectionView:
-//            <#code#>
-//        case .stackView:
-//            <#code#>
-//        case .segmentedControl:
-//            <#code#>
-//        case .slider:
-//            <#code#>
-//        case .switch:
-//            <#code#>
-//        case .activityIndicatorView:
-//            <#code#>
-//        case .pageControl:
-//            <#code#>
-//        case .stepper:
-//            <#code#>
-//        case .tableViewCell:
-//            <#code#>
-//        case .collectionViewCell:
-//            <#code#>
-//        case .textView:
-//            <#code#>
-//        case .scrollView:
-//            <#code#>
-//        case .pickerView:
-//            <#code#>
-//        case .visualEffectView:
-//            <#code#>
-//        case .mapView:
-//            <#code#>
-//        case .mtkView:
-//            <#code#>
-//        case .glkView:
-//            <#code#>
-//        case .sceneKitView:
-//            <#code#>
-//        case .skView:
-//            <#code#>
-//        case .arskView:
-//            <#code#>
-//        case .arscnView:
-//            <#code#>
-//        case .wkWebView:
-//            <#code#>
-//        case .webView:
-//            <#code#>
-//        case .arView:
-//            <#code#>
-//        case .clLocationButton:
-//            <#code#>
-//        case .navigationBar:
-//            <#code#>
-//        case .toolbar:
-//            <#code#>
-//        case .tabBar:
-//            <#code#>
-//        case .searchBar:
-//            <#code#>
-//        case .containerView:
-//            <#code#>
-        }
-    }
-     
 }

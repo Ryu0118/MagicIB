@@ -21,7 +21,11 @@ final class IBTableView: IBScrollView, IBPrototypeContainable {
         .init(propertyName: "estimatedSectionFooterHeight", type: .number),
     ]
     
-    var prototypes = [IBCell]()
+    var prototypes = [IBCell]() {
+        didSet {
+            print(prototypes)
+        }
+    }
     
     override var properties: [IBPropertyMapper] {
         super.properties + tableViewProperties

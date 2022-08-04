@@ -16,6 +16,7 @@ public class IBParser: NSObject {
     private var ibViewControllers = [IBViewController]()
     private var subviewsFlags = [IBView]()
     private var prototypesFlag: IBPrototypeContainable?
+    private var parentView: IBView?
     
     public func parse(_ absoluteURL: URL) throws {
         self.type = try IBType(url: absoluteURL)
@@ -38,12 +39,12 @@ extension IBParser: XMLParserDelegate {
         {
             waitingIBViewList.append(ibView)
             ibViewControllers.last?.appendView(ibView)
-            if let parentView = subviewsFlags.last {
-                parentView.subviews.append(ibView)
-            }
-            else if let prototypesFlag = prototypesFlag,
+            if let prototypesFlag = prototypesFlag,
                     let cell = ibView as? IBCell {
                 prototypesFlag.prototypes.append(cell)
+            }
+            else if let parentView = subviewsFlags.last {
+                parentView.subviews.append(ibView)
             }
         }
         else if let ibCompatibleViewController: IBCompatibleViewController = .init(rawValue: elementName),
@@ -55,12 +56,14 @@ extension IBParser: XMLParserDelegate {
             guard let lastIBView = waitingIBViewList.last else { return }
             if elementName == "subviews" {
                 subviewsFlags.append(lastIBView)
+                if parentView == nil { parentView = lastIBView }
             }
             else if elementName == "prototypes" {
                 prototypesFlag = lastIBView as? IBPrototypeContainable
             }
             else {
-                IBView.addValueToProperties(ibView: lastIBView, elementName: elementName, waitingElementList: waitingElementList, attributes: attributeDict)
+                lastIBView.waitingElementList = waitingElementList
+                lastIBView.addValueToProperties(attributes: attributeDict)
             }
         }
     }
@@ -83,7 +86,7 @@ extension IBParser: XMLParserDelegate {
     }
     
     public func parserDidEndDocument(_ parser: XMLParser) {
-        
+        print("parse end")
     }
     
 }
