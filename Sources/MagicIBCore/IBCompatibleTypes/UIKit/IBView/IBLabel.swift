@@ -7,6 +7,19 @@
 
 import Foundation
 
-class IBLabel: IBView {
-    
+final class IBLabel: IBView {
+    private let labelProperties: [IBPropertyMapper] = [
+        .init(propertyName: "semanticContentAttribute", type: .enum),
+        .init(propertyName: "numberOfLines", type: .number),
+        .init(propertyName: "lineBreakMode", type: .enum),
+        .init(propertyName: "baselineAdjustment", type: .enum),
+        .init(propertyName: "minimumScaleFactor", type: .number),
+        .init(propertyName: "showsExpansionTextWhenTruncated", type: .bool),
+        .init(ib: "highlightedColor", propertyName: "highlightedTextColor", type: .color),
+        .init(propertyName: "shadowColor", type: .color),
+        .init(propertyName: "shadowOffset", type: .size)
+    ]
+    override var properties: [IBPropertyMapper] {
+        baseProperties + labelProperties
+    }
 }
