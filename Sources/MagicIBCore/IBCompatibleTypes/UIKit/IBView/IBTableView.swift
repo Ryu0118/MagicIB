@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class IBTableView: IBScrollView {
+final class IBTableView: IBScrollView, IBPrototypeContainable {
     private let tableViewProperties: [IBPropertyMapper] = [
         .init(propertyName: "dataMode", type: .enum),
         .init(propertyName: "style", type: .enum),

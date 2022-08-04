@@ -4,7 +4,7 @@
 //
 //  Created by Ryu on 2022/07/28.
 //
-#if os(macOS)
+
 import Foundation
 
 class IBView: IBAnyView, IBCompatibleObject {
@@ -110,4 +110,4 @@ class IBView: IBAnyView, IBCompatibleObject {
     }
     
 }
-#endif
+

@@ -5,7 +5,7 @@
 //  Created by Ryu on 2022/07/30.
 //
 
-#if os(macOS)
+
 import Foundation
 
 final class IBButton: IBView {
@@ -96,4 +96,4 @@ final class IBButton: IBView {
         }
     }
 }
-#endif
+

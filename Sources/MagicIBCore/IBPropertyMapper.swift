@@ -4,7 +4,7 @@
 //
 //  Created by Ryu on 2022/07/30.
 //
-#if os(macOS)
+
 import Foundation
 
 class IBPropertyMapper {
@@ -63,4 +63,4 @@ class IBPropertyMapper {
     }
 }
 
-#endif
+

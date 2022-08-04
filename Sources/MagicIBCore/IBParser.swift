@@ -4,7 +4,7 @@
 //
 //  Created by Ryu on 2022/07/28.
 //
-#if os(macOS)
+
 import CoreGraphics
 import Foundation
 
@@ -15,6 +15,7 @@ public class IBParser: NSObject {
     private var waitingElementList = [String]()
     private var ibViewControllers = [IBViewController]()
     private var subviewsFlags = [IBView]()
+    private var prototypesFlag: IBPrototypeContainable?
     
     public func parse(_ absoluteURL: URL) throws {
         self.type = try IBType(url: absoluteURL)
@@ -40,6 +41,10 @@ extension IBParser: XMLParserDelegate {
             if let parentView = subviewsFlags.last {
                 parentView.subviews.append(ibView)
             }
+            else if let prototypesFlag = prototypesFlag,
+                    let cell = ibView as? IBCell {
+                prototypesFlag.prototypes.append(cell)
+            }
         }
         else if let ibCompatibleViewController: IBCompatibleViewController = .init(rawValue: elementName),
                 let ibViewController = IBViewController(attributes: attributeDict, ibCompatibleViewController: ibCompatibleViewController)
@@ -50,6 +55,9 @@ extension IBParser: XMLParserDelegate {
             guard let lastIBView = waitingIBViewList.last else { return }
             if elementName == "subviews" {
                 subviewsFlags.append(lastIBView)
+            }
+            else if elementName == "prototypes" {
+                prototypesFlag = lastIBView as? IBPrototypeContainable
             }
             else {
                 IBView.addValueToProperties(ibView: lastIBView, elementName: elementName, waitingElementList: waitingElementList, attributes: attributeDict)
@@ -68,6 +76,9 @@ extension IBParser: XMLParserDelegate {
         }
         if elementName == "subviews" {
             subviewsFlags.removeLast()
+        }
+        else if elementName == "prototypes" {
+            prototypesFlag = nil
         }
     }
     
@@ -103,4 +114,4 @@ extension IBParser {
     }
     
 }
-#endif 
+ 
