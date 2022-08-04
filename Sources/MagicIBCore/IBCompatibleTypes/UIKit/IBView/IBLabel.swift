@@ -17,9 +17,38 @@ final class IBLabel: IBView {
         .init(propertyName: "showsExpansionTextWhenTruncated", type: .bool),
         .init(ib: "highlightedColor", propertyName: "highlightedTextColor", type: .color),
         .init(propertyName: "shadowColor", type: .color),
-        .init(propertyName: "shadowOffset", type: .size)
+        .init(propertyName: "shadowOffset", type: .size),
+        .init(propertyName: "attributedText", type: .attributedString)
     ]
+    
+    private var attributedString: IBAttributedString?
+    
     override var properties: [IBPropertyMapper] {
         baseProperties + labelProperties
     }
+    
+    override func addValueToProperties(attributes: [String : String]) {
+        super.addValueToProperties(attributes: attributes)
+        switch relation {
+        case "size":
+            guard let propertyName = attributes["key"],
+                  let size = IBSize(attributes: attributes)
+            else { return }
+            addValueToProperty(ib: propertyName, value: size)
+        case "attributedString":
+            guard let propertyName = attributes["key"] else { return }
+            attributedString = IBAttributedString
+            addValueToProperty(ib: propertyName, value: attributedString!)
+        case "attributedString->fragment":
+            guard let content = attributes["content"] else { return }
+            attributedString?.addFragment(content)
+        case "attributedString->fragment->attributes->color":
+            attributedString?.addColorAttributes(attributes)
+        case "attributedString->fragment->attributes->font":
+            attributedString?.addFontAttributes(attributes)
+        case "attributedString->fragment->attributes->paragraphStyle":
+            attributedString?.addParagraphStyle(attributes)
+        }
+    }
+    
 }
