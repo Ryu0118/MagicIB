@@ -20,10 +20,7 @@ extension IBCompatibleObject {
     var functions: [IBFunctionMapper] { [] }
     
     var activatedProperties: [IBPropertyMapper] {
-        properties.filter {
-            guard let value = $0.value as? String else { return false }
-            return !value.isEmpty
-        }
+        properties.filter { $0.value != nil }
     }
     
     var isAllPropertiesValid: Bool {

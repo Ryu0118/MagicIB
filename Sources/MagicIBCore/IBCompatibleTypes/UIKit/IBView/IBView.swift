@@ -14,16 +14,14 @@ class IBView: IBAnyView, IBCompatibleObject {
     let classType: IBCompatibleView
     let dependencies: IBViewDependencies
     
-    var constraints = [IBLayoutConstraint]()
     var subviews = [IBView]()
     var parentElement: String? {
         waitingElementList[safe: waitingElementList.count - 2]
     }
-    private(set) var relation: String! {//ex) attributedString->fragment->attributes->color
-        didSet {
-            //print(relation ?? "")
-        }
-    }
+    
+    private(set) var constraints = [IBLayoutConstraint]()
+    private(set) var relation: String!//ex) attributedString->fragment->attributes->color
+    
     var waitingElementList = [String]() {
         didSet {
             var lastViewIndex: Int?
@@ -64,13 +62,9 @@ class IBView: IBAnyView, IBCompatibleObject {
         .init(ib: "verticalCompressionResistancePriority", functionName: "setContentCompressionResistancePriority", argumentNames: ["", "for"]),
     ]
     
-    var properties: [IBPropertyMapper] {
-        baseProperties
-    }
+    var properties: [IBPropertyMapper] { baseProperties }
     
-    var functions: [IBFunctionMapper] {
-        baseFunctions
-    }
+    var functions: [IBFunctionMapper] { baseFunctions }
 
     var typeName: String {
         if let name = customClass {

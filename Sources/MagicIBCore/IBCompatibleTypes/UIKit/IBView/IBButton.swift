@@ -8,12 +8,12 @@
 #if os(macOS)
 import Foundation
 
-class IBButton: IBView {
+final class IBButton: IBView {
     private var buttonConfiguration: IBButtonConfiguration?
     private var currentAttributedString: IBAttributedString?
     
     
-    let buttonProperties: [IBPropertyMapper] = [
+    private let buttonProperties: [IBPropertyMapper] = [
         .init(ib: "highlighted", propertyName: "isHighlighted", type: .bool),
         .init(ib: "selected", propertyName: "isSelected", type: .bool),
         .init(ib: "buttonType", propertyName: "buttonType", type: .enum),

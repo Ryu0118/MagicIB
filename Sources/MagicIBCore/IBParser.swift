@@ -75,7 +75,7 @@ extension IBParser: XMLParserDelegate {
     }
     
     public func parserDidEndDocument(_ parser: XMLParser) {
-        print("parse end")
+        
     }
     
 }
