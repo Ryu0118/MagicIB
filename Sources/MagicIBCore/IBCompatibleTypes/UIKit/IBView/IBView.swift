@@ -37,7 +37,7 @@ class IBView: IBAnyView, IBCompatibleObject {
         }
     }
     
-    let baseProperties: [IBPropertyMapper] = [
+    private let baseProperties: [IBPropertyMapper] = [
         .init(ib: "hidden", propertyName: "isHidden", type: .bool),
         .init(ib: "clipsSubviews", propertyName: "clipsToBounds", type: .bool),
         .init(ib: "multipleTouchEnabled", propertyName: "isMultipleTouchEnabled", type: .bool),

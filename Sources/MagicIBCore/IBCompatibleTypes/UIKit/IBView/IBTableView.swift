@@ -7,8 +7,8 @@
 
 import Foundation
 
-class IBTableView: IBScrollView {
-    let tableViewProperties: [IBPropertyMapper] = [
+final class IBTableView: IBScrollView {
+    private let tableViewProperties: [IBPropertyMapper] = [
         .init(propertyName: "dataMode", type: .enum),
         .init(propertyName: "style", type: .enum),
         .init(propertyName: "separatorStyle", type: .enum),
@@ -19,6 +19,9 @@ class IBTableView: IBScrollView {
         .init(propertyName: "sectionFooterHeight", type: .number),
         .init(propertyName: "estimatedSectionFooterHeight", type: .number),
     ]
+    
+    var prototypes = [IBTableViewCell]()
+    
     override var properties: [IBPropertyMapper] {
         super.properties + tableViewProperties
     }
