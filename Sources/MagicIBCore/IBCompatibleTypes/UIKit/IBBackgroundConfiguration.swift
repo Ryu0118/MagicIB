@@ -8,7 +8,7 @@
 import Foundation
 
 struct IBBackgroundConfiguration: IBCompatibleObject {
-    var properties: [IBPropertyMapper] =
+    let properties: [IBPropertyMapper] =
     [
         .init(propertyName: "image", type: .image),
         .init(propertyName: "imageContentMode", type: .enum),

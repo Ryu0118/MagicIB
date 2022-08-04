@@ -6,20 +6,16 @@
 //
 #if os(macOS)
 import Foundation
-import ObjectiveC
 
 class IBPropertyMapper {
     let ib: String
     let propertyName: String
     let type: IBInspectableType
-    var value: Any! {
-//        get {
-//            objc_getAssociatedObject(self, &_value)
-//        }
-//        set {
-//            objc_setAssociatedObject(self, &_value, newValue.debugDescription, objc_AssociationPolicy.OBJC_ASSOCIATION_COPY_NONATOMIC)
-//        }
+    var value: Any? {
         didSet {
+            if let value = value as? IBBackgroundConfiguration {
+                print(value.activatedProperties.map { $0.propertyName })
+            }
 //            switch type {
 //            case .font:
 //                if value as? IBFont == nil { fatalError("Different data type") }
@@ -64,43 +60,6 @@ class IBPropertyMapper {
     
     func addValue(_ value: Any) {
         self.value = value
-    }
-    
-    func generateSwiftCode(variableName: String) -> String? {
-        switch type {
-        case .number:
-            guard let value = value as? String else { return nil }
-            return "\(variableName).\(propertyName) = \(value)"
-        case .bool:
-            guard let value = value as? String else { return nil }
-            let convertedString = value == "YES" ? "true" : "false"
-            return "\(variableName).\(propertyName) = \(convertedString)"
-        case .enum:
-            guard let value = value as? String else { return nil }
-            return "\(variableName).\(propertyName) = .\(value)"
-//        case .array:
-//            if let value = value as? [String] {
-//                let array =  value
-//                    .joined(separator: ", ")
-//                    .insert(first: "[", last: "]")
-//                return "\(variableName).\(propertyName) = \(array)"
-//            }
-//            else if let value = value as? String {
-//                return "\(variableName).\(propertyName) = .\(value)"
-//            }
-//            else {
-//                return nil
-//            }
-        default:
-            return nil
-//        case .fullCustom:
-//            guard let value = value as? String else { return nil }
-//            /*
-//             {{VARIABLE_NAME}}, which may be in value,
-//             must be replaced by the name of the variable being set
-//             */
-//            return value.replacingOccurrences(of: "{{VARIABLE_NAME}}", with: variableName)
-        }
     }
 }
 

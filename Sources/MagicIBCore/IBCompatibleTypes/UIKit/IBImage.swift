@@ -8,7 +8,7 @@
 import Foundation
 
 struct IBImage: IBCompatibleObject {
-    var properties: [IBPropertyMapper] =
+    let properties: [IBPropertyMapper] =
     [
         .init(propertyName: "systemName", type: .string),
         .init(propertyName: "name", type: .string),

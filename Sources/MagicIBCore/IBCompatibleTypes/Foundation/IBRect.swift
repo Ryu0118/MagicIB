@@ -8,7 +8,7 @@
 import Foundation
 
 struct IBRect: IBCompatibleObject {
-    var properties: [IBPropertyMapper] =
+    let properties: [IBPropertyMapper] =
     [
         .init(propertyName: "x", type: .number),
         .init(propertyName: "y", type: .number),

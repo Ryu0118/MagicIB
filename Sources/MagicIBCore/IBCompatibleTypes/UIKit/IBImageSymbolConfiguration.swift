@@ -8,7 +8,7 @@
 import Foundation
 
 struct IBImageSymbolConfiguration: IBCompatibleObject {
-    var properties: [IBPropertyMapper] =
+    let properties: [IBPropertyMapper] =
     [
         .init(propertyName: "configurationType", type: .enum),
         .init(propertyName: "pointSize", type: .number),

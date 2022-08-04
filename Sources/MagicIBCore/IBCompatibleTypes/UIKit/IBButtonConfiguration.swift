@@ -9,7 +9,7 @@ import Foundation
 
 struct IBButtonConfiguration: IBCompatibleObject {
     
-    var properties: [IBPropertyMapper] =
+    let properties: [IBPropertyMapper] =
     [
         .init(propertyName: "style", type: .enum),
         .init(propertyName: "image", type: .image),
