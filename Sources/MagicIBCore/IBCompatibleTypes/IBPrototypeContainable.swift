@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol IBPrototypeContainable where Self: IBScrollView {
+protocol IBPrototypeContainable: AnyObject {
     var prototypes: [IBCell] { get set }
 }

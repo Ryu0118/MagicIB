@@ -37,7 +37,7 @@ final class IBLabel: IBView {
             addValueToProperty(ib: propertyName, value: size)
         case "attributedString":
             guard let propertyName = attributes["key"] else { return }
-            attributedString = IBAttributedString
+            attributedString = IBAttributedString()
             addValueToProperty(ib: propertyName, value: attributedString!)
         case "attributedString->fragment":
             guard let content = attributes["content"] else { return }
@@ -48,6 +48,8 @@ final class IBLabel: IBView {
             attributedString?.addFontAttributes(attributes)
         case "attributedString->fragment->attributes->paragraphStyle":
             attributedString?.addParagraphStyle(attributes)
+        default:
+            break
         }
     }
     

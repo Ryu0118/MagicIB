@@ -40,6 +40,8 @@ class IBScrollView: IBView {
                   let edgeInsets = IBEdgeInsets(attributes: attributes)
             else { return }
             addValueToProperty(ib: propertyName, value: edgeInsets)
+        default:
+            break
         }
     }
     
