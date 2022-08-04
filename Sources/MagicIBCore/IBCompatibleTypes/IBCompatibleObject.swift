@@ -23,7 +23,7 @@ extension IBCompatibleObject {
         properties.filter { $0.value != nil }
     }
     
-    var isAllPropertiesValid: Bool {
+    var isAllPropertiesActivated: Bool {
         activatedProperties.count == properties.count
     }
     
