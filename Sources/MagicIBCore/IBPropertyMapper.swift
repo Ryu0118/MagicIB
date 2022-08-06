@@ -13,6 +13,9 @@ class IBPropertyMapper {
     let type: IBInspectableType
     var value: Any? {
         didSet {
+            if type == .image && value is String {
+                value = IBImage(attributes: ["image"])
+            }
 //            switch type {
 //            case .font:
 //                if value as? IBFont == nil { fatalError("Different data type") }

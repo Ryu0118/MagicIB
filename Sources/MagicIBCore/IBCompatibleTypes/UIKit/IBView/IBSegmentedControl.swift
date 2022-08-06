@@ -16,7 +16,8 @@ class IBSegmentedControl: IBView {
         .init(propertyName: "selectedSegmentIndex", type: .number),
         .init(ib: "momentary", propertyName: "isMomentary", type: .bool),
         .init(ib: "springLoaded", propertyName: "isSpringLoaded", type: .bool),
-        .init(propertyName: "selectedSegmentTintColor", type: .color)
+        .init(propertyName: "selectedSegmentTintColor", type: .color),
+        .init(ib: "selected", propertyName: "isSelected", type: .bool),
     ]
     
     private let segmentedControlFunctions: [IBFunctionMapper] = [
@@ -40,10 +41,10 @@ class IBSegmentedControl: IBView {
                 putValueToArgument(ib: "title", value: title, type: .string, at: 0)
                 putValueToArgument(ib: "title", value: segmentCount, type: .number, at: 1)
             }
-            else if let imageName = attributes["image"] {
+            else if let _ = attributes["image"] {
                 guard let image = IBImage(attributes: attributes) else { return }
                 putValueToArgument(ib: "image", value: image, type: .image, at: 0)
-                putValueToArgument(ib: "image", value: segmentCount, type: .image, at: 1)
+                putValueToArgument(ib: "image", value: segmentCount, type: .number, at: 1)
             }
         case "segments->segment->size":
             guard let key = attributes["key"],
@@ -51,6 +52,12 @@ class IBSegmentedControl: IBView {
             else { return }
             putValueToArgument(ib: key, value: size, type: .size, at: 0)
             putValueToArgument(ib: key, value: segmentCount, type: .number, at: 1)
+        case "segments->segment->imageReference":
+            guard let key = attributes["key"],
+                  let image = IBImage(attributes: attributes)
+            else { return }
+            putValueToArgument(ib: "image", value: image, type: .image, at: 0)
+            putValueToArgument(ib: "image", value: segmentCount, type: .number, at: 1)
         default:
             break
         }
