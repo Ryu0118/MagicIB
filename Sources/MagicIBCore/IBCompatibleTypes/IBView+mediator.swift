@@ -27,8 +27,6 @@ extension IBView {
             return IBTableViewCell(attributes: attributes, ibCompatibleView: ibCompatibleView)
         case .progressView:
             return IBProgressView(attributes: attributes, ibCompatibleView: ibCompatibleView)
-        case .progressView:
-            return IBProgressView(attributes: attributes, ibCompatibleView: ibCompatibleView)
         case .collectionView:
             return IBCollectionView(attributes: attributes, ibCompatibleView: ibCompatibleView)
         case .stackView:
@@ -43,10 +41,8 @@ extension IBView {
             return IBActivityIndicatorView(attributes: attributes, ibCompatibleView: ibCompatibleView)
         case .pageControl:
             return IBPageControl(attributes: attributes, ibCompatibleView: ibCompatibleView)
-//        case .stepper:
-//            <#code#>
-        case .tableViewCell:
-            return IBTableViewCell(attributes: attributes, ibCompatibleView: ibCompatibleView)
+        case .stepper:
+            return IBStepper(attributes: attributes, ibCompatibleView: ibCompatibleView)
         case .collectionViewCell:
             return IBCollectionViewCell(attributes: attributes, ibCompatibleView: ibCompatibleView)
         default:
