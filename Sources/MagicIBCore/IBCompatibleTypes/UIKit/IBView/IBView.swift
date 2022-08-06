@@ -42,7 +42,6 @@ class IBView: IBAnyView, IBCompatibleObject {
         .init(ib: "clipsSubviews", propertyName: "clipsToBounds", type: .bool),
         .init(ib: "multipleTouchEnabled", propertyName: "isMultipleTouchEnabled", type: .bool),
         .init(ib: "alpha", propertyName: "alpha", type: .number),
-        .init(ib: "semanticContentAttribute", propertyName: "semanticContentAttribute", type: .bool),
         .init(ib: "multipleTouchEnabled", propertyName: "isMultipleTouchEnabled", type: .bool),
         .init(ib: "translatesAutoresizingMaskIntoConstraints", propertyName: "translatesAutoresizingMaskIntoConstraints", type: .bool),
         .init(ib: "autoresizingMask", propertyName: "autoresizingMask", type: .autoresizingMask),

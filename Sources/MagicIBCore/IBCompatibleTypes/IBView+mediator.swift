@@ -25,6 +25,8 @@ extension IBView {
             return IBScrollView(attributes: attributes, ibCompatibleView: ibCompatibleView)
         case .tableViewCell:
             return IBTableViewCell(attributes: attributes, ibCompatibleView: ibCompatibleView)
+        case .progressView:
+            return IBProgressView(attributes: attributes, ibCompatibleView: ibCompatibleView)
         default:
             return IBView(attributes: attributes, ibCompatibleView: ibCompatibleView)
 //        case .progressView:
