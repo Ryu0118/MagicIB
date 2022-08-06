@@ -14,7 +14,7 @@ public class IBParser: NSObject {
     private var waitingIBViewList = [IBView]()
     private var waitingElementList = [String]()
     private var ibViewControllers = [IBViewController]()
-    private var subviewsFlags = [IBView]()
+    private var subviewFlags = [IBView]()
     private var prototypesFlag: IBTableView?
     private var cellFlag: IBCollectionView?
     private var parentView: IBView?
@@ -44,7 +44,7 @@ extension IBParser: XMLParserDelegate {
                let cell = ibView as? IBTableViewCell {
                 tableView.prototypes.append(cell)
             }
-            else if let parentView = subviewsFlags.last {
+            else if let parentView = subviewFlags.last {
                 if let stackView = parentView as? IBStackView {
                     stackView.arrangedSubviews.append(ibView)
                 }
@@ -71,7 +71,7 @@ extension IBParser: XMLParserDelegate {
             guard let lastIBView = waitingIBViewList.last else { return }
             switch elementName {
             case "subviews":
-                subviewsFlags.append(lastIBView)
+                subviewFlags.append(lastIBView)
                 if parentView == nil { parentView = lastIBView }
             case "prototypes":
                 prototypesFlag = lastIBView as? IBTableView
@@ -96,7 +96,7 @@ extension IBParser: XMLParserDelegate {
         
         switch elementName {
         case "subviews":
-            subviewsFlags.removeLast()
+            subviewFlags.removeLast()
         case "prototypes":
             prototypesFlag = nil
         case "cells":
