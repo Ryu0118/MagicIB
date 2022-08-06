@@ -7,8 +7,6 @@
 
 import Foundation
 
-protocol IBCell { }
-
 final class IBTableViewCell: IBView, IBCell {
     private let tableViewCellProperties: [IBPropertyMapper] = [
         .init(propertyName: "selectionStyle", type: .enum),

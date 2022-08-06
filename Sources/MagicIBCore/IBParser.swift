@@ -15,7 +15,7 @@ public class IBParser: NSObject {
     private var waitingElementList = [String]()
     private var ibViewControllers = [IBViewController]()
     private var subviewsFlags = [IBView]()
-    private var prototypesFlag: IBPrototypeContainable?
+    private var prototypesFlag: IBTableView?
     private var parentView: IBView?
     
     public func parse(_ absoluteURL: URL) throws {
@@ -40,7 +40,7 @@ extension IBParser: XMLParserDelegate {
             waitingIBViewList.append(ibView)
             ibViewControllers.last?.appendView(ibView)
             if let prototypesFlag = prototypesFlag,
-                    let cell = ibView as? IBCell {
+               let cell = ibView as? IBTableViewCell {
                 prototypesFlag.prototypes.append(cell)
             }
             else if let parentView = subviewsFlags.last {
@@ -59,7 +59,7 @@ extension IBParser: XMLParserDelegate {
                 if parentView == nil { parentView = lastIBView }
             }
             else if elementName == "prototypes" {
-                prototypesFlag = lastIBView as? IBPrototypeContainable
+                prototypesFlag = lastIBView as? IBTableView
             }
             else {
                 lastIBView.waitingElementList = waitingElementList

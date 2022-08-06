@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class IBTableView: IBScrollView, IBPrototypeContainable {
+final class IBTableView: IBScrollView {
     
     private let tableViewProperties: [IBPropertyMapper] = [
         .init(propertyName: "dataMode", type: .enum),
@@ -21,11 +21,7 @@ final class IBTableView: IBScrollView, IBPrototypeContainable {
         .init(propertyName: "estimatedSectionFooterHeight", type: .number),
     ]
     
-    var prototypes = [IBCell]() {
-        didSet {
-            print(prototypes)
-        }
-    }
+    var prototypes = [IBTableViewCell]()
     
     override var properties: [IBPropertyMapper] {
         super.properties + tableViewProperties
