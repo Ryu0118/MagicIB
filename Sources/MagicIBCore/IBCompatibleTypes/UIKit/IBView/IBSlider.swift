@@ -16,7 +16,7 @@ class IBSlider: IBView {
         .init(propertyName: "value", type: .number),
         .init(ib: "minValue", propertyName: "minimumValue", type: .number),
         .init(ib: "maxValue", propertyName: "maximumValue", type: .number),
-        .init(propertyName: "minimumValueImage", type: <#T##IBInspectableType#>)
+        .init(propertyName: "minimumValueImage", type: .image)
     ]
 }
  

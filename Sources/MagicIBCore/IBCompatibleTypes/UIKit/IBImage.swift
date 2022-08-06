@@ -28,8 +28,12 @@ struct IBImage: IBCompatibleObject {
         }
     }
     
-    init(imageName: String) {
-        addValueToProperty(ib: "name", value: <#T##Any#>)
+    init(named: String) {
+        addValueToProperty(ib: "name", value: named)
+    }
+    
+    init(systemName: String) {
+        addValueToProperty(ib: "systemName", value: systemName)
     }
 }
 
