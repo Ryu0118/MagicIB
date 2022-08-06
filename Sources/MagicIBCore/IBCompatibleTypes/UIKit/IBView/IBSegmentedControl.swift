@@ -22,10 +22,36 @@ class IBSegmentedControl: IBView {
     
     private let segmentedControlFunctions: [IBFunctionMapper] = [
         .init(ib: "title", functionName: "setTitle", argumentNames: ["", "forSegmentAt"]),
-        .init(ib: "image", functionName: "setImage", argumentNames: ["", "forSegmentAt"])
+        .init(ib: "image", functionName: "setImage", argumentNames: ["", "forSegmentAt"]),
+        .init(ib: "contentOffset", functionName: "setContentOffset", argumentNames: ["", "forSegmentAt"]),
     ]
     
     override var properties: [IBPropertyMapper] {
         super.properties + segmentedControlProperties
+    }
+    
+    var segmentCount = 0
+    
+    override func addValueToProperties(attributes: [String : String]) {
+        super.addValueToProperties(attributes: attributes)
+        switch elementTree {
+        case "segments->segment":
+            defer { segmentCount += 1 }
+            if let title = attributes["title"], !title.isEmpty {
+                putValueToArgument(ib: "title", value: title, type: .string, at: 0)
+                putValueToArgument(ib: "title", value: segmentCount, type: .number, at: 1)
+            }
+            else if let imageName = attributes["image"] {
+                guard let image = IBImage(attributes: attributes) { return }
+                putValueToArgument(ib: "image", value: image, type: .image, at: 0)
+                putValueToArgument(ib: "image", value: segmentCount, type: .image, at: 1)
+            }
+        case "segments->segment->size":
+            guard let key = attributes["key"],
+                  let size = IBSize(attributes: attributes)
+            else { return }
+            putValueToArgument(ib: key, value: size, type: .size, at: 0)
+            putValueToArgument(ib: key, value: segmentCount, type: .number, at: 1)
+        }
     }
 }
