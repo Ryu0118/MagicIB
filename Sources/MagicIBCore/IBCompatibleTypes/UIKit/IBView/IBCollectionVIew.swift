@@ -7,7 +7,7 @@
 
 import Foundation
 
-class IBCollectionView: IBScrollView {
+final class IBCollectionView: IBScrollView {
     private let collectionViewProperties: [IBPropertyMapper] = [
         .init(ib: "springLoaded", propertyName: "isSpringLoaded", type: .bool),
         .init(propertyName: "dataMode", type: .enum),
