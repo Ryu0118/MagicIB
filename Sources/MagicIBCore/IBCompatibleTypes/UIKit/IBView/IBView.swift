@@ -42,7 +42,6 @@ class IBView: IBAnyView, IBCompatibleObject {
         .init(ib: "clipsSubviews", propertyName: "clipsToBounds", type: .bool),
         .init(ib: "multipleTouchEnabled", propertyName: "isMultipleTouchEnabled", type: .bool),
         .init(ib: "alpha", propertyName: "alpha", type: .number),
-        .init(ib: "semanticContentAttribute", propertyName: "semanticContentAttribute", type: .bool),
         .init(ib: "multipleTouchEnabled", propertyName: "isMultipleTouchEnabled", type: .bool),
         .init(ib: "translatesAutoresizingMaskIntoConstraints", propertyName: "translatesAutoresizingMaskIntoConstraints", type: .bool),
         .init(ib: "autoresizingMask", propertyName: "autoresizingMask", type: .autoresizingMask),
@@ -53,9 +52,10 @@ class IBView: IBAnyView, IBCompatibleObject {
         .init(ib: "opaque", propertyName: "isOpaque", type: .bool),
         .init(ib: "tag", propertyName: "tag", type: .number),
         .init(ib: "ambiguous", propertyName: "hasAmbiguousLayout", type: .bool),
+        .init(propertyName: "semanticContentAttribute", type: .enum),
     ]
         
-    private var baseFunctions: [IBFunctionMapper] = [
+    private let baseFunctions: [IBFunctionMapper] = [
         .init(ib: "horizontalHuggingPriority", functionName: "setContentHuggingPriority", argumentNames: ["", "for"]),
         .init(ib: "verticalHuggingPriority", functionName: "setContentHuggingPriority", argumentNames: ["", "for"]),
         .init(ib: "horizontalCompressionResistancePriority", functionName: "setContentCompressionResistancePriority", argumentNames: ["", "for"]),

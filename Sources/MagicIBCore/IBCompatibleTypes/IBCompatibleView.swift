@@ -40,6 +40,8 @@ enum IBCompatibleView: String, CaseIterable, CustomStringConvertible {
     case tabBar
     case searchBar
     case containerView
+    case collectionViewCellContentView
+    case collectionReusableView
     
     var description: String {
         switch self {
@@ -115,6 +117,10 @@ enum IBCompatibleView: String, CaseIterable, CustomStringConvertible {
             return "UISearchBar"
         case .containerView:
             return "UIViewController"
+        case .collectionViewCellContentView:
+            return "UIView"
+        case .collectionReusableView:
+            return "UICollectionReusableView"
         }
     }
 

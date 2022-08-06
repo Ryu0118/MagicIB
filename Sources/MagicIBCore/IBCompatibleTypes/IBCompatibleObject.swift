@@ -29,11 +29,16 @@ extension IBCompatibleObject {
     
     @discardableResult
     func addValueToProperty(ib: String, value: Any) -> IBPropertyMapper? {
-        let properties = properties
-            .filter { $0.ib == ib }
-        properties
-            .forEach { $0.addValue(value) }
+        let properties = properties.filter { $0.ib == ib }
+        properties.forEach { $0.addValue(value) }
         return properties.last
+    }
+    
+    @discardableResult
+    func putValueToArgument(ib: String, value: Any, type: IBInspectableType, at: Int) -> IBFunctionMapper? {
+        let functions = functions.filter { $0.ib == ib }
+        functions.forEach { $0.putValueToArgument(value, type: type, at: at) }
+        return functions.last
     }
     
     func findProperty(ib: String) -> IBPropertyMapper? {

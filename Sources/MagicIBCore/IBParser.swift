@@ -15,7 +15,8 @@ public class IBParser: NSObject {
     private var waitingElementList = [String]()
     private var ibViewControllers = [IBViewController]()
     private var subviewsFlags = [IBView]()
-    private var prototypesFlag: IBPrototypeContainable?
+    private var prototypesFlag: IBTableView?
+    private var cellFlag: IBCollectionView?
     private var parentView: IBView?
     
     public func parse(_ absoluteURL: URL) throws {
@@ -39,12 +40,26 @@ extension IBParser: XMLParserDelegate {
         {
             waitingIBViewList.append(ibView)
             ibViewControllers.last?.appendView(ibView)
-            if let prototypesFlag = prototypesFlag,
-                    let cell = ibView as? IBCell {
-                prototypesFlag.prototypes.append(cell)
+            if let tableView = prototypesFlag,
+               let cell = ibView as? IBTableViewCell {
+                tableView.prototypes.append(cell)
             }
             else if let parentView = subviewsFlags.last {
-                parentView.subviews.append(ibView)
+                if let stackView = parentView as? IBStackView {
+                    stackView.arrangedSubviews.append(ibView)
+                }
+                else if attributeDict["key"] == nil {
+                    parentView.subviews.append(ibView)
+                }
+                else if let propertyName = attributeDict["key"] {
+                    guard let previousIBView = waitingIBViewList[safe: waitingIBViewList.count - 2] else { return }
+                    previousIBView.addValueToProperty(ib: propertyName, value: ibView)
+                }
+            }
+            else if let collectionView = cellFlag,
+                    let cell = ibView as? IBCollectionViewCell
+            {
+                collectionView.cells.append(cell)
             }
         }
         else if let ibCompatibleViewController: IBCompatibleViewController = .init(rawValue: elementName),
@@ -54,14 +69,15 @@ extension IBParser: XMLParserDelegate {
         }
         else {
             guard let lastIBView = waitingIBViewList.last else { return }
-            if elementName == "subviews" {
+            switch elementName {
+            case "subviews":
                 subviewsFlags.append(lastIBView)
                 if parentView == nil { parentView = lastIBView }
-            }
-            else if elementName == "prototypes" {
-                prototypesFlag = lastIBView as? IBPrototypeContainable
-            }
-            else {
+            case "prototypes":
+                prototypesFlag = lastIBView as? IBTableView
+            case "cells":
+                cellFlag = lastIBView as? IBCollectionView
+            default:
                 lastIBView.waitingElementList = waitingElementList
                 lastIBView.addValueToProperties(attributes: attributeDict)
             }
@@ -77,12 +93,18 @@ extension IBParser: XMLParserDelegate {
             waitingElementList.remove(at: lastIndex)
             waitingIBViewList.last?.waitingElementList = waitingElementList
         }
-        if elementName == "subviews" {
+        
+        switch elementName {
+        case "subviews":
             subviewsFlags.removeLast()
-        }
-        else if elementName == "prototypes" {
+        case "prototypes":
             prototypesFlag = nil
+        case "cells":
+            cellFlag = nil
+        default:
+            break
         }
+        
     }
     
     public func parserDidEndDocument(_ parser: XMLParser) {

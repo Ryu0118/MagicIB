@@ -27,5 +27,13 @@ struct IBImage: IBCompatibleObject {
             addValueToProperty(ib: "name", value: image)
         }
     }
+    
+    init(named: String) {
+        addValueToProperty(ib: "name", value: named)
+    }
+    
+    init(systemName: String) {
+        addValueToProperty(ib: "systemName", value: systemName)
+    }
 }
 

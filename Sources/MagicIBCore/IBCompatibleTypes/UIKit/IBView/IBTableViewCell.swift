@@ -7,9 +7,7 @@
 
 import Foundation
 
-protocol IBCell { }
-
-final class IBTableViewCell: IBView, IBCell {
+final class IBTableViewCell: IBView {
     private let tableViewCellProperties: [IBPropertyMapper] = [
         .init(propertyName: "selectionStyle", type: .enum),
         .init(propertyName: "indentationWidth", type: .number),
