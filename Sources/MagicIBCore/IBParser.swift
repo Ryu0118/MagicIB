@@ -33,7 +33,7 @@ public class IBParser: NSObject {
 extension IBParser: XMLParserDelegate {
     
     public func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
-        waitingElementList.append(elementName)
+        defer { waitingElementList.append(elementName) }
 
         if let ibViewElement = IBCompatibleView.init(rawValue: elementName),
            let ibView = IBView.instance(attributes: attributeDict, ibCompatibleView: ibViewElement)
@@ -45,7 +45,12 @@ extension IBParser: XMLParserDelegate {
                 tableView.prototypes.append(cell)
             }
             else if let parentView = subviewsFlags.last {
-                parentView.subviews.append(ibView)
+                if let stackView = parentView as? IBStackView {
+                    stackView.arrangedSubviews.append(ibView)
+                }
+                else {
+                    parentView.subviews.append(ibView)
+                }
             }
             else if let collectionView = cellFlag,
                     let cell = ibView as? IBCollectionViewCell
