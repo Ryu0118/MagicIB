@@ -43,8 +43,8 @@ extension IBView {
             return IBActivityIndicatorView(attributes: attributes, ibCompatibleView: ibCompatibleView)
         case .pageControl:
             return IBPageControl(attributes: attributes, ibCompatibleView: ibCompatibleView)
-//        case .stepper:
-//            <#code#>
+        case .stepper:
+            return IBStepper(attributes: attributes, ibCompatibleView: ibCompatibleView)
         case .tableViewCell:
             return IBTableViewCell(attributes: attributes, ibCompatibleView: ibCompatibleView)
         case .collectionViewCell:
