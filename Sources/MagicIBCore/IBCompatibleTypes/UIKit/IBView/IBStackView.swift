@@ -14,7 +14,7 @@ class IBStackView: IBView {
     ]
     
     override var properties: [IBPropertyMapper] {
-        super.properties + stackView
+        super.properties + stackViewProperties
     }
     
 }
