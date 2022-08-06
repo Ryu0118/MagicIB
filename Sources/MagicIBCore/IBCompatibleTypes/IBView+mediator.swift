@@ -27,8 +27,6 @@ extension IBView {
             return IBTableViewCell(attributes: attributes, ibCompatibleView: ibCompatibleView)
         case .progressView:
             return IBProgressView(attributes: attributes, ibCompatibleView: ibCompatibleView)
-        case .progressView:
-            return IBProgressView(attributes: attributes, ibCompatibleView: ibCompatibleView)
         case .collectionView:
             return IBCollectionView(attributes: attributes, ibCompatibleView: ibCompatibleView)
         case .stackView:
