@@ -52,6 +52,7 @@ class IBView: IBAnyView, IBCompatibleObject {
         .init(ib: "opaque", propertyName: "isOpaque", type: .bool),
         .init(ib: "tag", propertyName: "tag", type: .number),
         .init(ib: "ambiguous", propertyName: "hasAmbiguousLayout", type: .bool),
+        .init(propertyName: "semanticContentAttribute", type: .enum),
     ]
         
     private let baseFunctions: [IBFunctionMapper] = [

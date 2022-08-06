@@ -9,7 +9,6 @@ import Foundation
 
 final class IBLabel: IBView {
     private let labelProperties: [IBPropertyMapper] = [
-        .init(propertyName: "semanticContentAttribute", type: .enum),
         .init(propertyName: "numberOfLines", type: .number),
         .init(propertyName: "lineBreakMode", type: .enum),
         .init(propertyName: "baselineAdjustment", type: .enum),

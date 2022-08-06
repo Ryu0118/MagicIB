@@ -35,7 +35,7 @@ extension IBCompatibleObject {
     }
     
     @discardableResult
-    func putValueToArgument(ib: String, value: Any, type: IBInspectableType, at: Int) -> IBFunctionMapper {
+    func putValueToArgument(ib: String, value: Any, type: IBInspectableType, at: Int) -> IBFunctionMapper? {
         let functions = functions.filter { $0.ib == ib }
         functions.forEach { $0.putValueToArgument(value, type: type, at: at) }
         return functions.last

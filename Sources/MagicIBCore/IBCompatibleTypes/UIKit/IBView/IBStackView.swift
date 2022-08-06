@@ -10,7 +10,6 @@ import Foundation
 class IBStackView: IBView {
     
     private let stackViewProperties: [IBPropertyMapper] = [
-        .init(propertyName: "semanticContentAttribute", type: .enum),
         .init(propertyName: "axis", type: .enum),
         .init(propertyName: "distribution", type: .enum),
         .init(propertyName: "alignment", type: .enum),

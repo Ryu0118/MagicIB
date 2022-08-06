@@ -10,7 +10,6 @@ import Foundation
 class IBSegmentedControl: IBView {
     
     private let segmentedControlProperties: [IBPropertyMapper] = [
-        .init(propertyName: "semanticContentAttribute", type: .enum),
         .init(ib: "showsMenuAsPrimaryAction", propertyName: "showsMenuAsPrimaryAction", type: .bool),
         .init(propertyName: "contentHorizontalAlignment", type: .enum),
         .init(propertyName: "contentVerticalAlignment", type: .enum),
@@ -42,7 +41,7 @@ class IBSegmentedControl: IBView {
                 putValueToArgument(ib: "title", value: segmentCount, type: .number, at: 1)
             }
             else if let imageName = attributes["image"] {
-                guard let image = IBImage(attributes: attributes) { return }
+                guard let image = IBImage(attributes: attributes) else { return }
                 putValueToArgument(ib: "image", value: image, type: .image, at: 0)
                 putValueToArgument(ib: "image", value: segmentCount, type: .image, at: 1)
             }
@@ -52,6 +51,8 @@ class IBSegmentedControl: IBView {
             else { return }
             putValueToArgument(ib: key, value: size, type: .size, at: 0)
             putValueToArgument(ib: key, value: segmentCount, type: .number, at: 1)
+        default:
+            break
         }
     }
 }

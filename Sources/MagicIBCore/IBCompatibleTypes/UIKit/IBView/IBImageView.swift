@@ -14,7 +14,6 @@ final class IBImageView: IBView {
         .init(ib: "highlighted", propertyName: "isHighlighted", type: .bool),
         .init(propertyName: "highlightedImage", type: .image),
         .init(propertyName: "preferredSymbolConfiguration", type: .symbolConfiguration),
-        .init(propertyName: "semanticContentAttribute", type: .enum),
     ]
     
     override var properties: [IBPropertyMapper] {

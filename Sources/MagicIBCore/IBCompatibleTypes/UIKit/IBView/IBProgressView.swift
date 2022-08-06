@@ -9,7 +9,6 @@ import Foundation
 
 class IBProgressView: IBView {
     private let progressProperties: [IBPropertyMapper] = [
-        .init(propertyName: "semanticContentAttribute", type: .enum),
         .init(propertyName: "progress", type: .number),
         .init(propertyName: "progressViewStyle", type: .enum),
         .init(propertyName: "progressImage", type: .image),
