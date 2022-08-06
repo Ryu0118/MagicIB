@@ -24,6 +24,15 @@ class IBProgressView: IBView {
     
     override func addValueToProperties(attributes: [String : String]) {
         super.addValueToProperties(attributes: attributes)
+        guard let propertyName = attributes["key"] else { return }
+        switch elementTree {
+        case "imageReference":
+            guard let image = IBImage(attributes: attributes) else { return }
+            addValueToProperty(ib: propertyName, value: image)
+        case "color":
+            guard let color = IBColor(attributes: attributes) else { return }
+            addValueToProperty(ib: propertyName, value: color)
+        }
     }
     
 }
