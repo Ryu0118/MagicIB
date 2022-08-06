@@ -43,8 +43,6 @@ extension IBView {
             return IBPageControl(attributes: attributes, ibCompatibleView: ibCompatibleView)
         case .stepper:
             return IBStepper(attributes: attributes, ibCompatibleView: ibCompatibleView)
-        case .tableViewCell:
-            return IBTableViewCell(attributes: attributes, ibCompatibleView: ibCompatibleView)
         case .collectionViewCell:
             return IBCollectionViewCell(attributes: attributes, ibCompatibleView: ibCompatibleView)
         default:

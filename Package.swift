@@ -14,7 +14,6 @@ let package = Package(
         .library(
             name: "MagicIBCore",
             targets: ["MagicIBCore"]),
-        .library(name: "MagicIB", targets: ["MagicIB"])
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -32,10 +31,8 @@ let package = Package(
                 resources: [
                     .process("Resources")
                 ]),
-        .target(name: "MagicIB"),
-        
         .testTarget(
             name: "MagicIBTests",
-            dependencies: ["MagicIB"]),
+            dependencies: ["MagicIBCore"]),
     ]
 )
