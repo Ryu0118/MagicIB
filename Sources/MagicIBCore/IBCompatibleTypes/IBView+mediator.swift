@@ -27,30 +27,30 @@ extension IBView {
             return IBTableViewCell(attributes: attributes, ibCompatibleView: ibCompatibleView)
         case .progressView:
             return IBProgressView(attributes: attributes, ibCompatibleView: ibCompatibleView)
-        default:
-            return IBView(attributes: attributes, ibCompatibleView: ibCompatibleView)
-//        case .progressView:
-//            <#code#>
-//        case .collectionView:
-//            <#code#>
-//        case .stackView:
-//            <#code#>
-//        case .segmentedControl:
-//            <#code#>
-//        case .slider:
-//            <#code#>
-//        case .switch:
-//            <#code#>
-//        case .activityIndicatorView:
-//            <#code#>
-//        case .pageControl:
-//            <#code#>
+        case .progressView:
+            return IBProgressView(attributes: attributes, ibCompatibleView: ibCompatibleView)
+        case .collectionView:
+            return IBCollectionView(attributes: attributes, ibCompatibleView: ibCompatibleView)
+        case .stackView:
+            return IBStackView(attributes: attributes, ibCompatibleView: ibCompatibleView)
+        case .segmentedControl:
+            return IBSegmentedControl(attributes: attributes, ibCompatibleView: ibCompatibleView)
+        case .slider:
+            return IBSlider(attributes: attributes, ibCompatibleView: ibCompatibleView)
+        case .switch:
+            return IBSwitch(attributes: attributes, ibCompatibleView: ibCompatibleView)
+        case .activityIndicatorView:
+            return IBActivityIndicatorView(attributes: attributes, ibCompatibleView: ibCompatibleView)
+        case .pageControl:
+            return IBPageControl(attributes: attributes, ibCompatibleView: ibCompatibleView)
 //        case .stepper:
 //            <#code#>
-//        case .tableViewCell:
-//            <#code#>
-//        case .collectionViewCell:
-//            <#code#>
+        case .tableViewCell:
+            return IBTableViewCell(attributes: attributes, ibCompatibleView: ibCompatibleView)
+        case .collectionViewCell:
+            return IBCollectionViewCell(attributes: attributes, ibCompatibleView: ibCompatibleView)
+        default:
+            return IBView(attributes: attributes, ibCompatibleView: ibCompatibleView)
 //        case .textView:
 //            <#code#>
 //        case .pickerView:

@@ -30,6 +30,10 @@ class IBSegmentedControl: IBView {
         super.properties + segmentedControlProperties
     }
     
+    override var functions: [IBFunctionMapper] {
+        super.functions + segmentedControlFunctions
+    }
+    
     var segmentCount = 0
     
     override func addValueToProperties(attributes: [String : String]) {

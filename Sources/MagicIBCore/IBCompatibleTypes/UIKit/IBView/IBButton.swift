@@ -29,15 +29,33 @@ final class IBButton: IBView {
         .init(ib: "changesSelectionAsPrimaryAction", propertyName: "changesSelectionAsPrimaryAction", type: .bool),
         .init(ib: "role", propertyName: "role", type: .bool),
         .init(ib: "configuration", propertyName: "configuration", type: .configuration),
+        .init(propertyName: "fontDescription", type: .font),
+    ]
+    
+    private let buttonFunctions: [IBFunctionMapper] = [
+        .init(ib: "state", functionName: "setTitle", argumentNames: ["", "for"])
     ]
     
     override var properties: [IBPropertyMapper] {
         super.properties + buttonProperties
     }
     
+    override var functions: [IBFunctionMapper] {
+        super.functions + buttonFunctions
+    }
+    
     override func addValueToProperties(attributes: [String: String]) {
         super.addValueToProperties(attributes: attributes)
         switch elementTree {
+        case "state":
+            guard let key = attributes["key"],
+                  let title = attributes["title"]
+            else { return }
+            putValueToArgument(ib: "state", value: title, type: .string, at: 0)
+            putValueToArgument(ib: "state", value: key, type: .enum, at: 1)
+        case "fontDescription":
+            guard let font = IBFont(attributes: attributes) else { return }
+            addValueToProperty(ib: "fontDescription", value: font)
         case "buttonConfiguration":
             guard let propertyName = attributes["key"] else { return }
             buttonConfiguration = IBButtonConfiguration(attributes: attributes)

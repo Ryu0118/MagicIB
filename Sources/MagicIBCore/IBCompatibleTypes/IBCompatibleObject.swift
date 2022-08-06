@@ -45,6 +45,10 @@ extension IBCompatibleObject {
         properties.first(where: { $0.ib == ib })
     }
     
+    func findFunction(ib: String) -> IBFunctionMapper? {
+        functions.first(where: { $0.ib == ib })
+    }
+    
     func mapping(_ attributes: [String: String]) {
         attributes.forEach { key, value in
             properties
