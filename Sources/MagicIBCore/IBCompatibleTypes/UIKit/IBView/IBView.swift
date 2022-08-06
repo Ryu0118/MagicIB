@@ -54,7 +54,7 @@ class IBView: IBAnyView, IBCompatibleObject {
         .init(ib: "ambiguous", propertyName: "hasAmbiguousLayout", type: .bool),
     ]
         
-    private var baseFunctions: [IBFunctionMapper] = [
+    private let baseFunctions: [IBFunctionMapper] = [
         .init(ib: "horizontalHuggingPriority", functionName: "setContentHuggingPriority", argumentNames: ["", "for"]),
         .init(ib: "verticalHuggingPriority", functionName: "setContentHuggingPriority", argumentNames: ["", "for"]),
         .init(ib: "horizontalCompressionResistancePriority", functionName: "setContentCompressionResistancePriority", argumentNames: ["", "for"]),
