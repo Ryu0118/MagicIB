@@ -32,6 +32,8 @@ class IBProgressView: IBView {
         case "color":
             guard let color = IBColor(attributes: attributes) else { return }
             addValueToProperty(ib: propertyName, value: color)
+        default:
+            break
         }
     }
     

@@ -40,6 +40,8 @@ final class IBCollectionView: IBScrollView {
                   let inset = IBEdgeInsets(attributes: attributes)
             else { return }
             collectionViewFlowLayout?.addValueToProperty(ib: propertyName, value: inset)
+        default:
+            break
         }
     }
     

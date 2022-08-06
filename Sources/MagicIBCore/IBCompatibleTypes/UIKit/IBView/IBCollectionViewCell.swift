@@ -25,7 +25,7 @@ final class IBCollectionViewCell: IBView {
         switch elementTree {
         case "collectionViewCellContentView":
             contentView = IBView(attributes: attributes, ibCompatibleView: .view)
-            addValueToProperty(ib: contentView!, value: view)
+            addValueToProperty(ib: propertyName, value: contentView!)
         case "collectionViewCellContentView->rect":
             guard let rect = IBRect(attributes: attributes) else { return }
             contentView?.addValueToProperty(ib: propertyName, value: rect)

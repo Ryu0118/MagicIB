@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct IBCollectionViewFlowLayout: IBCompatibleObject {
+class IBCollectionViewFlowLayout: IBCompatibleObject {
     
-    private let properties: [IBPropertyMapper] = [
+    let properties: [IBPropertyMapper] = [
         .init(propertyName: "scrollDirection", type: .enum),
         .init(propertyName: "minimumLineSpacing", type: .number),
         .init(propertyName: "minimumInteritemSpacing", type: .number),
