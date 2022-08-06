@@ -33,7 +33,7 @@ public class IBParser: NSObject {
 extension IBParser: XMLParserDelegate {
     
     public func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
-        defer { waitingElementList.append(elementName) }
+        waitingElementList.append(elementName)
 
         if let ibViewElement = IBCompatibleView.init(rawValue: elementName),
            let ibView = IBView.instance(attributes: attributeDict, ibCompatibleView: ibViewElement)
@@ -48,8 +48,12 @@ extension IBParser: XMLParserDelegate {
                 if let stackView = parentView as? IBStackView {
                     stackView.arrangedSubviews.append(ibView)
                 }
-                else {
+                else if attributeDict["key"] == nil {
                     parentView.subviews.append(ibView)
+                }
+                else if let propertyName = attributeDict["key"] {
+                    guard let previousIBView = waitingIBViewList[safe: waitingIBViewList.count - 2] else { return }
+                    previousIBView.addValueToProperty(ib: propertyName, value: ibView)
                 }
             }
             else if let collectionView = cellFlag,

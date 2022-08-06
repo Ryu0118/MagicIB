@@ -10,7 +10,9 @@ import Foundation
 final class IBCollectionViewCell: IBView {
     
     private let collectionViewCellProperties: [IBPropertyMapper] = [
-        .init(propertyName: "contentView", type: .view)
+        .init(propertyName: "contentView", type: .view),
+        .init(propertyName: "sectionHeaderView", type: .view),
+        .init(propertyName: "sectionFooterView", type: .view),
     ]
     
     override var properties: [IBPropertyMapper] {
