@@ -16,7 +16,20 @@ class IBSlider: IBView {
         .init(propertyName: "value", type: .number),
         .init(ib: "minValue", propertyName: "minimumValue", type: .number),
         .init(ib: "maxValue", propertyName: "maximumValue", type: .number),
-        .init(propertyName: "minimumValueImage", type: .image)
+        .init(propertyName: "minimumValueImage", type: .image),
+        .init(propertyName: "maximumValueImage", type: .image),
+        .init(propertyName: "preferredBehavioralStyle", type: .enum),
+        .init(propertyName: "minimumTrackTintColor", type: .color),
+        .init(propertyName: "maximumTrackTintColor", type: .color),
+        .init(propertyName: "thumbTintColor", type: .color),
     ]
+    
+    override var properties: [IBPropertyMapper] {
+        super.properties + sliderProperties
+    }
+    
+    override func addValueToProperties(attributes: [String : String]) {
+        super.addValueToProperties(attributes: attributes)
+    }
+    
 }
- 
