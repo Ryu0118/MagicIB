@@ -26,5 +26,6 @@ enum IBInspectableType {
     case edgeInsets
     case flowLayout
     case view
+    case optionSet
 }
 
