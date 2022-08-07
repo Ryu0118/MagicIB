@@ -45,7 +45,7 @@ class IBPropertyMapper {
 //            case .paragraphStyle:
 //                if value as? IBParagraphStyle == nil { fatalError("Different data type") }
 //            case .autoresizingMask:
-//                if value as? IBAutoresizingMask == nil { fatalError("Different data type") }
+//                if value as? IBOptionSet == nil { fatalError("Different data type") }
 //            default:
 //                break
 //            }
@@ -54,7 +54,7 @@ class IBPropertyMapper {
     
     var isRequireInitializer: Bool {
         switch type {
-        case .font, .color, .cgRect, .image, .configuration, .paragraphStyle, .autoresizingMask:
+        case .font, .color, .cgRect, .image, .configuration, .paragraphStyle, .optionSet:
             return true
         default:
             return false

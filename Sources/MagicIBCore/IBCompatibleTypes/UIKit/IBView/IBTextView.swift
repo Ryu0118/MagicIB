@@ -6,13 +6,6 @@
 //
 import Foundation
 
-struct IBOptionSet {
-    private(set) var set = Set<String>()
-    func add(_ element: String) {
-        set.insert(element)
-    }
-}
-
 class IBTextView: IBScrollView {
     private let textViewProperties: [IBPropertyMapper] = [
         .init(propertyName: "text", type: .string),
@@ -30,6 +23,7 @@ class IBTextView: IBScrollView {
         .init(propertyName: "smartInsertDeleteType", type: .enum),
         .init(propertyName: "smartQuotesType", type: .enum),
         .init(propertyName: "textContentType", type: .enum),
+        .init(propertyName: "dataDetectorTypes", type: .optionSet),
     ]
     
     override var properties: [IBPropertyMapper] {
@@ -40,11 +34,14 @@ class IBTextView: IBScrollView {
         super.addValueToProperties(attributes: attributes)
         
         switch elementTree {
-            
+        case "textInputTraits":
+            mapping(attributes)
+        case "dataDetectorType":
+            guard let propertyName = attributes["key"] else { return }
+            let optionSet = IBOptionSet(attributes: attributes)
+            addValueToProperty(ib: propertyName, value: optionSet)
+        default:
+            break
         }
     }
 }
-/*
- 
- <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="yes" keyboardType="numbersAndPunctuation" keyboardAppearance="alert" returnKeyType="route" enablesReturnKeyAutomatically="YES" secureTextEntry="YES" smartDashesType="no" smartInsertDeleteType="yes" smartQuotesType="yes" textContentType="address-level2"/>
- */
