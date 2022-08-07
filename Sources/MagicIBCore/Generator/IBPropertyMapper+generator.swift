@@ -59,7 +59,8 @@ extension IBPropertyMapper {
             guard let font = value as? IBFont else { return nil }
             return font.generateSwiftCode()
         case .color:
-            
+            guard let color = value as? IBColor else { return nil }
+            return color.generateSwiftCode()
         case .size:
         case .array:
         case .cgRect:
