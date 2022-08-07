@@ -62,7 +62,11 @@ extension IBPropertyMapper {
             guard let color = value as? IBColor else { return nil }
             return color.generateSwiftCode()
         case .size:
+            guard let size = value as? IBSize else { return nil }
+            return size.generateSwiftCode()
         case .array:
+            guard let array = value as? [String] else { return nil }
+            return array.description
         case .cgRect:
         case .image:
         case .buttonConfiguration:
