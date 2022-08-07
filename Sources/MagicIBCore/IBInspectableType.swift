@@ -28,5 +28,6 @@ enum IBInspectableType {
     case optionSet
     case visualEffect
     case wkWebViewConfiguration
+    case wkPreferences
 }
 

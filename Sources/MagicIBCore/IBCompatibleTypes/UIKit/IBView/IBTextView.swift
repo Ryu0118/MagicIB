@@ -37,8 +37,9 @@ class IBTextView: IBScrollView {
         case "textInputTraits":
             mapping(attributes)
         case "dataDetectorType":
-            guard let propertyName = attributes["key"] else { return }
-            let optionSet = IBOptionSet(attributes: attributes)
+            guard let propertyName = attributes["key"],
+                  let optionSet = IBOptionSet(attributes: attributes)
+            else { return }
             addValueToProperty(ib: propertyName, value: optionSet)
         default:
             break
