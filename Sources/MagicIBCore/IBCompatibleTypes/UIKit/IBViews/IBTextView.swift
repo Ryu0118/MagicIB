@@ -6,7 +6,6 @@
 //
 import Foundation
 
-@dynamicMemberLookup
 class IBTextView: IBScrollView {
     private let textViewProperties: [IBPropertyMapper] = [
         .init(propertyName: "text", type: .string),
@@ -29,10 +28,6 @@ class IBTextView: IBScrollView {
     
     override var properties: [IBPropertyMapper] {
         super.properties + textViewProperties
-    }
-    
-    subscript(dynamicMember key: String) -> Any? {
-        findProperty(ib: key)?.value
     }
     
     override func addValueToProperties(attributes: [String : String]) {

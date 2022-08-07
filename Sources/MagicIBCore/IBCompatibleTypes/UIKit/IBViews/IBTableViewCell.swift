@@ -7,7 +7,6 @@
 
 import Foundation
 
-@dynamicMemberLookup
 final class IBTableViewCell: IBView {
     private let tableViewCellProperties: [IBPropertyMapper] = [
         .init(propertyName: "selectionStyle", type: .enum),
@@ -16,9 +15,5 @@ final class IBTableViewCell: IBView {
     
     override var properties: [IBPropertyMapper] {
         super.properties + tableViewCellProperties
-    }
-    
-    subscript(dynamicMember key: String) -> Any? {
-        findProperty(ib: key)?.value
     }
 }

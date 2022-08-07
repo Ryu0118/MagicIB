@@ -7,7 +7,6 @@
 
 import Foundation
 
-@dynamicMemberLookup
 final class IBCollectionViewCell: IBView {
     
     private let collectionViewCellProperties: [IBPropertyMapper] = [
@@ -21,10 +20,6 @@ final class IBCollectionViewCell: IBView {
     }
     
     private var contentView: IBView?
-    
-    subscript(dynamicMember key: String) -> Any? {
-        findProperty(ib: key)?.value
-    }
     
     override func addValueToProperties(attributes: [String : String]) {
         super.addValueToProperties(attributes: attributes)

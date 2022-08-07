@@ -7,7 +7,6 @@
 
 import Foundation
 
-@dynamicMemberLookup
 class IBSegmentedControl: IBView {
     
     private let segmentedControlProperties: [IBPropertyMapper] = [
@@ -36,11 +35,7 @@ class IBSegmentedControl: IBView {
     }
     
     var segmentCount = 0
-    
-    subscript(dynamicMember key: String) -> Any? {
-        findProperty(ib: key)?.value
-    }
-    
+
     override func addValueToProperties(attributes: [String : String]) {
         super.addValueToProperties(attributes: attributes)
         switch elementTree {

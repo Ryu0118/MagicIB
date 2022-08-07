@@ -7,7 +7,6 @@
 
 import Foundation
 
-@dynamicMemberLookup
 class IBStepper: IBView {
     private let stepperProperties: [IBPropertyMapper] = [
         .init(propertyName: "showsMenuAsPrimaryAction", type: .bool),
@@ -23,9 +22,5 @@ class IBStepper: IBView {
     
     override var properties: [IBPropertyMapper] {
         super.properties + stepperProperties
-    }
-    
-    subscript(dynamicMember key: String) -> Any? {
-        findProperty(ib: key)?.value
     }
 }

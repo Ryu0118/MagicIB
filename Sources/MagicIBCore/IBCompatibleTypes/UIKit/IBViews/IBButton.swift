@@ -8,7 +8,6 @@
 
 import Foundation
 
-@dynamicMemberLookup
 final class IBButton: IBView {
     private var buttonConfiguration: IBButtonConfiguration?
     private var currentAttributedString: IBAttributedString?
@@ -44,11 +43,7 @@ final class IBButton: IBView {
     override var functions: [IBFunctionMapper] {
         super.functions + buttonFunctions
     }
-    
-    subscript(dynamicMember key: String) -> Any? {
-        findProperty(ib: key)?.value
-    }
-    
+
     override func addValueToProperties(attributes: [String: String]) {
         super.addValueToProperties(attributes: attributes)
         switch elementTree {

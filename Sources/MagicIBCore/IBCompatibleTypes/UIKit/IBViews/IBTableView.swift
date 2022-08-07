@@ -7,7 +7,6 @@
 
 import Foundation
 
-@dynamicMemberLookup
 final class IBTableView: IBScrollView {
     
     private let tableViewProperties: [IBPropertyMapper] = [
@@ -26,9 +25,5 @@ final class IBTableView: IBScrollView {
     
     override var properties: [IBPropertyMapper] {
         super.properties + tableViewProperties
-    }
-    
-    subscript(dynamicMember key: String) -> Any? {
-        findProperty(ib: key)?.value
     }
 }
