@@ -7,6 +7,7 @@
 
 import Foundation
 
+@dynamicMemberLookup
 class IBScrollView: IBView {
     private let scrollViewProperties: [IBPropertyMapper] = [
         .init(ib: "directionalLockEnabled", propertyName: "isDirectionalLockEnabled", type: .bool),
@@ -25,6 +26,10 @@ class IBScrollView: IBView {
     
     override var properties: [IBPropertyMapper] {
         super.properties + scrollViewProperties
+    }
+    
+    subscript(dynamicMember key: String) -> Any? {
+        findProperty(ib: key)?.value
     }
     
     override func addValueToProperties(attributes: [String : String]) {

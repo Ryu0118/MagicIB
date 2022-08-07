@@ -68,7 +68,10 @@ extension IBPropertyMapper {
             guard let array = value as? [String] else { return nil }
             return array.description
         case .cgRect:
+            guard let rect = value as? IBRect else { return nil }
+            return rect.generateSwiftCode()
         case .image:
+            
         case .buttonConfiguration:
         case .paragraphStyle:
         case .backgroundConfiguration:

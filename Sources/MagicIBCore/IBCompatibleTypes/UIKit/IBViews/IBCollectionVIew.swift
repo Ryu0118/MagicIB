@@ -7,6 +7,7 @@
 
 import Foundation
 
+@dynamicMemberLookup
 final class IBCollectionView: IBScrollView {
     
     private let collectionViewProperties: [IBPropertyMapper] = [
@@ -22,6 +23,10 @@ final class IBCollectionView: IBScrollView {
     var cells = [IBCollectionViewCell]()
     
     private var collectionViewFlowLayout: IBCollectionViewFlowLayout?
+    
+    subscript(dynamicMember key: String) -> Any? {
+        findProperty(ib: key)?.value
+    }
     
     override func addValueToProperties(attributes: [String : String]) {
         super.addValueToProperties(attributes: attributes)

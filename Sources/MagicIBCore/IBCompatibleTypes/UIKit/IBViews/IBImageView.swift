@@ -7,6 +7,7 @@
 
 import Foundation
 
+@dynamicMemberLookup
 final class IBImageView: IBView {
     
     private let imageProperties: [IBPropertyMapper] = [
@@ -18,6 +19,10 @@ final class IBImageView: IBView {
     
     override var properties: [IBPropertyMapper] {
         super.properties + imageProperties
+    }
+    
+    subscript(dynamicMember key: String) -> Any? {
+        findProperty(ib: key)?.value
     }
     
     override func addValueToProperties(attributes: [String : String]) {

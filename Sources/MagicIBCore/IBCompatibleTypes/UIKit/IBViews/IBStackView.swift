@@ -7,6 +7,7 @@
 
 import Foundation
 
+@dynamicMemberLookup
 class IBStackView: IBView {
     
     private let stackViewProperties: [IBPropertyMapper] = [
@@ -23,4 +24,7 @@ class IBStackView: IBView {
         super.properties + stackViewProperties
     }
     
+    subscript(dynamicMember key: String) -> Any? {
+        findProperty(ib: key)?.value
+    }
 }

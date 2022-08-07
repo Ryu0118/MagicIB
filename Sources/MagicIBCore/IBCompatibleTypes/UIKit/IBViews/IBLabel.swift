@@ -7,6 +7,7 @@
 
 import Foundation
 
+@dynamicMemberLookup
 final class IBLabel: IBView {
     private let labelProperties: [IBPropertyMapper] = [
         .init(propertyName: "numberOfLines", type: .number),
@@ -24,6 +25,10 @@ final class IBLabel: IBView {
     
     override var properties: [IBPropertyMapper] {
         super.properties + labelProperties
+    }
+    
+    subscript(dynamicMember key: String) -> Any? {
+        findProperty(ib: key)?.value
     }
     
     override func addValueToProperties(attributes: [String : String]) {

@@ -7,17 +7,24 @@
 
 import Foundation
 
+@dynamicMemberLookup
 struct IBOffset: IBCompatibleObject {
     let properties: [IBPropertyMapper] = [
         .init(propertyName: "horizontal", type: .number),
         .init(propertyName: "vertical", type: .number),
     ]
+    
     init?(attributes: [String: String]) {
         mapping(attributes)
         if !isAllPropertiesActivated { return nil }
     }
+    
+    subscript(dynamicMember key: String) -> Any? {
+        findProperty(ib: key)?.value
+    }
 }
 
+@dynamicMemberLookup
 class IBSearchBar: IBView {
     private let searchBarProperties: [IBPropertyMapper] = [
         .init(propertyName: "barStyle", type: .enum),
@@ -51,6 +58,10 @@ class IBSearchBar: IBView {
     
     override var properties: [IBPropertyMapper] {
         super.properties + searchBarProperties
+    }
+    
+    subscript(dynamicMember key: String) -> Any? {
+        findProperty(ib: key)?.value
     }
     
     override func addValueToProperties(attributes: [String : String]) {

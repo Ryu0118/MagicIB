@@ -7,6 +7,7 @@
 
 import Foundation
 
+@dynamicMemberLookup
 struct IBBackgroundConfiguration: IBCompatibleObject {
     let properties: [IBPropertyMapper] =
     [
@@ -25,5 +26,9 @@ struct IBBackgroundConfiguration: IBCompatibleObject {
         }
         let attributes = attributes.filter{ key, value in key != "image" }
         mapping(attributes)
+    }
+    
+    subscript(dynamicMember key: String) -> Any? {
+        findProperty(ib: key)?.value
     }
 }

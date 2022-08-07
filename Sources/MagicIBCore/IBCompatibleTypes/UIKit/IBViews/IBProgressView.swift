@@ -7,6 +7,7 @@
 
 import Foundation
 
+@dynamicMemberLookup
 class IBProgressView: IBView {
     private let progressProperties: [IBPropertyMapper] = [
         .init(propertyName: "progress", type: .number),
@@ -19,6 +20,10 @@ class IBProgressView: IBView {
     
     override var properties: [IBPropertyMapper] {
         super.properties + progressProperties
+    }
+    
+    subscript(dynamicMember key: String) -> Any? {
+        findProperty(ib: key)?.value
     }
     
     override func addValueToProperties(attributes: [String : String]) {

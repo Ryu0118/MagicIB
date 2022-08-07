@@ -7,6 +7,7 @@
 
 import Foundation
 
+@dynamicMemberLookup
 class IBPageControl: IBView {
     private let pageControlProperties: [IBPropertyMapper] = [
         .init(propertyName: "showsMenuAsPrimaryAction", type: .bool),
@@ -23,5 +24,9 @@ class IBPageControl: IBView {
     
     override var properties: [IBPropertyMapper] {
         super.properties + pageControlProperties
+    }
+    
+    subscript(dynamicMember key: String) -> Any? {
+        findProperty(ib: key)?.value
     }
 }

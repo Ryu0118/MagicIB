@@ -7,6 +7,7 @@
 
 import Foundation
 
+@dynamicMemberLookup
 class IBMapView: IBView {
     private let mapViewProperties: [IBPropertyMapper] = [
         .init(propertyName: "mapType", type: .enum),
@@ -24,5 +25,9 @@ class IBMapView: IBView {
     
     override var properties: [IBPropertyMapper] {
         super.properties + mapViewProperties
+    }
+    
+    subscript(dynamicMember key: String) -> Any? {
+        findProperty(ib: key)?.value
     }
 }

@@ -7,6 +7,7 @@
 
 import Foundation
 
+@dynamicMemberLookup
 struct IBWebViewConfiguration: IBCompatibleObject {
     let properties: [IBPropertyMapper] = [
         .init(propertyName: "allowsAirPlayForMediaPlayback", type: .bool),
@@ -22,5 +23,9 @@ struct IBWebViewConfiguration: IBCompatibleObject {
     
     init(attributes: [String: String]) {
         mapping(attributes)
+    }
+    
+    subscript(dynamicMember key: String) -> Any? {
+        findProperty(ib: key)?.value
     }
 }

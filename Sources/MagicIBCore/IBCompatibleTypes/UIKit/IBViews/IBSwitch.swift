@@ -7,6 +7,7 @@
 
 import Foundation
 
+@dynamicMemberLookup
 class IBSwitch: IBView {
     private let switchProperties: [IBPropertyMapper] = [
         .init(propertyName: "showsMenuAsPrimaryAction", type: .bool),
@@ -22,5 +23,9 @@ class IBSwitch: IBView {
     
     override var properties: [IBPropertyMapper] {
         super.properties + switchProperties
+    }
+    
+    subscript(dynamicMember key: String) -> Any? {
+        findProperty(ib: key)?.value
     }
 }

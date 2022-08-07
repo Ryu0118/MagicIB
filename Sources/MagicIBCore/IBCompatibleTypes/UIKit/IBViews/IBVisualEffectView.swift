@@ -7,6 +7,7 @@
 
 import Foundation
 
+@dynamicMemberLookup
 class IBVisualEffectView: IBView {
     private let visualEffectViewProperties: [IBPropertyMapper] = [
         .init(propertyName: "contentView", type: .view),
@@ -15,6 +16,10 @@ class IBVisualEffectView: IBView {
     
     override var properties: [IBPropertyMapper] {
         super.properties + visualEffectViewProperties
+    }
+    
+    subscript(dynamicMember key: String) -> Any? {
+        findProperty(ib: key)?.value
     }
     
     override func addValueToProperties(attributes: [String : String]) {

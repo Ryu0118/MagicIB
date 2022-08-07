@@ -7,6 +7,7 @@
 
 import Foundation
 
+@dynamicMemberLookup
 struct IBWebViewPreferences: IBCompatibleObject {
     let properties: [IBPropertyMapper] = [
         .init(propertyName: "javaScriptCanOpenWindowsAutomatically", type: .bool),
@@ -16,5 +17,9 @@ struct IBWebViewPreferences: IBCompatibleObject {
     
     init(attributes: [String: String]) {
         mapping(attributes)
+    }
+    
+    subscript(dynamicMember key: String) -> Any? {
+        findProperty(ib: key)?.value
     }
 }

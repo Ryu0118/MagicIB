@@ -7,6 +7,7 @@
 
 import Foundation
 
+@dynamicMemberLookup
 class IBWebView: IBView {
     private let webViewProperties: [IBPropertyMapper] = [
         .init(propertyName: "allowsBackForwardNavigationGestures", type: .bool),
@@ -18,6 +19,10 @@ class IBWebView: IBView {
     
     override var properties: [IBPropertyMapper] {
         super.properties + webViewProperties
+    }
+    
+    subscript(dynamicMember key: String) -> Any? {
+        findProperty(ib: key)?.value
     }
     
     override func addValueToProperties(attributes: [String : String]) {

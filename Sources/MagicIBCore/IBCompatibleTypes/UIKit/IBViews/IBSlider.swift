@@ -7,6 +7,7 @@
 
 import Foundation
 
+@dynamicMemberLookup
 class IBSlider: IBView {
     private let sliderProperties: [IBPropertyMapper] = [
         .init(ib: "selected", propertyName: "isSelected", type: .bool),
@@ -32,4 +33,7 @@ class IBSlider: IBView {
         super.addValueToProperties(attributes: attributes)
     }
     
+    subscript(dynamicMember key: String) -> Any? {
+        findProperty(ib: key)?.value
+    }
 }

@@ -8,6 +8,7 @@
 import Foundation
 import OpenGL
 
+@dynamicMemberLookup
 struct IBColor: IBCompatibleObject {
     let properties: [IBPropertyMapper] =
     [
@@ -19,8 +20,11 @@ struct IBColor: IBCompatibleObject {
         .init(propertyName: "name", type: .string),
     ]
     
-    
     init?(attributes: [String: String]) {
         mapping(attributes)
+    }
+    
+    subscript(dynamicMember key: String) -> Any? {
+        findProperty(ib: key)?.value
     }
 }
