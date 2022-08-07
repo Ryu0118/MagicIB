@@ -27,6 +27,6 @@ enum IBInspectableType {
     case view
     case optionSet
     case visualEffect
-    case webKitConfiguration
+    case wkWebViewConfiguration
 }
 
