@@ -15,6 +15,7 @@ enum IBInspectableType {
     case font
     case color
     case size
+    case array
     case cgRect
     case image
     case buttonConfiguration
@@ -29,5 +30,6 @@ enum IBInspectableType {
     case visualEffect
     case wkWebViewConfiguration
     case wkPreferences
+    case offsetWrapper
 }
 
