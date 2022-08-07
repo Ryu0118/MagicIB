@@ -88,8 +88,7 @@ extension IBParser: XMLParserDelegate {
         let trimmed = string.trimmingCharacters(in: .whitespacesAndNewlines)
         if let textView = waitingIBViewList.last as? IBTextView,
            !trimmed.isEmpty {
-            textView.addValueToProperty(ib: "text", value: trimmed)
-            print(trimmed)
+            textView.addValueToProperty(ib: "text", value: string)
         }
     }
     
