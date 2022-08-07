@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IBPropertyMapper: IBSwiftSourceGeneratable {
+extension IBPropertyMapper {
     
     func generateSwiftCode(variableName: String) -> String? {
         guard let value = value else { return nil }
@@ -56,7 +56,10 @@ extension IBPropertyMapper: IBSwiftSourceGeneratable {
             guard let value = value as? String else { return nil }
             return "\"\(value)\""
         case .font:
+            guard let font = value as? IBFont else { return nil }
+            return font.generateSwiftCode()
         case .color:
+            
         case .size:
         case .array:
         case .cgRect:

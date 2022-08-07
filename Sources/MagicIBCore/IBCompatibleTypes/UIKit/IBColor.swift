@@ -14,6 +14,7 @@ struct IBColor: IBCompatibleObject {
         .init(propertyName: "red", type: .number),
         .init(propertyName: "green", type: .number),
         .init(propertyName: "blue", type: .number),
+        .init(propertyName: "alpha", type: .number),
         .init(propertyName: "systemColor", type: .string),
         .init(propertyName: "name", type: .string),
     ]

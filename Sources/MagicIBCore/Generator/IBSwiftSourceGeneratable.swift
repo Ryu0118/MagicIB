@@ -8,5 +8,5 @@
 import Foundation
 
 protocol IBSwiftSourceGeneratable {
-    func generateSwiftCode(variableName: String) -> String?
+    func generateSwiftCode() -> String?
 }

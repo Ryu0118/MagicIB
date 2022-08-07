@@ -9,7 +9,7 @@ import Foundation
 
 extension IBFont: IBSwiftSourceGeneratable {
     
-    func generateSwiftCode(variableName: String) -> String? {
+    func generateSwiftCode() -> String? {
         if let name = fontName,
            let size = size {
             return "UIFont(name: \(name), size: \(size)"
@@ -27,6 +27,9 @@ extension IBFont: IBSwiftSourceGeneratable {
         }
         else if let style = style {
             return ".preferredFont(forTextStyle: .\(style)"
+        }
+        else {
+            return nil
         }
     }
     
