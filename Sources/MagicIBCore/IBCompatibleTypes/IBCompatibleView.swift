@@ -32,7 +32,6 @@ enum IBCompatibleView: String, CaseIterable, CustomStringConvertible {
     case arskView
     case arscnView
     case wkWebView
-    case webView
     case arView
     case clLocationButton
     case navigationBar
@@ -101,8 +100,6 @@ enum IBCompatibleView: String, CaseIterable, CustomStringConvertible {
             return "ARSCNView"
         case .wkWebView:
             return "WKWebView"
-        case .webView:
-            return "UIWebView"
         case .arView:
             return "ARView"
         case .clLocationButton:
