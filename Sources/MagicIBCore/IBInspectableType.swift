@@ -13,7 +13,6 @@ enum IBInspectableType {
     case `enum`//enum or static let
     case string
     case font
-    case autoresizingMask
     case color
     case size
     case cgRect
@@ -26,5 +25,6 @@ enum IBInspectableType {
     case edgeInsets
     case flowLayout
     case view
+    case optionSet
 }
 

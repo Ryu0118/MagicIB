@@ -44,7 +44,7 @@ class IBView: IBAnyView, IBCompatibleObject {
         .init(ib: "alpha", propertyName: "alpha", type: .number),
         .init(ib: "multipleTouchEnabled", propertyName: "isMultipleTouchEnabled", type: .bool),
         .init(ib: "translatesAutoresizingMaskIntoConstraints", propertyName: "translatesAutoresizingMaskIntoConstraints", type: .bool),
-        .init(ib: "autoresizingMask", propertyName: "autoresizingMask", type: .autoresizingMask),
+        .init(ib: "autoresizingMask", propertyName: "autoresizingMask", type: .optionSet),
         .init(ib: "contentMode", propertyName: "contentMode", type: .enum),
         .init(ib: "frame", propertyName: "frame", type: .cgRect),
         .init(ib: "backgroundColor", propertyName: "backgroundColor", type: .color),
@@ -95,7 +95,7 @@ class IBView: IBAnyView, IBCompatibleObject {
             addValueToProperty(ib: propertyName, value: rect)
         case "autoresizingMask":
             guard let propertyName = attributes["key"] else { return }
-            let autoresizingMask = IBAutoresizingMask(attributes: attributes)
+            let autoresizingMask = IBOptionSet(attributes: attributes)
             addValueToProperty(ib: propertyName, value: autoresizingMask)
         case "color":
             guard let propertyName = attributes["key"] else { return }

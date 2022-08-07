@@ -32,7 +32,7 @@ final class IBCollectionViewCell: IBView {
             guard let rect = IBRect(attributes: attributes) else { return }
             contentView?.addValueToProperty(ib: propertyName, value: rect)
         case "collectionViewCellContentView->autoresizingMask":
-            let autoresizingMask = IBAutoresizingMask(attributes: attributes)
+            let autoresizingMask = IBOptionSet(attributes: attributes)
             contentView?.addValueToProperty(ib: propertyName, value: autoresizingMask)
         case "collectionViewCellContentView->color":
             guard let color = IBColor(attributes: attributes) else { return }

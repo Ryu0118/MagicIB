@@ -84,6 +84,14 @@ extension IBParser: XMLParserDelegate {
         }
     }
     
+    public func parser(_ parser: XMLParser, foundCharacters string: String) {
+        let trimmed = string.trimmingCharacters(in: .whitespacesAndNewlines)
+        if let textView = waitingIBViewList.last as? IBTextView,
+           !trimmed.isEmpty {
+            textView.addValueToProperty(ib: "text", value: string)
+        }
+    }
+    
     public func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
         
         if let lastIndex = waitingIBViewList.lastIndex(where: { $0.classType.rawValue == elementName }) {

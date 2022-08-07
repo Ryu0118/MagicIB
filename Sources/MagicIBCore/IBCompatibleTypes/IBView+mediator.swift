@@ -45,10 +45,10 @@ extension IBView {
             return IBStepper(attributes: attributes, ibCompatibleView: ibCompatibleView)
         case .collectionViewCell:
             return IBCollectionViewCell(attributes: attributes, ibCompatibleView: ibCompatibleView)
+        case .textView:
+            return IBTextView(attributes: attributes, ibCompatibleView: ibCompatibleView)
         default:
             return IBView(attributes: attributes, ibCompatibleView: ibCompatibleView)
-//        case .textView:
-//            <#code#>
 //        case .pickerView:
 //            <#code#>
 //        case .visualEffectView:
