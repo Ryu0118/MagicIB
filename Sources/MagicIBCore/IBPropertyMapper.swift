@@ -6,11 +6,6 @@
 //
 
 import Foundation
-import class Foundation.Bundle
-
-private class ImageNameChecker {
-    
-}
 
 class IBPropertyMapper {
     let ib: String
