@@ -26,5 +26,7 @@ enum IBInspectableType {
     case flowLayout
     case view
     case optionSet
+    case visualEffect
+    case 
 }
 
