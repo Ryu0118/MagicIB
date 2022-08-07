@@ -36,6 +36,8 @@ class IBWebView: IBView {
             guard let configuration = findProperty(ib: "configuration")?.value as? IBWebViewConfiguration else { return }
             let preferences = IBWebViewPreferences(attributes: attributes)
             configuration.addValueToProperty(ib: propertyName, value: preferences)
+        default:
+            break
         }
     }
 }
