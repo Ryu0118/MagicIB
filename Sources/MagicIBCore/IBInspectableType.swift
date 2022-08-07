@@ -17,7 +17,7 @@ enum IBInspectableType {
     case size
     case cgRect
     case image
-    case configuration
+    case buttonConfiguration
     case paragraphStyle
     case backgroundConfiguration
     case symbolConfiguration
@@ -27,6 +27,7 @@ enum IBInspectableType {
     case view
     case optionSet
     case visualEffect
-    case 
+    case wkWebViewConfiguration
+    case wkPreferences
 }
 

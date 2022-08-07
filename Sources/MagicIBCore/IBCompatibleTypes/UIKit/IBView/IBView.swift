@@ -94,8 +94,9 @@ class IBView: IBAnyView, IBCompatibleObject {
             guard let rect = IBRect(attributes: attributes) else { return }
             addValueToProperty(ib: propertyName, value: rect)
         case "autoresizingMask":
-            guard let propertyName = attributes["key"] else { return }
-            let autoresizingMask = IBOptionSet(attributes: attributes)
+            guard let propertyName = attributes["key"],
+                  let autoresizingMask = IBOptionSet(attributes: attributes)
+            else { return }
             addValueToProperty(ib: propertyName, value: autoresizingMask)
         case "color":
             guard let propertyName = attributes["key"] else { return }

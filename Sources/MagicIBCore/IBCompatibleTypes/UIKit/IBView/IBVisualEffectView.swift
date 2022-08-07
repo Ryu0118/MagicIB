@@ -23,13 +23,13 @@ class IBVisualEffectView: IBView {
         switch elementTree {
         case "view->rect":
             guard let propertyName = attributes["key"],
-                  let contentView = findProperty(ib: "contentView").value as? IBView,
+                  let contentView = findProperty(ib: "contentView")?.value as? IBView,
                   let rect = IBRect(attributes: attributes)
             else { return }
             contentView.addValueToProperty(ib: propertyName, value: rect)
         case "view->autoresizingMask":
             guard let propertyName = attributes["key"],
-                  let contentView = findProperty(ib: "contentView").value as? IBView,
+                  let contentView = findProperty(ib: "contentView")?.value as? IBView,
                   let autoresizingMask = IBOptionSet(attributes: attributes)
             else { return }
             contentView.addValueToProperty(ib: propertyName, value: autoresizingMask)
