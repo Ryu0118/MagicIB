@@ -86,9 +86,20 @@ extension IBParser: XMLParserDelegate {
     
     public func parser(_ parser: XMLParser, foundCharacters string: String) {
         let trimmed = string.trimmingCharacters(in: .whitespacesAndNewlines)
-        if let textView = waitingIBViewList.last as? IBTextView,
-           !trimmed.isEmpty {
+        guard !trimmed.isEmpty else { return }
+        
+        if let textView = waitingIBViewList.last as? IBTextView {
             textView.addValueToProperty(ib: "text", value: string)
+        }
+        else if let searchBar = waitingIBViewList.last as? IBSearchBar {
+            if var array = searchBar.findProperty(ib: "scopeButtonTitles")?.value as? [String] {
+                array.append(string)
+                searchBar.addValueToProperty(ib: "scopeButtonTitles", value: array)
+            }
+            else {
+                let array = [string]
+                searchBar.addValueToProperty(ib: "scopeButtonTitles", value: array)
+            }
         }
     }
     

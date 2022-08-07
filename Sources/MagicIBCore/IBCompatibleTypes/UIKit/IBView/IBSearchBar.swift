@@ -32,24 +32,45 @@ class IBSearchBar: IBView {
         .init(propertyName: "backgroundImage", type: .image),
         .init(propertyName: "barTintColor", type: .color),
         .init(propertyName: "scopeBarBackgroundImage", type: .image),
+        .init(propertyName: "searchTextPositionAdjustment", type: .offsetWrapper),
+        .init(propertyName: "searchFieldBackgroundPositionAdjustment", type: .offsetWrapper),
+        .init(propertyName: "autocapitalizationType", type: .enum),
+        .init(propertyName: "autocorrectionType", type: .enum),
+        .init(propertyName: "spellCheckingType", type: .enum),
+        .init(propertyName: "keyboardType", type: .enum),
+        .init(propertyName: "keyboardAppearance", type: .enum),
+        .init(propertyName: "returnKeyType", type: .enum),
+        .init(propertyName: "enablesReturnKeyAutomatically", type: .bool),
+        .init(propertyName: "secureTextEntry", type: .bool),
+        .init(propertyName: "smartDashesType", type: .enum),
+        .init(propertyName: "smartInsertDeleteType", type: .enum),
+        .init(propertyName: "smartQuotesType", type: .enum),
+        .init(propertyName: "textContentType", type: .enum),
+        .init(propertyName: "scopeButtonTitles", type: .array)
     ]
     
     override var properties: [IBPropertyMapper] {
         super.properties + searchBarProperties
     }
+    
+    override func addValueToProperties(attributes: [String : String]) {
+        super.addValueToProperties(attributes: attributes)
+        
+        switch elementTree {
+        case "imageReference":
+            guard let propertyName = attributes["key"],
+                  let image = IBImage(attributes: attributes)
+            else { return }
+            addValueToProperty(ib: propertyName, value: image)
+        case "offsetWrapper":
+            guard let propertyName = attributes["key"],
+                  let offset = IBOffset(attributes: attributes)
+            else { return }
+            addValueToProperty(ib: propertyName, value: offset)
+        case "textInputTraits":
+            mapping(attributes)
+        default:
+            break
+        }
+    }
 }
-/*
- <searchBar contentMode="center" semanticContentAttribute="forceLeftToRight" fixedFrame="YES" barStyle="black" searchBarStyle="minimal" text="1" prompt="3" placeholder="2" showsSearchResultsButton="YES" showsBookmarkButton="YES" showsCancelButton="YES" backgroundImage="screenshot.png" showsScopeBar="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eId-eM-mWl">
-     <rect key="frame" x="10" y="-34" width="414" height="132"/>
-     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-     <color key="barTintColor" red="0.50640599590000002" green="1" blue="0.58250088099999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-     <imageReference key="scopeBarBackgroundImage" image="square.and.arrow.up.trianglebadge.exclamationmark" catalog="system" symbolScale="medium" renderingMode="template"/>
-     <offsetWrapper key="searchTextPositionAdjustment" horizontal="6" vertical="5"/>
-     <offsetWrapper key="searchFieldBackgroundPositionAdjustment" horizontal="10" vertical="10"/>
-     <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" spellCheckingType="yes" keyboardType="URL" keyboardAppearance="light" returnKeyType="route" enablesReturnKeyAutomatically="YES" secureTextEntry="YES" smartDashesType="yes" smartInsertDeleteType="no" smartQuotesType="yes" textContentType="name"/>
-     <scopeButtonTitles>
-         <string>Title</string>
-         <string>Title</string>
-     </scopeButtonTitles>
- </searchBar>
- */
