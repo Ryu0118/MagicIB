@@ -47,14 +47,18 @@ extension IBView {
             return IBCollectionViewCell(attributes: attributes, ibCompatibleView: ibCompatibleView)
         case .textView:
             return IBTextView(attributes: attributes, ibCompatibleView: ibCompatibleView)
+        case .pickerView:
+            return IBPickerView(attributes: attributes, ibCompatibleView: ibCompatibleView)
+        case .visualEffectView:
+            return IBVisualEffectView(attributes: attributes, ibCompatibleView: ibCompatibleView)
+        case .mapView:
+            return IBMapView(attributes: attributes, ibCompatibleView: ibCompatibleView)
+        case .searchBar:
+            return IBSearchBar(attributes: attributes, ibCompatibleView: ibCompatibleView)
+        case .wkWebView:
+            return IBWebView(attributes: attributes, ibCompatibleView: ibCompatibleView)
         default:
             return IBView(attributes: attributes, ibCompatibleView: ibCompatibleView)
-//        case .pickerView:
-//            <#code#>
-//        case .visualEffectView:
-//            <#code#>
-//        case .mapView:
-//            <#code#>
 //        case .mtkView:
 //            <#code#>
 //        case .glkView:
@@ -67,10 +71,6 @@ extension IBView {
 //            <#code#>
 //        case .arscnView:
 //            <#code#>
-//        case .wkWebView:
-//            <#code#>
-//        case .webView:
-//            <#code#>
 //        case .arView:
 //            <#code#>
 //        case .clLocationButton:
@@ -80,8 +80,6 @@ extension IBView {
 //        case .toolbar:
 //            <#code#>
 //        case .tabBar:
-//            <#code#>
-//        case .searchBar:
 //            <#code#>
 //        case .containerView:
 //            <#code#>
