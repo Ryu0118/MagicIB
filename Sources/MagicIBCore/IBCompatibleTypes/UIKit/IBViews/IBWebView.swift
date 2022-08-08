@@ -28,12 +28,12 @@ class IBWebView: IBView {
             let configuration = IBWebViewConfiguration(attributes: attributes)
             addValueToProperty(ib: propertyName, value: configuration)
         case "wkWebViewConfiguration->dataDetectorTypes", "wkWebViewConfiguration->audiovisualMediaTypes":
-            guard let configuration = findProperty(ib: "configuration")?.value as? IBWebViewConfiguration,
+            guard let configuration = self.configuration as? IBWebViewConfiguration,
                   let optionSet = IBOptionSet(attributes: attributes)
             else { return }
             configuration.addValueToProperty(ib: propertyName, value: optionSet)
         case "wkWebViewConfiguration->wkPreferences":
-            guard let configuration = findProperty(ib: "configuration")?.value as? IBWebViewConfiguration else { return }
+            guard let configuration = self.configuration as? IBWebViewConfiguration else { return }
             let preferences = IBWebViewPreferences(attributes: attributes)
             configuration.addValueToProperty(ib: propertyName, value: preferences)
         default:

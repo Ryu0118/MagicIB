@@ -10,16 +10,16 @@ import Foundation
 extension IBColor: IBSwiftSourceGeneratable {
 
     func generateSwiftCode() -> String? {
-        if let red = findProperty(ib: "red")?.value as? String,
-           let green = findProperty(ib: "green")?.value as? String,
-           let blue = findProperty(ib: "blue")?.value as? String,
-           let alpha = findProperty(ib: "alpha")?.value as? String {
+        if let red = self.red as? String,
+           let green = self.green as? String,
+           let blue = self.blue as? String,
+           let alpha = self.alpha as? String {
             return "UIColor(red: \(red), green: \(green), blue: \(blue), alpha: \(alpha)"
         }
-        else if let systemColor = findProperty(ib: "systemColor")?.value as? String {
+        else if let systemColor = self.systemColor as? String {
             return ".\(systemColor)"
         }
-        else if let name = findProperty(ib: "name")?.value as? String {
+        else if let name = self.name as? String {
             return "UIColor(named: \"\(name)\")"
         }
         else {

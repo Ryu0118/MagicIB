@@ -10,8 +10,8 @@ import Foundation
 extension IBSize: IBSwiftSourceGeneratable {
     
     func generateSwiftCode() -> String? {
-        guard let width = findProperty(ib: "width")?.value as? String,
-              let height = findProperty(ib: "height")?.value as? String
+        guard let width = self.width as? String,
+              let height = self.height as? String
         else { return nil }
         return "CGSize(width: \(width), height: \(height)"
     }

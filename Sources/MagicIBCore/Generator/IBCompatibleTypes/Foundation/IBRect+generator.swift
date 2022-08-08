@@ -10,10 +10,10 @@ import Foundation
 extension IBRect: IBSwiftSourceGeneratable {
     
     func generateSwiftCode() -> String? {
-        guard let x = findProperty(ib: "x")?.value as? String,
-              let y = findProperty(ib: "y")?.value as? String,
-              let width = findProperty(ib: "width")?.value as? String,
-              let height = findProperty(ib: "height")?.value as? String
+        guard let x = self.x as? String,
+              let y = self.y as? String,
+              let width = self.width as? String,
+              let height = self.height as? String
         else { return nil }
         return "CGRect(x: \(x), y: \(y), width: \(width), height: \(height)"
     }

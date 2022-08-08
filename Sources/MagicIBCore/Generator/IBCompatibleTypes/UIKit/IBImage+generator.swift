@@ -16,7 +16,9 @@ extension IBImage: IBSwiftSourceGeneratable {
      */
     func generateSwiftCode() -> String? {
         var swiftCode = ""
-        if let systemName = findProperty(ib: "systemName")
+        if let systemName = self.systemName {
+            
+        }
     }
     
 }

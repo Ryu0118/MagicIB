@@ -80,13 +80,13 @@ final class IBButton: IBView {
             guard let backgroundConfiguration = IBBackgroundConfiguration(attributes: attributes) else { return }
             buttonConfiguration?.addValueToProperty(ib: "background", value: backgroundConfiguration)
         case "buttonConfiguration->backgroundConfiguration->color":
-            guard let backgroundConfiguration = buttonConfiguration?.findProperty(ib: "background")?.value as? IBBackgroundConfiguration,
+            guard let backgroundConfiguration = buttonConfiguration?.background as? IBBackgroundConfiguration,
                   let propertyName = attributes["key"],
                   let color = IBColor(attributes: attributes)
             else { return }
             backgroundConfiguration.addValueToProperty(ib: propertyName, value: color)
         case "buttonConfiguration->backgroundConfiguration->imageReference":
-            guard let backgroundConfiguration = buttonConfiguration?.findProperty(ib: "background")?.value as? IBBackgroundConfiguration,
+            guard let backgroundConfiguration = buttonConfiguration?.background as? IBBackgroundConfiguration,
                   let propertyName = attributes["key"],
                   let image = IBImage(attributes: attributes)
             else { return }
