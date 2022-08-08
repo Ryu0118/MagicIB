@@ -32,6 +32,7 @@ class IBAttributedString {
 
 extension IBAttributedString {
     
+    @dynamicMemberLookup
     class Fragment: IBCompatibleObject {
         let properties: [IBPropertyMapper] =
         [
@@ -44,6 +45,10 @@ extension IBAttributedString {
         
         init(_ content: String) {
             addValueToProperty(ib: "content", value: content)
+        }
+        
+        subscript(dynamicMember key: String) -> Any? {
+            findProperty(ib: key)?.value
         }
         
         func addParagraphStyle(attributes: [String: String]) {

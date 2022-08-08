@@ -7,6 +7,7 @@
 
 import Foundation
 
+@dynamicMemberLookup
 struct IBImage: IBCompatibleObject {
     let properties: [IBPropertyMapper] =
     [
@@ -15,7 +16,6 @@ struct IBImage: IBCompatibleObject {
         .init(propertyName: "symbolScale", type: .enum),
         .init(propertyName: "renderingMode", type: .enum),
     ]
-    
     
     init?(attributes: [String: String]) {
         guard let image = attributes["image"] else { return nil }
@@ -34,6 +34,10 @@ struct IBImage: IBCompatibleObject {
     
     init(systemName: String) {
         addValueToProperty(ib: "systemName", value: systemName)
+    }
+    
+    subscript(dynamicMember key: String) -> Any? {
+        findProperty(ib: key)?.value
     }
 }
 

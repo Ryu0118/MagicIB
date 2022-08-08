@@ -1,5 +1,5 @@
 //
-//  IBVibrancyEffect.swift
+//  IBOffset.swift
 //  
 //
 //  Created by Ryu on 2022/08/07.
@@ -8,14 +8,15 @@
 import Foundation
 
 @dynamicMemberLookup
-struct IBVibrancyEffect: IBCompatibleObject {
+struct IBOffset: IBCompatibleObject {
     let properties: [IBPropertyMapper] = [
-        .init(propertyName: "blurEffect", type: .visualEffect),
-        .init(propertyName: "style", type: .enum)
+        .init(propertyName: "horizontal", type: .number),
+        .init(propertyName: "vertical", type: .number),
     ]
     
-    init(attributes: [String: String]) {
+    init?(attributes: [String: String]) {
         mapping(attributes)
+        if !isAllPropertiesActivated { return nil }
     }
     
     subscript(dynamicMember key: String) -> Any? {

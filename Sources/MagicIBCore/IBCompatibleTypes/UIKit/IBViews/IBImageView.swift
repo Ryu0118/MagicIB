@@ -19,7 +19,7 @@ final class IBImageView: IBView {
     override var properties: [IBPropertyMapper] {
         super.properties + imageProperties
     }
-    
+
     override func addValueToProperties(attributes: [String : String]) {
         super.addValueToProperties(attributes: attributes)
         switch elementTree {

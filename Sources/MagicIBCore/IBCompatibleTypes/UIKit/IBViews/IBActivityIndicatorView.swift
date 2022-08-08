@@ -14,6 +14,7 @@ class IBActivityIndicatorView: IBView {
         .init(propertyName: "style", type: .bool),
         .init(propertyName: "color", type: .color)
     ]
+    
     override var properties: [IBPropertyMapper] {
         super.properties + activityIndicatorProperties
     }

@@ -7,6 +7,7 @@
 
 import Foundation
 
+@dynamicMemberLookup
 class IBView: IBAnyView, IBCompatibleObject {
     
     let id: String
@@ -85,7 +86,11 @@ class IBView: IBAnyView, IBCompatibleObject {
         self.customClass = attributes["customClass"]
         self.mapping(attributes)
     }
-
+    
+    subscript(dynamicMember key: String) -> Any? {
+        findProperty(ib: key)?.value
+    }
+    
     func addValueToProperties(attributes: [String: String]) {
         switch elementTree {
         case "rect":

@@ -7,17 +7,6 @@
 
 import Foundation
 
-struct IBOffset: IBCompatibleObject {
-    let properties: [IBPropertyMapper] = [
-        .init(propertyName: "horizontal", type: .number),
-        .init(propertyName: "vertical", type: .number),
-    ]
-    init?(attributes: [String: String]) {
-        mapping(attributes)
-        if !isAllPropertiesActivated { return nil }
-    }
-}
-
 class IBSearchBar: IBView {
     private let searchBarProperties: [IBPropertyMapper] = [
         .init(propertyName: "barStyle", type: .enum),

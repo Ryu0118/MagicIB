@@ -7,6 +7,7 @@
 
 import Foundation
 
+
 class IBMapView: IBView {
     private let mapViewProperties: [IBPropertyMapper] = [
         .init(propertyName: "mapType", type: .enum),

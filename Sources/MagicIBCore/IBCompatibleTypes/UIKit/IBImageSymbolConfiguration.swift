@@ -7,6 +7,7 @@
 
 import Foundation
 
+@dynamicMemberLookup
 struct IBImageSymbolConfiguration: IBCompatibleObject {
     let properties: [IBPropertyMapper] =
     [
@@ -19,5 +20,9 @@ struct IBImageSymbolConfiguration: IBCompatibleObject {
     
     init(attributes: [String: String]) {
         mapping(attributes)
+    }
+    
+    subscript(dynamicMember key: String) -> Any? {
+        findProperty(ib: key)?.value
     }
 }

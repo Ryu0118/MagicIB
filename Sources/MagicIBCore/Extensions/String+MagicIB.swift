@@ -13,8 +13,8 @@ extension String: LocalizedError {
         return first + self + last
     }
     
-    func `as`<T>(_ transform: (Self) throws -> T) rethrows -> [T] {
-        try [self].map { try transform($0) }
+    func `as`<T>(_ transform: (Self) throws -> T) rethrows -> T {
+        try transform(self)
     }
     
     mutating func addLine(_ string: String, newLineCount: Int = 1, indentCount: Int = 0) {

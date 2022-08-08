@@ -31,5 +31,4 @@ class IBSlider: IBView {
     override func addValueToProperties(attributes: [String : String]) {
         super.addValueToProperties(attributes: attributes)
     }
-    
 }

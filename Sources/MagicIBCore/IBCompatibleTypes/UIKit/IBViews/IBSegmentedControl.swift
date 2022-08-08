@@ -35,7 +35,7 @@ class IBSegmentedControl: IBView {
     }
     
     var segmentCount = 0
-    
+
     override func addValueToProperties(attributes: [String : String]) {
         super.addValueToProperties(attributes: attributes)
         switch elementTree {
