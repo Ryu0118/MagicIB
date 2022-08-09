@@ -71,7 +71,8 @@ extension IBPropertyMapper {
             guard let rect = value as? IBRect else { return nil }
             return rect.generateSwiftCode()
         case .image:
-            
+            guard let image = value as? IBImage else { return nil }
+            return image.generateSwiftCode()
         case .buttonConfiguration:
         case .paragraphStyle:
         case .backgroundConfiguration:
