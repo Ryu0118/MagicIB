@@ -10,7 +10,14 @@ import Foundation
 extension IBButtonConfiguration: IBSwiftSourceGeneratable {
     
     func generateSwiftCode() -> String? {
-        <#code#>
+        guard let style = self.style as? String else { return nil }
+        var swiftCode = "let buttonConfiguration: UIButton.Configuration = .\(style)()"
+        
+        activatedProperties
+            .compactMap { $0.generateSwiftCode(variableName: "buttonConfiguration") }
+            .forEach { swiftCode.addLine($0) }
+        
+        return swiftCode
     }
     
 }

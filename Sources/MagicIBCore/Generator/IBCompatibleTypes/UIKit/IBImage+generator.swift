@@ -7,6 +7,11 @@
 
 import Foundation
 
+struct ReturnType {
+    let swiftCode: String
+    let variableName: String?
+}
+
 extension IBImage: IBSwiftSourceGeneratable {
     /*
      .init(propertyName: "systemName", type: .string),
