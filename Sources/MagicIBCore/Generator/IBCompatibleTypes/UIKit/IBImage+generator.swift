@@ -7,11 +7,6 @@
 
 import Foundation
 
-struct ReturnType {
-    let swiftCode: String
-    let variableName: String?
-}
-
 struct Line {
     enum `Type` {
         case declare(isMutating: Bool, operand: String)
