@@ -12,31 +12,68 @@ struct ReturnType {
     let variableName: String?
 }
 
+struct Line {
+    enum `Type` {
+        case declare(isMutating: Bool, operand: String)
+        case assign(propertyName: String, operand: String)
+        case function(String)
+    }
+    
+    let variableName: String
+    let type: Type
+    
+    var line: String {
+        switch type {
+        case .declare(let isMutating, let operand):
+            let varType = isMutating ? "var" : "let"
+            return "\(varType) \(variableName) = \(operand)"
+        case .assign(let propertyName, let operand):
+            return "\(variableName).\(propertyName) = \(operand)"
+        case .function(let function):
+            return "\(variableName).\(function)"
+        }
+    }
+    
+    var originalValue: String {
+        switch type {
+        case .declare(let _, let operand):
+            return operand
+        case .assign(let propertyName, let operand):
+            return operand
+        case .function(let string):
+            return string
+        }
+    }
+}
+
 extension IBImage: IBSwiftSourceGeneratable {
-    /*
-     .init(propertyName: "systemName", type: .string),
-     .init(propertyName: "name", type: .string),
-     .init(propertyName: "symbolScale", type: .enum),
-     .init(propertyName: "renderingMode", type: .enum),
-     */
-    func generateSwiftCode() -> String? {
-        var swiftCode = ""
+    
+    func generateSwiftCode() -> [Line] {
+        var lines = [Line]()
         if let systemName = self.systemName as? String {
             if let symbolScale = self.symbolScale as? String {
-                swiftCode.addLine("let symbolConfiguration = UIImage.SymbolConfiguration(scale: .\(symbolScale)")
-                swiftCode.addLine("let image = UIImage(systemName: \"\(systemName))\", withConfiguration: symbolConfiguration)")
+                lines.append(contentsOf: [
+                    Line(variableName: "symbolConfiguration", type: .declare(isMutating: false, operand: "UIImage.SymbolConfiguration(scale: .\(symbolScale))")),
+                    Line(variableName: "image", type: .declare(isMutating: false, operand: "UIImage(systemName: \"\(systemName))\", withConfiguration: symbolConfiguration)"))
+                ])
             }
             else {
-                swiftCode.addLine("let image = UIImage(systemName: \"\(systemName))\"")
+                lines.append(
+                    Line(variableName: "image", type: .declare(isMutating: false, operand: "UIImage(systemName: \"\(systemName))\""))
+                )
             }
         }
         else if let name = self.name as? String {
-            swiftCode.addLine("let image = UIImage(named: \"\(name)\")")
+            lines.append(
+                Line(variableName: "image", type: .declare(isMutating: false, operand: "UIImage(named: \"\(name)\")"))
+            )
         }
         if let renderingMode = self.renderingMode as? String {
-            swiftCode.addLine("image?.withRenderingMode(.\(renderingMode)")
+            lines.append(
+                Line(variableName: "image", type: .function("image?.withRenderingMode(.\(renderingMode)"))
+            )
         }
-        return swiftCode.isEmpty ? nil : swiftCode
+        return lines
     }
     
 }
