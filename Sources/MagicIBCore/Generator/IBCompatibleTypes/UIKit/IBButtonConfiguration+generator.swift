@@ -14,17 +14,15 @@ extension IBButtonConfiguration: IBSwiftSourceGeneratable {
         
         return buildLines {
             Line(variableName: "buttonConfiguration", lineType: .declare(isMutating: false, type: "UIButton.Configuration", operand: ".\(style)()"))
+            
+            generateBasicTypePropertyLines(variableName: "buttonConfiguration")
+            generateNonCustomizablePropertyLines(variableName: "buttonConfiguration")
+            
             if let image = self.image as? IBImage {
                 image
                     .generateSwiftCode()
                     .related(variableName: "buttonConfiguration", propertyName: "image")
             }
-            activatedProperties
-                .basicType()
-                .compactMap { property in
-                    guard let operand = property.convertValidValue() else { return nil }
-                    return Line(variableName: "buttonConfiguration", lineType: .assign(propertyName: property.propertyName, operand: operand))
-                }
         }
     }
     

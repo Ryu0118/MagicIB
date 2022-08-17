@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IBColor: IBSwiftSourceGeneratable {
+extension IBColor: IBSwiftSourceGeneratable, NonCustomizable {
 
     func generateSwiftCode() -> [Line] {
         if let red = self.red as? String,
@@ -23,7 +23,7 @@ extension IBColor: IBSwiftSourceGeneratable {
             return Line(variableName: "color", lineType: .declare(isMutating: false, operand: "UIColor(named: \"\(name)\")")).toArray()
         }
         else {
-            return nil
+            return []
         }
      }
     

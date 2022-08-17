@@ -12,6 +12,7 @@ struct Line {
         case declare(isMutating: Bool, type: String? = nil, operand: String)
         case assign(propertyName: String, operand: String)
         case function(String)
+        case custom(String)
     }
     
     let variableName: String
@@ -32,6 +33,8 @@ struct Line {
             return "\(variableName).\(propertyName) = \(operand)"
         case .function(let function):
             return "\(variableName).\(function)"
+        case .custom(let custom):
+            return custom
         }
     }
     
@@ -43,6 +46,8 @@ struct Line {
             return operand
         case .function(let string):
             return string
+        case .custom(let custom):
+            return custom
         }
     }
     
