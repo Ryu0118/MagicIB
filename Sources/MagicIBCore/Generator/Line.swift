@@ -15,8 +15,8 @@ struct Line {
         case custom(String)
     }
     
-    let variableName: String
-    let lineType: LineType
+    private let variableName: String
+    private let lineType: LineType
     private let variableType: String?
     
     var line: String {
@@ -55,6 +55,12 @@ struct Line {
         self.variableName = variableName
         self.lineType = lineType
         self.variableType = variableType
+    }
+    
+    init(custom: String) {
+        self.variableName = "custom"
+        self.lineType = .custom(custom)
+        self.variableType = nil
     }
     
 }

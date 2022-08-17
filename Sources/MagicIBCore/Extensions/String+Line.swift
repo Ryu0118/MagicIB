@@ -9,6 +9,8 @@ import Foundation
 
 extension String {
     func buildLines() -> [Line] {
-        self.components(separatedBy: "\n")
+        self
+            .components(separatedBy: "\n")
+            .map { Line(custom: $0) }
     }
 }

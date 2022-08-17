@@ -10,6 +10,13 @@ import Foundation
 class IBAttributedString {
     var fragments = [Fragment]()
     
+    var text: String {
+        fragments.reduce(.init()) { previous, fragment -> String in
+            guard let content = fragment.content as? String else { return previous }
+            return previous + content
+        }
+    }
+    
     init() {}
     
     func addFragment(_ content: String) {
