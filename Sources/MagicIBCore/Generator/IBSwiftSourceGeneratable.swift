@@ -8,5 +8,12 @@
 import Foundation
 
 protocol IBSwiftSourceGeneratable {
-    func generateSwiftCode() -> String?
+    func generateSwiftCode() -> [Line]
+    func buildLines(@ArrayBuilder<Line> _ builder: () -> [Line]) -> [Line]
+}
+
+extension IBSwiftSourceGeneratable {
+    func buildLines(@ArrayBuilder<Line> _ builder: () -> [Line]) -> [Line] {
+        builder()
+    }
 }

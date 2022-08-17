@@ -9,24 +9,24 @@ import Foundation
 
 extension IBFont: IBSwiftSourceGeneratable {
     
-    func generateSwiftCode() -> String? {
+    func generateSwiftCode() -> [Line] {
         if let name = fontName,
            let size = size {
-            return "UIFont(name: \(name), size: \(size)"
+            return Line(variableName: "font", lineType: .declare(isMutating: false, operand: "UIFont(name: \(name), size: \(size)")).toArray()
         }
         else if let type = type,
                 let size = size {
             switch type {
             case .system:
-                return ".systemFont(ofSize: \(size)"
+                return Line(variableName: "font", lineType: .declare(isMutating: false, operand: ".systemFont(ofSize: \(size)")).toArray()
             case .italicSystem:
-                return ".italicSystemFont(ofSize: \(size)"
+                return Line(variableName: "font", lineType: .declare(isMutating: false, operand: ".italicSystemFont(ofSize: \(size)")).toArray()
             case .boldSystem:
-                return ".boldSystemFont(ofSize: \(size)"
+                return Line(variableName: "font", lineType: .declare(isMutating: false, operand: ".boldSystemFont(ofSize: \(size)")).toArray()
             }
         }
         else if let style = style {
-            return ".preferredFont(forTextStyle: .\(style)"
+            return Line(variableName: "font", lineType: .declare(isMutating: false, operand: ".preferredFont(forTextStyle: .\(style)")).toArray()
         }
         else {
             return nil

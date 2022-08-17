@@ -11,7 +11,6 @@ final class MagicIBTests: XCTestCase {
         guard #available(macOS 10.13, *) else {
             return
         }
-
         // Mac Catalyst won't have `Process`, but it is supported for executables.
         #if !targetEnvironment(macCatalyst)
 

@@ -7,6 +7,17 @@
 
 import Foundation
 
+extension Array where Element == IBPropertyMapper {
+    func except(type: [IBInspectableType]) -> [Element] {
+        self.filter { type.contains($0.type) }
+    }
+    
+    func basicType() -> [Element] {
+        let basicTypes: [IBInspectableType] = [.enum, .number, .bool, .string]
+        return self.filter { basicTypes.contains($0.type) }
+    }
+}
+
 extension IBPropertyMapper {
     
     func generateSwiftCode(variableName: String) -> String? {
@@ -40,7 +51,7 @@ extension IBPropertyMapper {
         }
     }
     
-    private func convertValidValue() -> String? {
+    func convertValidValue() -> String? {
         guard let value = value else { return nil }
         
         switch type {

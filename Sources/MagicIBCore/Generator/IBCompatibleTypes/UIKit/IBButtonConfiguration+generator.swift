@@ -9,15 +9,23 @@ import Foundation
 
 extension IBButtonConfiguration: IBSwiftSourceGeneratable {
     
-    func generateSwiftCode() -> String? {
-        guard let style = self.style as? String else { return nil }
-        var swiftCode = "let buttonConfiguration: UIButton.Configuration = .\(style)()"
+    func generateSwiftCode() -> [Line] {
+        guard let style = self.style as? String else { return [] }
         
-        activatedProperties
-            .compactMap { $0.generateSwiftCode(variableName: "buttonConfiguration") }
-            .forEach { swiftCode.addLine($0) }
-        
-        return swiftCode
+        return buildLines {
+            Line(variableName: "buttonConfiguration", lineType: .declare(isMutating: false, type: "UIButton.Configuration", operand: ".\(style)()"))
+            if let image = self.image as? IBImage {
+                image
+                    .generateSwiftCode()
+                    .related(variableName: "buttonConfiguration", propertyName: "image")
+            }
+            activatedProperties
+                .basicType()
+                .compactMap { property in
+                    guard let operand = property.convertValidValue() else { return nil }
+                    return Line(variableName: "buttonConfiguration", lineType: .assign(propertyName: property.propertyName, operand: operand))
+                }
+        }
     }
     
 }
