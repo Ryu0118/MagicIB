@@ -15,9 +15,9 @@ extension IBButtonConfiguration: SwiftCodeGeneratable {
         return buildLines {
             Line(variableName: "buttonConfiguration", lineType: .declare(isMutating: false, type: "UIButton.Configuration", operand: ".\(style)()"))
             
+            generateCustomizablePropertyLines(variableName: "buttonConfiguration")
             generateBasicTypePropertyLines(variableName: "buttonConfiguration")
             generateNonCustomizablePropertyLines(variableName: "buttonConfiguration")
-            generateCustomizablePropertyLines(variableName: "buttonConfiguration")
         }
     }
     
