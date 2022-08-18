@@ -37,7 +37,7 @@ final class IBImageView: IBView {
                   let propertyName = attributes["key"],
                   let font = IBFont(attributes: attributes)
             else { return }
-            preferredSymbolConfiguration.addValueToProperty(ib: "preferredSymbolConfigurationForImage", value: font)
+            preferredSymbolConfiguration.addValueToProperty(ib: propertyName, value: font)
         default:
             break
         }

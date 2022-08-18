@@ -74,7 +74,7 @@ extension IBAttributedString.Fragment: SwiftCodeGeneratable {
             
             return buildLines {
                 //let stringAttributes1: [NSAttributedStringKey : Any] = [
-                Line(variableName: attributeName, lineType: .declare(isMutating: false, type: "[NSAttributedStringKey : Any]", operand: "["))
+                Line(variableName: attributeName, lineType: .declare(isMutating: false, type: "[NSAttributedString.Key : Any]", operand: "["))
                 
                 //NSMutableParagraphStyle
                 var paragraphStyleLines = [Line]()
