@@ -26,7 +26,14 @@ extension IBAttributedString: SwiftCodeGeneratable {
             }
         case .legacy:
             return buildLines {
-                fragments.enumerated().flatMap { $1.generateSwiftCode(mode: .legacy(fragmentCount: $0)) }
+                fragments
+                    .enumerated()
+                    .flatMap { $1.generateSwiftCode(mode: .legacy(fragmentCount: $0)) }
+                Line(variableName: "attributedString", lineType: .declare(isMutating: false, operand: "NSMutableAttributedString()"))
+                
+                for i in 1...fragments.count {
+                    Line(variableName: "attributedString", lineType: .function("append(string\(i)"))
+                }
             }
         }
     }
@@ -43,10 +50,18 @@ extension IBAttributedString.Fragment: SwiftCodeGeneratable {
     
     func generateSwiftCode(mode: Mode) -> [Line] {
         guard let content = self.content as? String,
-              let variableName = self.uniqueName as? String
+              let variableName = self.uniqueName
         else { return [] }
         switch mode {
         case .modern:
+                /*
+                 var attributedString = AttributedString(str)
+                 
+                 if let range = attributedString.range(of: "string") {
+                     attributedString[range].foregroundColor = .red
+                     attributedString[range].font = .systemFont(ofSize: 12)
+                 }
+                 */
             return buildLines {
                 Line(relatedVariableName: variableName, custom: "if let range = \(variableName).range(of: \"\(content)\") {")
                 generateCustomizablePropertyLines(variableName: "\(variableName)[range]")
@@ -73,7 +88,6 @@ extension IBAttributedString.Fragment: SwiftCodeGeneratable {
                      .font : UIFont.systemFont(ofSize: 24.0),
                      .paragraphStyle: NSParagraphStyle.default
                  ]
-                 let string1 = NSAttributedString(string: "0123", attributes: stringAttributes1)
                  */
                 activatedProperties.compactMap { property in
                     if let nonCustomizable = property.value as? NonCustomizable {
@@ -86,7 +100,8 @@ extension IBAttributedString.Fragment: SwiftCodeGeneratable {
                         }
                         
                         guard let type = type,
-                              let rightOperand = nonCustomizable.generateSwiftCode().first?.explicitType(type).originalValue
+                              var firstLine = nonCustomizable.generateSwiftCode().first,
+                              let rightOperand = firstLine.explicitType(type).originalValue
                         else { fatalError("failed to get right operand") }
                         
                         return Line(relatedVariableName: attributeName, custom: ".\(property.propertyName): \(rightOperand)")
@@ -101,6 +116,8 @@ extension IBAttributedString.Fragment: SwiftCodeGeneratable {
                 }
                 
                 Line(relatedVariableName: attributeName, custom: "]")
+                //let string1 = NSAttributedString(string: "0123", attributes: stringAttributes1)
+                Line(variableName: stringName, lineType: .declare(isMutating: false, operand: "NSAttributedString(string: \"\(content)\", attributes: \(attributeName)"))
             }
         }
     }
