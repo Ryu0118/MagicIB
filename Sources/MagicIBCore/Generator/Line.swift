@@ -15,7 +15,8 @@ struct Line {
         case custom(String)
     }
     
-    static let end = Line(relatedVariableName: "custom", custom: "}")
+    static let end = Line(relatedVariableName: .custom, custom: "}")
+    static let newLine = Line(relatedVariableName: .custom, custom: "\n")
     
     private let variableName: String
     private let lineType: LineType

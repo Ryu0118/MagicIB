@@ -22,11 +22,11 @@ extension IBAttributedString: SwiftCodeGeneratable {
         case .modern:
             return buildLines {
                 Line(variableName: variableName, lineType: .declare(isMutating: true, operand: "AttributedString(\"\(text)\""))
-                fragments.flatMap { $0.generateSwiftCode }
+                fragments.flatMap { $0.generateSwiftCode(mode: .modern) }
             }
         case .legacy:
             return buildLines {
-                
+                fragments.flatMap { $0.generateSwiftCode(mode: .legacy) }
             }
         }
     }
@@ -34,15 +34,23 @@ extension IBAttributedString: SwiftCodeGeneratable {
 }
 
 extension IBAttributedString.Fragment: SwiftCodeGeneratable {
-    func generateSwiftCode() -> [Line] {
+    func generateSwiftCode() -> [Line] { generateSwiftCode(mode: .modern) }
+    func generateSwiftCode(mode: IBAttributedString.Mode) -> [Line] {
         guard let content = self.content as? String,
               let variableName = self.uniqueName as? String
         else { return [] }
-        return buildLines {
-            Line(relatedVariableName: variableName, custom: "if let range = \(variableName).range(of: \"\(content)\") {")
-            generateCustomizablePropertyLines(variableName: "\(variableName)[range]")
-            generateNonCustomizablePropertyLines(variableName: "\(variableName)[range]")
-            Line.end
+        switch mode {
+        case .modern:
+            return buildLines {
+                Line(relatedVariableName: variableName, custom: "if let range = \(variableName).range(of: \"\(content)\") {")
+                generateCustomizablePropertyLines(variableName: "\(variableName)[range]")
+                generateNonCustomizablePropertyLines(variableName: "\(variableName)[range]")
+                Line.end
+            }
+        case .legacy:
+            return buildLines {
+                
+            }
         }
     }
 }
