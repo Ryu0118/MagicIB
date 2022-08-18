@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IBRect: IBSwiftSourceGeneratable, NonCustomizable {
+extension IBRect: SwiftCodeGeneratable, NonCustomizable {
     
     func generateSwiftCode() -> [Line] {
         guard let x = self.x as? String,

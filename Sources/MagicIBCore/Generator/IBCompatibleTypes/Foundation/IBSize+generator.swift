@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IBSize: IBSwiftSourceGeneratable, NonCustomizable {
+extension IBSize: SwiftCodeGeneratable, NonCustomizable {
     
     func generateSwiftCode() -> String? {
         guard let width = self.width as? String,

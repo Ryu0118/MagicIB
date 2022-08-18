@@ -7,18 +7,18 @@
 
 import Foundation
 
-protocol IBSwiftSourceGeneratable {
+protocol SwiftCodeGeneratable {
     func generateSwiftCode() -> [Line]
     func buildLines(@ArrayBuilder<Line> _ builder: () -> [Line]) -> [Line]
 }
 
-extension IBSwiftSourceGeneratable {
+extension SwiftCodeGeneratable {
     func buildLines(@ArrayBuilder<Line> _ builder: () -> [Line]) -> [Line] {
         builder()
     }
 }
 
-extension IBSwiftSourceGeneratable {
+extension SwiftCodeGeneratable {
     func camelized(_ source1: String, _ source2: String) -> String {
         let dropped = source2.dropFirst()
         let initial = source2.prefix(1).uppercased()
@@ -26,7 +26,7 @@ extension IBSwiftSourceGeneratable {
     }
 }
 
-extension IBCompatibleObject where Self: IBSwiftSourceGeneratable {
+extension IBCompatibleObject where Self: SwiftCodeGeneratable {
     func generateBasicTypePropertyLines(variableName: String, except: [String] = []) -> [Line] {
         activatedProperties
             .basicType()
@@ -51,7 +51,7 @@ extension IBCompatibleObject where Self: IBSwiftSourceGeneratable {
             .customType()
             .except(except)
             .compactMap { property -> [Line]? in
-                guard let generator = property.value as? IBSwiftSourceGeneratable
+                guard let generator = property.value as? SwiftCodeGeneratable
                 else { return nil }
                 return generator
                     .generateSwiftCode()

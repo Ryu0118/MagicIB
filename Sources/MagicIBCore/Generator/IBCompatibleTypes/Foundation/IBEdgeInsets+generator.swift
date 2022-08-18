@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IBEdgeInsets: IBSwiftSourceGeneratable, NonCustomizable {
+extension IBEdgeInsets: SwiftCodeGeneratable, NonCustomizable {
     func generateSwiftCode() -> [Line] {
         if let top = self.top as? String,
            let leading = self.leading as? String,

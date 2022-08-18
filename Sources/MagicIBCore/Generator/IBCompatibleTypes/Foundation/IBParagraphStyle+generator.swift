@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IBParagraphStyle: IBSwiftSourceGeneratable {
+extension IBParagraphStyle: SwiftCodeGeneratable {
     func generateSwiftCode() -> [Line] {
         guard let uniqueName = uniqueName else { fatalError("uniqueName has not been initialized") }
         buildLines {

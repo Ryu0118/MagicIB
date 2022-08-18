@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IBColor: IBSwiftSourceGeneratable, NonCustomizable {
+extension IBColor: SwiftCodeGeneratable, NonCustomizable {
 
     func generateSwiftCode() -> [Line] {
         if let red = self.red as? String,

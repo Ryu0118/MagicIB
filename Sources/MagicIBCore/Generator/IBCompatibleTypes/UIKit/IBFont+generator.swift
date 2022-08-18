@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IBFont: IBSwiftSourceGeneratable, NonCustomizable {
+extension IBFont: SwiftCodeGeneratable, NonCustomizable {
     
     func generateSwiftCode() -> [Line] {
         if let name = fontName,

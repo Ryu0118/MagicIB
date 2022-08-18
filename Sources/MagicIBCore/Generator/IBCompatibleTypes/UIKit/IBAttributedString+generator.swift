@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IBAttributedString: IBSwiftSourceGeneratable {
+extension IBAttributedString: SwiftCodeGeneratable {
     
     enum Mode {
         case modern
@@ -33,7 +33,7 @@ extension IBAttributedString: IBSwiftSourceGeneratable {
     
 }
 
-extension IBAttributedString.Fragment: IBSwiftSourceGeneratable {
+extension IBAttributedString.Fragment: SwiftCodeGeneratable {
     func generateSwiftCode() -> [Line] {
         guard let content = self.content as? String,
               let variableName = self.uniqueName as? String

@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IBButtonConfiguration: IBSwiftSourceGeneratable {
+extension IBButtonConfiguration: SwiftCodeGeneratable {
     
     func generateSwiftCode() -> [Line] {
         guard let style = self.style as? String else { return [] }

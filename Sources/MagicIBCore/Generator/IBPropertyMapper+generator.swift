@@ -23,7 +23,9 @@ extension Array where Element == IBPropertyMapper {
     
     func customType() -> [Element] {
         let basicTypes: [IBInspectableType] = [.enum, .number, .bool, .string]
-        return self.filter { !basicTypes.contains($0.type) }
+        return self.filter {
+            !basicTypes.contains($0.type) && $0.value as? NonCustomizable == nil
+        }
     }
 }
 
