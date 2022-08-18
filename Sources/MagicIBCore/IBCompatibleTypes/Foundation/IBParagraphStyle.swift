@@ -8,7 +8,7 @@
 import Foundation
 
 @dynamicMemberLookup
-struct IBParagraphStyle: IBCompatibleObject {
+class IBParagraphStyle: IBCompatibleObject, UniqueName {
     
     let properties: [IBPropertyMapper] =
     [
@@ -28,6 +28,8 @@ struct IBParagraphStyle: IBCompatibleObject {
         .init(propertyName: "tighteningFactorForTruncation", type: .number),
         .init(propertyName: "headerLevel", type: .number),
     ]
+    
+    var uniqueName: String?
     
     init(attributes: [String: String]) {
         mapping(attributes)

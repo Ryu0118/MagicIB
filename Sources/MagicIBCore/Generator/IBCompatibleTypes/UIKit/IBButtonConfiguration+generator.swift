@@ -17,12 +17,7 @@ extension IBButtonConfiguration: IBSwiftSourceGeneratable {
             
             generateBasicTypePropertyLines(variableName: "buttonConfiguration")
             generateNonCustomizablePropertyLines(variableName: "buttonConfiguration")
-            
-            if let image = self.image as? IBImage {
-                image
-                    .generateSwiftCode()
-                    .related(variableName: "buttonConfiguration", propertyName: "image")
-            }
+            generateCustomizablePropertyLines(variableName: "buttonConfiguration")
         }
     }
     

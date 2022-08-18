@@ -8,13 +8,22 @@
 import Foundation
 
 extension Array where Element == IBPropertyMapper {
-    func except(type: [IBInspectableType]) -> [Element] {
+    func except(_ type: [IBInspectableType]) -> [Element] {
         self.filter { type.contains($0.type) }
+    }
+    
+    func except(_ propertyName: [String]) -> [Element] {
+        self.filter { $0.propertyName != propertyName }
     }
     
     func basicType() -> [Element] {
         let basicTypes: [IBInspectableType] = [.enum, .number, .bool, .string]
         return self.filter { basicTypes.contains($0.type) }
+    }
+    
+    func customType() -> [Element] {
+        let basicTypes: [IBInspectableType] = [.enum, .number, .bool, .string]
+        return self.filter { !basicTypes.contains($0.type) }
     }
 }
 

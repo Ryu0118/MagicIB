@@ -8,7 +8,7 @@
 import Foundation
 
 protocol NonCustomizable: IBSwiftSourceGeneratable {
-    func generateSwiftCode() -> Line
+    func generateSwiftCode(variableName: String, propertyName: String) -> Line?
 }
 
 extension NonCustomizable {

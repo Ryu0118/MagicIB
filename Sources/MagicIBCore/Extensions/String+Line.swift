@@ -8,9 +8,9 @@
 import Foundation
 
 extension String {
-    func buildLines() -> [Line] {
+    func buildLines(relatedVariableName: String) -> [Line] {
         self
             .components(separatedBy: "\n")
-            .map { Line(custom: $0) }
+            .map { Line(relatedVariableName: relatedVariableName, custom: $0) }
     }
 }

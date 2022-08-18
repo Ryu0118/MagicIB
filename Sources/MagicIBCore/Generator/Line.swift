@@ -15,9 +15,18 @@ struct Line {
         case custom(String)
     }
     
+    static let end = Line(relatedVariableName: "custom", custom: "}")
+    
     private let variableName: String
     private let lineType: LineType
     private let variableType: String?
+    
+    var isStartOfBlock: Bool {
+        originalValue.dropLast() == "{"
+    }
+    var isEndOfBlock: Bool {
+        originalValue.dropLast() == "}"
+    }
     
     var line: String {
         switch lineType {
@@ -57,8 +66,8 @@ struct Line {
         self.variableType = variableType
     }
     
-    init(custom: String) {
-        self.variableName = "custom"
+    init(relatedVariableName: String, custom: String) {
+        self.variableName = relatedVariableName
         self.lineType = .custom(custom)
         self.variableType = nil
     }

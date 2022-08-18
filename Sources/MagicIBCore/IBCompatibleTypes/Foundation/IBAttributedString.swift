@@ -7,7 +7,11 @@
 
 import Foundation
 
-class IBAttributedString {
+protocol UniqueName: AnyObject {
+    var uniqueName: String? { get set }
+}
+
+class IBAttributedString: UniqueName {
     var fragments = [Fragment]()
     
     var text: String {
@@ -17,10 +21,13 @@ class IBAttributedString {
         }
     }
     
+    var uniqueName: String?
+    
     init() {}
     
     func addFragment(_ content: String) {
         let fragment = Fragment(content)
+        fragment.uniqueName = uniqueName
         fragments.append(fragment)
     }
     
@@ -40,7 +47,7 @@ class IBAttributedString {
 extension IBAttributedString {
     
     @dynamicMemberLookup
-    class Fragment: IBCompatibleObject {
+    class Fragment: IBCompatibleObject, UniqueName {
         let properties: [IBPropertyMapper] =
         [
             .init(propertyName: "content", type: .string),
@@ -49,6 +56,8 @@ extension IBAttributedString {
             .init(ib: "NSFont", propertyName: "font", type: .font),
             .init(ib: "NSParagraphStyle", propertyName: "paragraphStyle", type: .paragraphStyle)
         ]
+        
+        var uniqueName: String?
         
         init(_ content: String) {
             addValueToProperty(ib: "content", value: content)
@@ -61,6 +70,7 @@ extension IBAttributedString {
         func addParagraphStyle(attributes: [String: String]) {
             guard let ib = attributes["key"] else { return }
             let paragraphStyle = IBParagraphStyle(attributes: attributes)
+            paragraphStyle.uniqueName = uniqueName
             addValueToProperty(ib: ib, value: paragraphStyle)
         }
         
