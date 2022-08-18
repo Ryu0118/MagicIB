@@ -10,7 +10,7 @@ import Foundation
 extension IBFont: SwiftCodeGeneratable, NonCustomizable {
     
     func generateSwiftCode() -> [Line] {
-        return buildLines {
+        buildLines {
             if let name = fontName,
                let size = size {
                 Line(variableName: "font", lineType: .declare(isMutating: false, operand: "UIFont(name: \(name), size: \(size)"))
