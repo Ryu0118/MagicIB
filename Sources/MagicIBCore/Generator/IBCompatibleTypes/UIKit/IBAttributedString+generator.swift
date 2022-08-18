@@ -56,11 +56,50 @@ extension IBAttributedString.Fragment: SwiftCodeGeneratable {
         case .legacy(let count):
             let attributeName = "stringAttributes\(count + 1)"
             let stringName = "string\(count + 1)"
+            
             return buildLines {
+                //let stringAttributes1: [NSAttributedStringKey : Any] = [
                 Line(variableName: attributeName, lineType: .declare(isMutating: false, type: "[NSAttributedStringKey : Any]", operand: "["))
-                activatedProperties.map {
-                    $0.
+                
+                //NSMutableParagraphStyle
+                var paragraphStyleLines = [Line]()
+                if let paragraphStyle = self.paragraphStyle as? IBParagraphStyle {
+                    paragraphStyleLines = paragraphStyle.generateSwiftCode()
+                    paragraphStyleLines
                 }
+                /*
+                 let stringAttributes1: [NSAttributedStringKey : Any] = [
+                     .foregroundColor : UIColor.blue,
+                     .font : UIFont.systemFont(ofSize: 24.0),
+                     .paragraphStyle: NSParagraphStyle.default
+                 ]
+                 let string1 = NSAttributedString(string: "0123", attributes: stringAttributes1)
+                 */
+                activatedProperties.compactMap { property in
+                    if let nonCustomizable = property.value as? NonCustomizable {
+                        var type: String?
+                        if let _ = property.value as? IBColor {
+                            type = "UIColor"
+                        }
+                        else if let _ = property.value as? IBFont {
+                            type = "UIFont"
+                        }
+                        
+                        guard let type = type,
+                              let rightOperand = nonCustomizable.generateSwiftCode().first?.explicitType(type).originalValue
+                        else { fatalError("failed to get right operand") }
+                        
+                        return Line(relatedVariableName: attributeName, custom: ".\(property.propertyName): \(rightOperand)")
+                    }
+                    else if let paragraphStyle = property.value as? IBParagraphStyle,
+                            let variableName = paragraphStyleLines.last?.variableName {
+                        return Line(relatedVariableName: attributeName, custom: ".\(property.propertyName): \(variableName)")
+                    }
+                    else {
+                        return nil
+                    }
+                }
+                
                 Line(relatedVariableName: attributeName, custom: "]")
             }
         }

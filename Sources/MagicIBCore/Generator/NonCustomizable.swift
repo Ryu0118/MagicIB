@@ -16,4 +16,8 @@ extension NonCustomizable {
         guard let operand = self.generateSwiftCode().first?.originalValue else { return nil }
         return Line(variableName: variableName, lineType: .assign(propertyName: propertyName, operand: operand))
     }
+    
+    func getRightOperand() -> String? {
+        return self.generateSwiftCode().first?.originalValue
+    }
 }

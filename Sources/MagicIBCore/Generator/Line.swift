@@ -18,7 +18,7 @@ struct Line {
     static let end = Line(relatedVariableName: .end, custom: "}")
     static let newLine = Line(relatedVariableName: .newLine, custom: "\n")
     
-    private let variableName: String
+    let variableName: String
     private var lineType: LineType
     private let variableType: String?
     
@@ -80,8 +80,8 @@ extension Line {
         return [self]
     }
     
-    func explicitType(_ type: String) -> Line {
-        if originalValue.first == "." && case .declare(let isMutating, let optionalType, let operand) = lineType {
+    mutating func explicitType(_ type: String) -> Line {
+        if originalValue.first == ".", case .declare(let isMutating, let optionalType, let operand) = lineType {
             lineType = .declare(isMutating: isMutating, type: optionalType, operand: type + operand)
         }
         else {
