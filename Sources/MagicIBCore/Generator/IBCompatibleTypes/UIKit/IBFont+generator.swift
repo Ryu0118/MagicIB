@@ -10,26 +10,25 @@ import Foundation
 extension IBFont: SwiftCodeGeneratable, NonCustomizable {
     
     func generateSwiftCode() -> [Line] {
-        if let name = fontName,
-           let size = size {
-            return Line(variableName: "font", lineType: .declare(isMutating: false, operand: "UIFont(name: \(name), size: \(size)")).toArray()
-        }
-        else if let type = type,
-                let size = size {
-            switch type {
-            case .system:
-                return Line(variableName: "font", lineType: .declare(isMutating: false, operand: ".systemFont(ofSize: \(size)")).toArray()
-            case .italicSystem:
-                return Line(variableName: "font", lineType: .declare(isMutating: false, operand: ".italicSystemFont(ofSize: \(size)")).toArray()
-            case .boldSystem:
-                return Line(variableName: "font", lineType: .declare(isMutating: false, operand: ".boldSystemFont(ofSize: \(size)")).toArray()
+        return buildLines {
+            if let name = fontName,
+               let size = size {
+                Line(variableName: "font", lineType: .declare(isMutating: false, operand: "UIFont(name: \(name), size: \(size)"))
             }
-        }
-        else if let style = style {
-            return Line(variableName: "font", lineType: .declare(isMutating: false, operand: ".preferredFont(forTextStyle: .\(style)")).toArray()
-        }
-        else {
-            return []
+            else if let type = type,
+                    let size = size {
+                switch type {
+                case .system:
+                    Line(variableName: "font", lineType: .declare(isMutating: false, operand: ".systemFont(ofSize: \(size)"))
+                case .italicSystem:
+                    Line(variableName: "font", lineType: .declare(isMutating: false, operand: ".italicSystemFont(ofSize: \(size)"))
+                case .boldSystem:
+                    Line(variableName: "font", lineType: .declare(isMutating: false, operand: ".boldSystemFont(ofSize: \(size)"))
+                }
+            }
+            else if let style = style {
+                Line(variableName: "font", lineType: .declare(isMutating: false, operand: ".preferredFont(forTextStyle: .\(style)"))
+            }
         }
     }
     
