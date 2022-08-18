@@ -84,8 +84,6 @@ extension Line {
         if originalValue.first == ".", case .declare(let isMutating, let optionalType, let operand) = lineType {
             lineType = .declare(isMutating: isMutating, type: optionalType, operand: type + operand)
         }
-        else {
-            return self
-        }
+        return self
     }
 }

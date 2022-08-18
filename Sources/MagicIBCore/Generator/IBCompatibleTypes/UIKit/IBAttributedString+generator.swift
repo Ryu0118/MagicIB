@@ -100,13 +100,12 @@ extension IBAttributedString.Fragment: SwiftCodeGeneratable {
                         }
                         
                         guard let type = type,
-                              var firstLine = nonCustomizable.generateSwiftCode().first,
-                              let rightOperand = firstLine.explicitType(type).originalValue
+                              var firstLine = nonCustomizable.generateSwiftCode().first
                         else { fatalError("failed to get right operand") }
-                        
+                        let rightOperand = firstLine.explicitType(type).originalValue
                         return Line(relatedVariableName: attributeName, custom: ".\(property.propertyName): \(rightOperand)")
                     }
-                    else if let paragraphStyle = property.value as? IBParagraphStyle,
+                    else if let _ = property.value as? IBParagraphStyle,
                             let variableName = paragraphStyleLines.last?.variableName {
                         return Line(relatedVariableName: attributeName, custom: ".\(property.propertyName): \(variableName)")
                     }

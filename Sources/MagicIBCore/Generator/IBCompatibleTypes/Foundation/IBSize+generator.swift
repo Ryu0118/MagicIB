@@ -9,11 +9,13 @@ import Foundation
 
 extension IBSize: SwiftCodeGeneratable, NonCustomizable {
     
-    func generateSwiftCode() -> String? {
+    func generateSwiftCode() -> [Line] {
         guard let width = self.width as? String,
               let height = self.height as? String
-        else { return nil }
-        return "CGSize(width: \(width), height: \(height)"
+        else { return [] }
+        return buildLines {
+            Line(variableName: "size", lineType: .declare(isMutating: false, operand: "CGSize(width: \(width), height: \(height)"))
+        }
     }
     
 }

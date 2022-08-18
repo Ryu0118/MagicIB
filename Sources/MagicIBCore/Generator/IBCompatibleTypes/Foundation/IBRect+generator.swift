@@ -15,7 +15,9 @@ extension IBRect: SwiftCodeGeneratable, NonCustomizable {
               let width = self.width as? String,
               let height = self.height as? String
         else { return [] }
-        return Line(variableName: "edgeInsets", lineType: .declare(isMutating: false, operand: "CGRect(x: \(x), y: \(y), width: \(width), height: \(height)")).toArray()
+        return buildLines {
+            Line(variableName: "edgeInsets", lineType: .declare(isMutating: false, operand: "CGRect(x: \(x), y: \(y), width: \(width), height: \(height)"))
+        }
     }
     
 }

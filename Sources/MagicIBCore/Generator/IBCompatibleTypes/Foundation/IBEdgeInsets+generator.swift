@@ -9,22 +9,21 @@ import Foundation
 
 extension IBEdgeInsets: SwiftCodeGeneratable, NonCustomizable {
     func generateSwiftCode() -> [Line] {
-        if let top = self.top as? String,
-           let leading = self.leading as? String,
-           let bottom = self.bottom as? String,
-           let trailing = self.trailing as? String
-        {
-            return Line(variableName: "edgeInset", lineType: .declare(isMutating: false, operand: "NSDirectionalEdgeInsets(top: \(top), leading: \(leading), bottom: \(bottom), trailing: \(trailing)")).toArray()
-        }
-        else if let top = self.minY as? String,
-                let bottom = self.maxY as? String,
-                let left = self.minX as? String,
-                let right = self.maxX as? String
-        {
-            return Line(variableName: "edgeInset", lineType: .declare(isMutating: false, operand: "UIEdgeInsets(top: \(top), left: \(left), bottom: \(bottom), right: \(right)")).toArray()
-        }
-        else {
-            return []
+        buildLines {
+            if let top = self.top as? String,
+               let leading = self.leading as? String,
+               let bottom = self.bottom as? String,
+               let trailing = self.trailing as? String
+            {
+                Line(variableName: "edgeInset", lineType: .declare(isMutating: false, operand: "NSDirectionalEdgeInsets(top: \(top), leading: \(leading), bottom: \(bottom), trailing: \(trailing)"))
+            }
+            else if let top = self.minY as? String,
+                    let bottom = self.maxY as? String,
+                    let left = self.minX as? String,
+                    let right = self.maxX as? String
+            {
+                Line(variableName: "edgeInset", lineType: .declare(isMutating: false, operand: "UIEdgeInsets(top: \(top), left: \(left), bottom: \(bottom), right: \(right)"))
+            }
         }
     }
 }
