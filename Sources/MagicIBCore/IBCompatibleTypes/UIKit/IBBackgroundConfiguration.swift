@@ -16,7 +16,8 @@ struct IBBackgroundConfiguration: IBCompatibleObject {
         .init(propertyName: "strokeWidth", type: .number),
         .init(propertyName: "strokeOffset", type: .number),
         .init(propertyName: "strokeColor", type: .color),
-        .init(propertyName: "backgroundColor", type: .color)
+        .init(propertyName: "backgroundColor", type: .color),
+        .init(propertyName: "cornerRadius", type: .number),
     ]
     
     init?(attributes: [String: String]) {
