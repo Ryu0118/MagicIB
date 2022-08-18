@@ -26,7 +26,7 @@ extension IBAttributedString: SwiftCodeGeneratable {
             }
         case .legacy:
             return buildLines {
-                fragments.flatMap { $0.generateSwiftCode(mode: .legacy) }
+                fragments.enumerated().flatMap { $1.generateSwiftCode(mode: .legacy(fragmentCount: $0)) }
             }
         }
     }
@@ -34,8 +34,14 @@ extension IBAttributedString: SwiftCodeGeneratable {
 }
 
 extension IBAttributedString.Fragment: SwiftCodeGeneratable {
+    enum Mode {
+        case modern
+        case legacy(fragmentCount: Int)
+    }
+    
     func generateSwiftCode() -> [Line] { generateSwiftCode(mode: .modern) }
-    func generateSwiftCode(mode: IBAttributedString.Mode) -> [Line] {
+    
+    func generateSwiftCode(mode: Mode) -> [Line] {
         guard let content = self.content as? String,
               let variableName = self.uniqueName as? String
         else { return [] }
@@ -47,9 +53,15 @@ extension IBAttributedString.Fragment: SwiftCodeGeneratable {
                 generateNonCustomizablePropertyLines(variableName: "\(variableName)[range]")
                 Line.end
             }
-        case .legacy:
+        case .legacy(let count):
+            let attributeName = "stringAttributes\(count + 1)"
+            let stringName = "string\(count + 1)"
             return buildLines {
-                
+                Line(variableName: attributeName, lineType: .declare(isMutating: false, type: "[NSAttributedStringKey : Any]", operand: "["))
+                activatedProperties.map {
+                    $0.
+                }
+                Line(relatedVariableName: attributeName, custom: "]")
             }
         }
     }

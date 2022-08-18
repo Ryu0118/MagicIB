@@ -8,7 +8,7 @@
 import Foundation
 
 extension IBColor: SwiftCodeGeneratable, NonCustomizable {
-
+    
     func generateSwiftCode() -> [Line] {
         if let red = self.red as? String,
            let green = self.green as? String,
@@ -25,6 +25,5 @@ extension IBColor: SwiftCodeGeneratable, NonCustomizable {
         else {
             return []
         }
-     }
-    
+    }
 }

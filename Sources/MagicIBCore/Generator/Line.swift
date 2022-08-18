@@ -15,18 +15,18 @@ struct Line {
         case custom(String)
     }
     
-    static let end = Line(relatedVariableName: .custom, custom: "}")
-    static let newLine = Line(relatedVariableName: .custom, custom: "\n")
+    static let end = Line(relatedVariableName: .end, custom: "}")
+    static let newLine = Line(relatedVariableName: .newLine, custom: "\n")
     
     private let variableName: String
-    private let lineType: LineType
+    private var lineType: LineType
     private let variableType: String?
     
     var isStartOfBlock: Bool {
-        originalValue.dropLast() == "{"
+        originalValue.dropLast() == "{" || originalValue.dropLast() == "["
     }
     var isEndOfBlock: Bool {
-        originalValue.dropLast() == "}"
+        originalValue == "}" || originalValue == "]"
     }
     
     var line: String {
@@ -78,5 +78,14 @@ struct Line {
 extension Line {
     func toArray() -> [Line] {
         return [self]
+    }
+    
+    func explicitType(_ type: String) -> Line {
+        if originalValue.first == "." && case .declare(let isMutating, let optionalType, let operand) = lineType {
+            lineType = .declare(isMutating: isMutating, type: optionalType, operand: type + operand)
+        }
+        else {
+            return self
+        }
     }
 }

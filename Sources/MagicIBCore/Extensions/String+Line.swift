@@ -8,7 +8,8 @@
 import Foundation
 
 extension String {
-    static let custom = "custom"
+    static let end= "end"
+    static let newLine = "newLine"
     func buildLines(relatedVariableName: String) -> [Line] {
         self
             .components(separatedBy: "\n")
