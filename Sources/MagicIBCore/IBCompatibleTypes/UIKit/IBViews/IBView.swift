@@ -8,7 +8,7 @@
 import Foundation
 
 @dynamicMemberLookup
-class IBView: IBAnyView, IBCompatibleObject {
+class IBView: IBAnyView, IBCompatibleObject, UniqueName {
     
     let id: String
     let customClass: String?
@@ -22,6 +22,8 @@ class IBView: IBAnyView, IBCompatibleObject {
     
     private(set) var constraints = [IBLayoutConstraint]()
     private(set) var elementTree: String!//ex) attributedString->fragment->attributes->color
+    
+    var uniqueName: String?
     
     var waitingElementList = [String]() {
         didSet {
