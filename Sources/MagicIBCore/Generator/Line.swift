@@ -76,10 +76,6 @@ struct Line {
 }
 
 extension Line {
-    func toArray() -> [Line] {
-        return [self]
-    }
-    
     mutating func explicitType(_ type: String) -> Line {
         if originalValue.first == ".", case .declare(let isMutating, let optionalType, let operand) = lineType {
             lineType = .declare(isMutating: isMutating, type: optionalType, operand: type + operand)
