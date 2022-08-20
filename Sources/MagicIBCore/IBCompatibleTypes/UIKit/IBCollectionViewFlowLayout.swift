@@ -7,6 +7,7 @@
 
 import Foundation
 
+@dynamicMemberLookup
 class IBCollectionViewFlowLayout: IBCompatibleObject {
     
     let properties: [IBPropertyMapper] = [
@@ -23,4 +24,7 @@ class IBCollectionViewFlowLayout: IBCompatibleObject {
         mapping(attributes)
     }
     
+    subscript(dynamicMember key: String) -> Any? {
+        findProperty(ib: key)?.value
+    }
 }

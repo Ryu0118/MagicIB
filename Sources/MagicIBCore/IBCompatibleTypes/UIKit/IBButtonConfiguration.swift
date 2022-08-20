@@ -7,6 +7,7 @@
 
 import Foundation
 
+@dynamicMemberLookup
 struct IBButtonConfiguration: IBCompatibleObject {
     
     let properties: [IBPropertyMapper] =
@@ -28,9 +29,11 @@ struct IBButtonConfiguration: IBCompatibleObject {
         .init(propertyName: "baseBackgroundColor", type: .color),
     ]
     
-    
     init(attributes: [String: String]) {
         mapping(attributes)
     }
     
+    subscript(dynamicMember key: String) -> Any? {
+        findProperty(ib: key)?.value
+    }
 }

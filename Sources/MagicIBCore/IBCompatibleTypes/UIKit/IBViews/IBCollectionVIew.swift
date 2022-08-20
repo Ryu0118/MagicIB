@@ -22,7 +22,7 @@ final class IBCollectionView: IBScrollView {
     var cells = [IBCollectionViewCell]()
     
     private var collectionViewFlowLayout: IBCollectionViewFlowLayout?
-    
+
     override func addValueToProperties(attributes: [String : String]) {
         super.addValueToProperties(attributes: attributes)
         switch elementTree {

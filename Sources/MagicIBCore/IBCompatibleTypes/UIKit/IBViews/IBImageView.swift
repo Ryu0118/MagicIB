@@ -19,7 +19,7 @@ final class IBImageView: IBView {
     override var properties: [IBPropertyMapper] {
         super.properties + imageProperties
     }
-    
+
     override func addValueToProperties(attributes: [String : String]) {
         super.addValueToProperties(attributes: attributes)
         switch elementTree {
@@ -32,6 +32,12 @@ final class IBImageView: IBView {
             guard let propertyName = attributes["key"] else { return }
             let symbolConfiguration = IBImageSymbolConfiguration(attributes: attributes)
             addValueToProperty(ib: propertyName, value: symbolConfiguration)
+        case "preferredSymbolConfiguration->fontDescription":
+            guard let preferredSymbolConfiguration = self.preferredSymbolConfiguration as? IBImageSymbolConfiguration,
+                  let propertyName = attributes["key"],
+                  let font = IBFont(attributes: attributes)
+            else { return }
+            preferredSymbolConfiguration.addValueToProperty(ib: propertyName, value: font)
         default:
             break
         }

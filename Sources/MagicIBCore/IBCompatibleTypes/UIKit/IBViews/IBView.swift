@@ -7,7 +7,8 @@
 
 import Foundation
 
-class IBView: IBAnyView, IBCompatibleObject {
+@dynamicMemberLookup
+class IBView: IBAnyView, IBCompatibleObject, UniqueName {
     
     let id: String
     let customClass: String?
@@ -22,11 +23,13 @@ class IBView: IBAnyView, IBCompatibleObject {
     private(set) var constraints = [IBLayoutConstraint]()
     private(set) var elementTree: String!//ex) attributedString->fragment->attributes->color
     
+    var uniqueName: String? = "testView"
+    
     var waitingElementList = [String]() {
         didSet {
             var lastViewIndex: Int?
             for (i, element) in waitingElementList.reversed().enumerated() {
-                if let _ = IBCompatibleView.init(rawValue: element) {
+                if let _ = IBCompatibleView(rawValue: element) {
                     lastViewIndex = i
                     break
                 }
@@ -85,7 +88,11 @@ class IBView: IBAnyView, IBCompatibleObject {
         self.customClass = attributes["customClass"]
         self.mapping(attributes)
     }
-
+    
+    subscript(dynamicMember key: String) -> Any? {
+        findProperty(ib: key)?.value
+    }
+    
     func addValueToProperties(attributes: [String: String]) {
         switch elementTree {
         case "rect":

@@ -7,8 +7,6 @@
 
 import Foundation
 
-protocol IBSwiftSourceGeneratable {}
-
 protocol IBCompatibleObject {
     var properties: [IBPropertyMapper] { get }
     var functions: [IBFunctionMapper] { get }

@@ -7,6 +7,7 @@
 
 import Foundation
 
+@dynamicMemberLookup
 struct IBBackgroundConfiguration: IBCompatibleObject {
     let properties: [IBPropertyMapper] =
     [
@@ -15,7 +16,8 @@ struct IBBackgroundConfiguration: IBCompatibleObject {
         .init(propertyName: "strokeWidth", type: .number),
         .init(propertyName: "strokeOffset", type: .number),
         .init(propertyName: "strokeColor", type: .color),
-        .init(propertyName: "backgroundColor", type: .color)
+        .init(propertyName: "backgroundColor", type: .color),
+        .init(propertyName: "cornerRadius", type: .number),
     ]
     
     init?(attributes: [String: String]) {
@@ -25,5 +27,9 @@ struct IBBackgroundConfiguration: IBCompatibleObject {
         }
         let attributes = attributes.filter{ key, value in key != "image" }
         mapping(attributes)
+    }
+    
+    subscript(dynamicMember key: String) -> Any? {
+        findProperty(ib: key)?.value
     }
 }

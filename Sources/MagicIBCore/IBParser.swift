@@ -92,7 +92,7 @@ extension IBParser: XMLParserDelegate {
             textView.addValueToProperty(ib: "text", value: string)
         }
         else if let searchBar = waitingIBViewList.last as? IBSearchBar {
-            if var array = searchBar.findProperty(ib: "scopeButtonTitles")?.value as? [String] {
+            if var array = searchBar.scopeButtonTitles as? [String] {
                 array.append(string)
                 searchBar.addValueToProperty(ib: "scopeButtonTitles", value: array)
             }
@@ -128,6 +128,7 @@ extension IBParser: XMLParserDelegate {
     
     public func parserDidEndDocument(_ parser: XMLParser) {
         print("parse end")
+        print(parentView!.subviews.flatMap { $0.generateSwiftCode().map { $0.line } })
     }
     
 }

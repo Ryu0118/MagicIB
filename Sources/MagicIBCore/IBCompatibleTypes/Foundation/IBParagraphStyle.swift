@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct IBParagraphStyle: IBCompatibleObject {
+@dynamicMemberLookup
+class IBParagraphStyle: IBCompatibleObject, UniqueName {
     
     let properties: [IBPropertyMapper] =
     [
@@ -28,9 +29,13 @@ struct IBParagraphStyle: IBCompatibleObject {
         .init(propertyName: "headerLevel", type: .number),
     ]
     
+    var uniqueName: String?
     
     init(attributes: [String: String]) {
         mapping(attributes)
     }
     
+    subscript(dynamicMember key: String) -> Any? {
+        findProperty(ib: key)?.value
+    }
 }
