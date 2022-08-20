@@ -37,6 +37,7 @@ final class IBLabel: IBView {
         case "attributedString":
             guard let propertyName = attributes["key"] else { return }
             attributedString = IBAttributedString()
+            attributedString?.uniqueName = propertyName
             addValueToProperty(ib: propertyName, value: attributedString!)
         case "attributedString->fragment":
             guard let content = attributes["content"] else { return }

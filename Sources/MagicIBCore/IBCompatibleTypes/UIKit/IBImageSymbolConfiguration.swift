@@ -15,6 +15,7 @@ struct IBImageSymbolConfiguration: IBCompatibleObject {
         .init(propertyName: "pointSize", type: .number),
         .init(propertyName: "scale", type: .enum),
         .init(propertyName: "weight", type: .enum),
+        .init(propertyName: "fontDescription", type: .font),
     ]
     
     

@@ -57,7 +57,7 @@ class IBSegmentedControl: IBView {
             putValueToArgument(ib: key, value: size, type: .size, at: 0)
             putValueToArgument(ib: key, value: segmentCount, type: .number, at: 1)
         case "segments->segment->imageReference":
-            guard let key = attributes["key"],
+            guard let _ = attributes["key"],
                   let image = IBImage(attributes: attributes)
             else { return }
             putValueToArgument(ib: "image", value: image, type: .image, at: 0)

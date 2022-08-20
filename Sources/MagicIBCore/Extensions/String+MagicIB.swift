@@ -17,6 +17,10 @@ extension String: LocalizedError {
         try transform(self)
     }
     
+    var lineCount: Int {
+        self.components(separatedBy: "\n").count
+    }
+    
     mutating func addLine(_ string: String, newLineCount: Int = 1, indentCount: Int = 0) {
         self += String(repeating: "\n", count: newLineCount) + String(repeating: "    ", count: indentCount) + string
     }

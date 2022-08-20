@@ -27,7 +27,7 @@ class IBView: IBAnyView, IBCompatibleObject {
         didSet {
             var lastViewIndex: Int?
             for (i, element) in waitingElementList.reversed().enumerated() {
-                if let _ = IBCompatibleView.init(rawValue: element) {
+                if let _ = IBCompatibleView(rawValue: element) {
                     lastViewIndex = i
                     break
                 }

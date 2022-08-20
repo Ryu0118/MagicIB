@@ -7,15 +7,17 @@
 
 import Foundation
 
-extension IBRect: IBSwiftSourceGeneratable {
+extension IBRect: SwiftCodeGeneratable, NonCustomizable {
     
-    func generateSwiftCode() -> String? {
+    func generateSwiftCode() -> [Line] {
         guard let x = self.x as? String,
               let y = self.y as? String,
               let width = self.width as? String,
               let height = self.height as? String
-        else { return nil }
-        return "CGRect(x: \(x), y: \(y), width: \(width), height: \(height)"
+        else { return [] }
+        return buildLines {
+            Line(variableName: "edgeInsets", lineType: .declare(isMutating: false, operand: "CGRect(x: \(x), y: \(y), width: \(width), height: \(height)"))
+        }
     }
     
 }

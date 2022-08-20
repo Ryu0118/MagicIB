@@ -97,6 +97,13 @@ final class IBButton: IBView {
             else { return }
             let configuration = IBImageSymbolConfiguration(attributes: attributes)
             buttonConfiguration.addValueToProperty(ib: propertyName, value: configuration)
+        case "buttonConfiguration->preferredSymbolConfiguration->fontDescription":
+            guard let buttonConfiguration = buttonConfiguration,
+                  let preferredSymbolConfiguration = buttonConfiguration.preferredSymbolConfiguration as? IBImageSymbolConfiguration,
+                  let propertyName = attributes["key"],
+                  let font = IBFont(attributes: attributes)
+            else { return }
+            preferredSymbolConfiguration.addValueToProperty(ib: propertyName, value: font)
         case "buttonConfiguration->directionalEdgeInsets":
             guard let propertyName = attributes["key"],
                   let buttonConfiguration = buttonConfiguration,

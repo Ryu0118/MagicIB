@@ -7,29 +7,28 @@
 
 import Foundation
 
-extension IBFont: IBSwiftSourceGeneratable {
+extension IBFont: SwiftCodeGeneratable, NonCustomizable {
     
-    func generateSwiftCode() -> String? {
-        if let name = fontName,
-           let size = size {
-            return "UIFont(name: \(name), size: \(size)"
-        }
-        else if let type = type,
-                let size = size {
-            switch type {
-            case .system:
-                return ".systemFont(ofSize: \(size)"
-            case .italicSystem:
-                return ".italicSystemFont(ofSize: \(size)"
-            case .boldSystem:
-                return ".boldSystemFont(ofSize: \(size)"
+    func generateSwiftCode() -> [Line] {
+        buildLines {
+            if let name = fontName,
+               let size = size {
+                Line(variableName: "font", lineType: .declare(isMutating: false, operand: "UIFont(name: \(name), size: \(size)"))
             }
-        }
-        else if let style = style {
-            return ".preferredFont(forTextStyle: .\(style)"
-        }
-        else {
-            return nil
+            else if let type = type,
+                    let size = size {
+                switch type {
+                case .system:
+                    Line(variableName: "font", lineType: .declare(isMutating: false, operand: ".systemFont(ofSize: \(size)"))
+                case .italicSystem:
+                    Line(variableName: "font", lineType: .declare(isMutating: false, operand: ".italicSystemFont(ofSize: \(size)"))
+                case .boldSystem:
+                    Line(variableName: "font", lineType: .declare(isMutating: false, operand: ".boldSystemFont(ofSize: \(size)"))
+                }
+            }
+            else if let style = style {
+                Line(variableName: "font", lineType: .declare(isMutating: false, operand: ".preferredFont(forTextStyle: .\(style)"))
+            }
         }
     }
     
