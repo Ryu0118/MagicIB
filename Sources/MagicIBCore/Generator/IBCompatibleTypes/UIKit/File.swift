@@ -10,7 +10,11 @@ import Foundation
 extension IBCollectionViewFlowLayout: SwiftCodeGeneratable {
     
     func generateSwiftCode() -> [Line] {
-        <#code#>
+        buildLines {
+            Line(variableName: "layout", lineType: .declare(isMutating: false, type: nil, operand: "UICollectionViewFlowLayout()"))
+            generateBasicTypePropertyLines(variableName: "layout")
+            generateNonCustomizablePropertyLines(variableName: "layout")
+        }
     }
     
 }
