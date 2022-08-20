@@ -3,7 +3,7 @@
 
 import Foundation
 
-enum IBCompatibleView: String, CaseIterable, CustomStringConvertible {
+enum IBCompatibleView: String {
     case view
     case imageView
     case button
@@ -43,7 +43,7 @@ enum IBCompatibleView: String, CaseIterable, CustomStringConvertible {
     case collectionReusableView
 }
 
-extension IBCompatibleView {
+extension IBCompatibleView: CaseIterable, CustomStringConvertible {
     
     var variableName: String {
         switch self {
@@ -54,7 +54,7 @@ extension IBCompatibleView {
         case .visualEffectView:
             return "effectView"
         case .wkWebView:
-            return "webViewclassType.description"
+            return "webView"
         default:
             return self.rawValue
         }
