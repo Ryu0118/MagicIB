@@ -23,7 +23,7 @@ class IBView: IBAnyView, IBCompatibleObject, UniqueName {
     private(set) var constraints = [IBLayoutConstraint]()
     private(set) var elementTree: String!//ex) attributedString->fragment->attributes->color
     
-    var uniqueName: String?
+    var uniqueName: String? = "testView"
     
     var waitingElementList = [String]() {
         didSet {

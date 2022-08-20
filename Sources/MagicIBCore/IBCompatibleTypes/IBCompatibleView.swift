@@ -41,6 +41,24 @@ enum IBCompatibleView: String, CaseIterable, CustomStringConvertible {
     case containerView
     case collectionViewCellContentView
     case collectionReusableView
+}
+
+extension IBCompatibleView {
+    
+    var variableName: String {
+        switch self {
+        case .activityIndicatorView:
+            return "indicatorView"
+        case .collectionViewCell, .tableViewCell:
+            return "cell"
+        case .visualEffectView:
+            return "effectView"
+        case .wkWebView:
+            return "webViewclassType.description"
+        default:
+            return self.rawValue
+        }
+    }
     
     var description: String {
         switch self {
@@ -120,5 +138,4 @@ enum IBCompatibleView: String, CaseIterable, CustomStringConvertible {
             return "UICollectionReusableView"
         }
     }
-
 }

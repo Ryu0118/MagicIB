@@ -12,10 +12,13 @@ extension IBView: SwiftCodeGeneratable {
     func generateSwiftCode() -> [Line] {
         guard let uniqueName = uniqueName else { return [] }
         return buildLines {
-            Line(variableName: uniqueName, lineType: .declare(isMutating: false, type: "UIView", operand: "{"))
-            Line(variableName: "view", lineType: .declare(isMutating: false, type: nil, operand: "UIView()"))
-            generateBasicTypePropertyLines(variableName: "view")
-            generateNonCustomizablePropertyLines(variableName: "view")
+            let variableName = classType.variableName
+            let className = classType.description
+            Line(variableName: uniqueName, lineType: .declare(isMutating: false, type: className, operand: "{"))
+            Line(variableName: variableName, lineType: .declare(isMutating: false, type: nil, operand: "\(className)()"))
+            generateCustomizablePropertyLines(variableName: variableName)
+            generateBasicTypePropertyLines(variableName: variableName)
+            generateNonCustomizablePropertyLines(variableName: variableName)
             Line(relatedVariableName: uniqueName, custom: "}()")
         }
     }
