@@ -32,7 +32,7 @@ extension IBAttributedString: SwiftCodeGeneratable {
                 Line(variableName: "attributedString", lineType: .declare(isMutating: false, operand: "NSMutableAttributedString()"))
                 
                 for i in 1...fragments.count {
-                    Line(variableName: "attributedString", lineType: .function("append(string\(i)"))
+                    Line(variableName: "attributedString", lineType: .function("attributedString.append(string\(i)"))
                 }
             }
         }

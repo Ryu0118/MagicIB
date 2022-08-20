@@ -41,7 +41,7 @@ struct Line {
         case .assign(let propertyName, let operand):
             return "\(variableName).\(propertyName) = \(operand)"
         case .function(let function):
-            return "\(variableName).\(function)"
+            return function
         case .custom(let custom):
             return custom
         }
@@ -74,7 +74,9 @@ struct Line {
 
 extension Line {
     mutating func explicitType(_ type: String) -> Line {
-        if originalValue.first == ".", case .declare(let isMutating, let optionalType, let operand) = lineType {
+        if case .declare(let isMutating, let optionalType, let operand) = lineType,
+           originalValue.first == "."
+        {
             lineType = .declare(isMutating: isMutating, type: optionalType, operand: type + operand)
         }
         return self
