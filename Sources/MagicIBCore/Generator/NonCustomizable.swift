@@ -18,6 +18,6 @@ extension NonCustomizable {
     }
     
     func getRightOperand() -> String? {
-        return self.generateSwiftCode().first?.originalValue
+        self.generateSwiftCode().first?.originalValue
     }
 }
