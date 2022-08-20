@@ -20,7 +20,6 @@ struct Line {
     
     let variableName: String
     private var lineType: LineType
-    private let variableType: String?
     
     var isStartOfBlock: Bool {
         originalValue.dropLast() == "{" || originalValue.dropLast() == "["
@@ -42,7 +41,7 @@ struct Line {
         case .assign(let propertyName, let operand):
             return "\(variableName).\(propertyName) = \(operand)"
         case .function(let function):
-            return "\(variableName).\(function)"
+            return function
         case .custom(let custom):
             return custom
         }
@@ -61,27 +60,23 @@ struct Line {
         }
     }
     
-    init(variableName: String, lineType: LineType, variableType: String? = nil) {
+    init(variableName: String, lineType: LineType) {
         self.variableName = variableName
         self.lineType = lineType
-        self.variableType = variableType
     }
     
     init(relatedVariableName: String, custom: String) {
         self.variableName = relatedVariableName
         self.lineType = .custom(custom)
-        self.variableType = nil
     }
     
 }
 
 extension Line {
-    func toArray() -> [Line] {
-        return [self]
-    }
-    
     mutating func explicitType(_ type: String) -> Line {
-        if originalValue.first == ".", case .declare(let isMutating, let optionalType, let operand) = lineType {
+        if case .declare(let isMutating, let optionalType, let operand) = lineType,
+           originalValue.first == "."
+        {
             lineType = .declare(isMutating: isMutating, type: optionalType, operand: type + operand)
         }
         return self

@@ -128,6 +128,7 @@ extension IBParser: XMLParserDelegate {
     
     public func parserDidEndDocument(_ parser: XMLParser) {
         print("parse end")
+        print(parentView!.subviews.flatMap { $0.generateSwiftCode().map { $0.line } })
     }
     
 }
