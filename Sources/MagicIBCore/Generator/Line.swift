@@ -20,7 +20,6 @@ struct Line {
     
     let variableName: String
     private var lineType: LineType
-    private let variableType: String?
     
     var isStartOfBlock: Bool {
         originalValue.dropLast() == "{" || originalValue.dropLast() == "["
@@ -61,16 +60,14 @@ struct Line {
         }
     }
     
-    init(variableName: String, lineType: LineType, variableType: String? = nil) {
+    init(variableName: String, lineType: LineType) {
         self.variableName = variableName
         self.lineType = lineType
-        self.variableType = variableType
     }
     
     init(relatedVariableName: String, custom: String) {
         self.variableName = relatedVariableName
         self.lineType = .custom(custom)
-        self.variableType = nil
     }
     
 }
