@@ -10,10 +10,10 @@ import Foundation
 extension IBVibrancyEffect: SwiftCodeGeneratable, NonCustomizable {
     
     func generateSwiftCode() -> [Line] {
-        buildLines {
-            guard let blurEffect = self.blurEffect as? IBBlurEffect,
-                  let blurEffectInitializer = blurEffect.getRightOperand()
-            else { return [] }
+        guard let blurEffect = self.blurEffect as? IBBlurEffect,
+              let blurEffectInitializer = blurEffect.getRightOperand()
+        else { return [] }
+        return buildLines {
             if let style = self.style {
                 Line(variableName: "vibrancyEffect", lineType: .declare(isMutating: false, type: nil, operand: "UIVibrancyEffect(blurEffect: \(blurEffectInitializer), style: .\(style)"))
             }
