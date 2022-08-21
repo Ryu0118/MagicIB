@@ -12,7 +12,7 @@ extension IBOffset: SwiftCodeGeneratable, NonCustomizable {
         guard let horizontal = self.horizontal as? String,
               let vertical = self.vertical as? String else { return [] }
         return buildLines {
-            Line(variableName: "offset", lineType: .declare(isMutating: false, operand: "UIOffset(horizontal: \(horizontal), vertical: \(vertical)"))
+            Line(variableName: "offset", lineType: .declare(isMutating: false, operand: "UIOffset(horizontal: \(horizontal), vertical: \(vertical))"))
         }
     }
 }

@@ -11,9 +11,15 @@ extension String {
     static let end = "end"
     static let newLine = "newLine"
     static let fileHeader = "fileHeader"
+    static let `import` = "import"
+    
     func buildLines(relatedVariableName: String) -> [Line] {
         self
             .components(separatedBy: "\n")
             .map { Line(relatedVariableName: relatedVariableName, custom: $0) }
+    }
+    
+    func indent(_ indentCount: Int) -> String {
+        String(repeating: "    ", count: indentCount) + self
     }
 }

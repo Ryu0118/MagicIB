@@ -20,12 +20,13 @@ struct Line {
     
     let variableName: String
     private var lineType: LineType
+    private var indentCount = 0
     
     var isStartOfBlock: Bool {
-        originalValue.dropLast() == "{" || originalValue.dropLast() == "["
+        originalValue.suffix(1) == "{" || originalValue.suffix(1) == "["
     }
     var isEndOfBlock: Bool {
-        originalValue == "}" || originalValue == "]"
+        originalValue.prefix(1) == "}" || originalValue.prefix(1) == "]"
     }
     
     var line: String {
@@ -33,17 +34,17 @@ struct Line {
         case .declare(let isMutating, let type, let operand):
             let varType = isMutating ? "var" : "let"
             if let type = type {
-                return "\(varType) \(variableName): \(type) = \(operand)"
+                return "\(varType) \(variableName): \(type) = \(operand)".indent(indentCount)
             }
             else {
-                return "\(varType) \(variableName) = \(operand)"
+                return "\(varType) \(variableName) = \(operand)".indent(indentCount)
             }
         case .assign(let propertyName, let operand):
-            return "\(variableName).\(propertyName) = \(operand)"
+            return "\(variableName).\(propertyName) = \(operand)".indent(indentCount)
         case .function(let function):
-            return function
+            return function.indent(indentCount)
         case .custom(let custom):
-            return custom
+            return custom.indent(indentCount)
         }
     }
     
@@ -69,7 +70,6 @@ struct Line {
         self.variableName = relatedVariableName
         self.lineType = .custom(custom)
     }
-    
 }
 
 extension Line {
@@ -80,5 +80,9 @@ extension Line {
             lineType = .declare(isMutating: isMutating, type: optionalType, operand: type + operand)
         }
         return self
+    }
+    
+    mutating func indent(_ indentCount: Int) {
+        self.indentCount = indentCount
     }
 }

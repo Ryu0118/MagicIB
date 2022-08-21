@@ -12,11 +12,7 @@ extension String: LocalizedError {
     func insert(first: String = "", last: String = "") -> String {
         return first + self + last
     }
-    
-    func `as`<T>(_ transform: (Self) throws -> T) rethrows -> T {
-        try transform(self)
-    }
-    
+        
     var lineCount: Int {
         self.components(separatedBy: "\n").count
     }

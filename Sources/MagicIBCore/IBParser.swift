@@ -9,8 +9,10 @@ import CoreGraphics
 import Foundation
 
 public class IBParser: NSObject {
-
-    fileprivate var type: IBType?
+    
+    var url: URL!
+    var type: IBType!
+    
     private var waitingIBViewList = [IBView]()
     private var waitingElementList = [String]()
     private var ibViewControllers = [IBViewController]()
@@ -21,6 +23,7 @@ public class IBParser: NSObject {
     
     public func parse(_ absoluteURL: URL) throws {
         self.type = try IBType(url: absoluteURL)
+        self.url = absoluteURL
         let data = try Data(contentsOf: absoluteURL)
         let parser = XMLParser(data: data)
         parser.delegate = self
@@ -132,8 +135,9 @@ extension IBParser: XMLParserDelegate {
     
     public func parserDidEndDocument(_ parser: XMLParser) {
         print("parse end")
-        print(parentView!.subviews.flatMap { $0.generateSwiftCode().map { $0.line } })
-        print(type)
+        let generator = SwiftCodeGenerator(url: url, type: .storyboard(ibViewController: ibViewControllers.last!))
+        let string = try! generator.generate()
+        print(string)
     }
     
 }
@@ -152,7 +156,7 @@ extension IBParser {
         }
     }
     
-    fileprivate enum IBType: String {
+    enum IBType: String {
         case storyboard
         case xib
         

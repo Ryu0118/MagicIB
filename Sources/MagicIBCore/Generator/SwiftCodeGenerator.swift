@@ -27,24 +27,53 @@ class SwiftCodeGenerator {
     func generate() throws -> String {
         switch type {
         case .storyboard(let ibViewController):
-            try generateViewController(ibViewController: ibViewController)
+            return try generateViewController(ibViewController: ibViewController)
         case .xib(let ibView):
-            generateView(ibView: ibView)
+            return generateView(ibView: ibView)
         }
     }
     
     private func generateViewController(ibViewController: IBViewController) throws -> String {
         guard let ibView = ibViewController.ibView else { throw "IBViewController property IBView is nil" }
-        let fileHeader = generateFileHeader()
-        let lines = ibView.subviews.map { $0.generateSwiftCode() }
+        
+        return buildLines {
+            let dependencies: [Dependencies] = [ibViewController.dependencies] + ibViewController.ibView.subviews.compactMap { $0.dependencies }
+            generateFileHeader()
+            Line.newLine
+            generateImport(dependencies: dependencies)
+            Line.newLine
+            ibView.subviews.flatMap { $0.generateSwiftCode() + [Line.newLine] }
+        }
+        .map {
+            var mutatingLine = $0
+            if mutatingLine.isStartOfBlock {
+                mutatingLine.indent(indentCount)
+                indentCount += 1
+            }
+            else if mutatingLine.isEndOfBlock {
+                indentCount -= 1
+                mutatingLine.indent(indentCount)
+            }
+            else {
+                mutatingLine.indent(indentCount)
+            }
+            return mutatingLine.line
+        }
+        .joined(separator: "\n")
+        
+    }
+    
+    private func buildLines(@ArrayBuilder<Line> _ builder: () -> [Line]) -> [Line] {
+        builder()
     }
     
     private func generateView(ibView: IBView) -> String {
         ""
     }
     
-    private func generateImport(dependencies: Dependencies) {
-        
+    private func generateImport(dependencies: [Dependencies]) -> [Line] {
+        Set<String>(dependencies.flatMap { $0.dependencies })
+            .map { Line(relatedVariableName: .import, custom: "import \($0)") }
     }
     
     private func generateFileHeader() -> [Line] {
