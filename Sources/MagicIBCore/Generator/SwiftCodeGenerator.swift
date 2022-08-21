@@ -9,4 +9,8 @@ import Foundation
 
 class SwiftCodeGenerator {
     
+    init(parentView: IBView) {
+        
+    }
+    
 }
