@@ -20,10 +20,10 @@ extension IBImageSymbolConfiguration: SwiftCodeGeneratable, NonCustomizable {
             }
             else {
                 if let scale = self.scale as? String {
-                    Line(variableName: "symbolConfiguration", lineType: .declare(isMutating: false, operand: "UIImage.SymbolConfiguration(scale: .\(scale)"))
+                    Line(variableName: "symbolConfiguration", lineType: .declare(isMutating: false, operand: "UIImage.SymbolConfiguration(scale: .\(scale))"))
                 }
                 else if let weight = self.weight as? String {
-                    Line(variableName: "symbolConfiguration", lineType: .declare(isMutating: false, operand: "UIImage.SymbolConfiguration(weight: .\(weight)"))
+                    Line(variableName: "symbolConfiguration", lineType: .declare(isMutating: false, operand: "UIImage.SymbolConfiguration(weight: .\(weight))"))
                 }
             }
         }
@@ -55,10 +55,10 @@ extension IBImageSymbolConfiguration: SwiftCodeGeneratable, NonCustomizable {
               let rightOperand = font.getRightOperand()
         else { return nil }
         if let scale = self.scale as? String {
-            return Line(variableName: "symbolConfiguration", lineType: .declare(isMutating: false, operand: "UIImage.SymbolConfiguration(font: \(rightOperand), scale: .\(scale)"))
+            return Line(variableName: "symbolConfiguration", lineType: .declare(isMutating: false, operand: "UIImage.SymbolConfiguration(font: \(rightOperand), scale: .\(scale))"))
         }
         else {
-            return Line(variableName: "symbolConfiguration", lineType: .declare(isMutating: false, operand: "UIImage.SymbolConfiguration(font: \(rightOperand)"))
+            return Line(variableName: "symbolConfiguration", lineType: .declare(isMutating: false, operand: "UIImage.SymbolConfiguration(font: \(rightOperand))"))
         }
     }
 }

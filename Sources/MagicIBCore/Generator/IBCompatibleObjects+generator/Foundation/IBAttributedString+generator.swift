@@ -21,7 +21,7 @@ extension IBAttributedString: SwiftCodeGeneratable {
         switch mode {
         case .modern:
             return buildLines {
-                Line(variableName: variableName, lineType: .declare(isMutating: true, operand: "AttributedString(\"\(text)\""))
+                Line(variableName: variableName, lineType: .declare(isMutating: true, operand: "AttributedString(\"\(text)\")"))
                 fragments.flatMap { $0.generateSwiftCode(mode: .modern) }
             }
         case .legacy:
@@ -32,7 +32,7 @@ extension IBAttributedString: SwiftCodeGeneratable {
                 Line(variableName: "attributedString", lineType: .declare(isMutating: false, operand: "NSMutableAttributedString()"))
                 
                 for i in 1...fragments.count {
-                    Line(variableName: "attributedString", lineType: .function("attributedString.append(string\(i)"))
+                    Line(variableName: "attributedString", lineType: .function("attributedString.append(string\(i))"))
                 }
             }
         }
@@ -116,7 +116,7 @@ extension IBAttributedString.Fragment: SwiftCodeGeneratable {
                 
                 Line(relatedVariableName: attributeName, custom: "]")
                 //let string1 = NSAttributedString(string: "0123", attributes: stringAttributes1)
-                Line(variableName: stringName, lineType: .declare(isMutating: false, operand: "NSAttributedString(string: \"\(content)\", attributes: \(attributeName)"))
+                Line(variableName: stringName, lineType: .declare(isMutating: false, operand: "NSAttributedString(string: \"\(content)\", attributes: \(attributeName))"))
             }
         }
     }

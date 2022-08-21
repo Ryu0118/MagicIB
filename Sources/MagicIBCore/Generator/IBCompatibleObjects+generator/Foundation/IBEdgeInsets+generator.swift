@@ -15,14 +15,14 @@ extension IBEdgeInsets: SwiftCodeGeneratable, NonCustomizable {
                let bottom = self.bottom as? String,
                let trailing = self.trailing as? String
             {
-                Line(variableName: "edgeInset", lineType: .declare(isMutating: false, operand: "NSDirectionalEdgeInsets(top: \(top), leading: \(leading), bottom: \(bottom), trailing: \(trailing)"))
+                Line(variableName: "edgeInset", lineType: .declare(isMutating: false, operand: "NSDirectionalEdgeInsets(top: \(top), leading: \(leading), bottom: \(bottom), trailing: \(trailing))"))
             }
             else if let top = self.minY as? String,
                     let bottom = self.maxY as? String,
                     let left = self.minX as? String,
                     let right = self.maxX as? String
             {
-                Line(variableName: "edgeInset", lineType: .declare(isMutating: false, operand: "UIEdgeInsets(top: \(top), left: \(left), bottom: \(bottom), right: \(right)"))
+                Line(variableName: "edgeInset", lineType: .declare(isMutating: false, operand: "UIEdgeInsets(top: \(top), left: \(left), bottom: \(bottom), right: \(right))"))
             }
         }
     }

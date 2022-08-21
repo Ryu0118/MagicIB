@@ -17,14 +17,14 @@ extension IBImage: SwiftCodeGeneratable {
                     Line(variableName: "image", lineType: .declare(isMutating: false, operand: "UIImage(systemName: \"\(systemName))\", withConfiguration: symbolConfiguration)"))
                 }
                 else {
-                    Line(variableName: "image", lineType: .declare(isMutating: false, operand: "UIImage(systemName: \"\(systemName))\""))
+                    Line(variableName: "image", lineType: .declare(isMutating: false, operand: "UIImage(systemName: \"\(systemName))\")"))
                 }
             }
             else if let name = self.name as? String {
                 Line(variableName: "image", lineType: .declare(isMutating: false, operand: "UIImage(named: \"\(name)\")"))
             }
             if let renderingMode = self.renderingMode as? String {
-                Line(variableName: "image", lineType: .function("image?.withRenderingMode(.\(renderingMode)"))
+                Line(variableName: "image", lineType: .function("image?.withRenderingMode(.\(renderingMode))"))
             }
         }
     }

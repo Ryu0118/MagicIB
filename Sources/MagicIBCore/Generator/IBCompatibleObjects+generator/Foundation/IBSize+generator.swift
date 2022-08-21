@@ -14,7 +14,7 @@ extension IBSize: SwiftCodeGeneratable, NonCustomizable {
               let height = self.height as? String
         else { return [] }
         return buildLines {
-            Line(variableName: "size", lineType: .declare(isMutating: false, operand: "CGSize(width: \(width), height: \(height)"))
+            Line(variableName: "size", lineType: .declare(isMutating: false, operand: "CGSize(width: \(width), height: \(height))"))
         }
     }
     
