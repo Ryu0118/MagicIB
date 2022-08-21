@@ -39,7 +39,11 @@ extension IBParser: XMLParserDelegate {
            let ibView = IBView.instance(attributes: attributeDict, ibCompatibleView: ibViewElement)
         {
             waitingIBViewList.append(ibView)
-            ibViewControllers.last?.appendView(ibView)
+            
+            if ibViewControllers.last?.ibView == nil {
+                ibViewControllers.last?.ibView = ibView
+            }
+            
             if let tableView = prototypesFlag,
                let cell = ibView as? IBTableViewCell {
                 tableView.prototypes.append(cell)
@@ -129,6 +133,7 @@ extension IBParser: XMLParserDelegate {
     public func parserDidEndDocument(_ parser: XMLParser) {
         print("parse end")
         print(parentView!.subviews.flatMap { $0.generateSwiftCode().map { $0.line } })
+        print(type)
     }
     
 }

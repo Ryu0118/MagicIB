@@ -23,7 +23,7 @@ class IBViewController: NSObject {
         }
     }
     
-    var ibViews = [IBView]()
+    var ibView: IBView!
     
     init?(attributes: [String: String],
           ibCompatibleViewController: IBCompatibleViewController
@@ -35,9 +35,5 @@ class IBViewController: NSObject {
         self.superClass = ibCompatibleViewController
         self.dependencies = IBViewControllerDependencies(ibCompatibleViewController: superClass)
     }
-    
-    func appendView(_ ibView: IBView) {
-        ibViews.append(ibView)
-    }
-    
+
 }

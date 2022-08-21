@@ -7,7 +7,11 @@
 
 import Foundation
 
-struct IBViewControllerDependencies {
+protocol Dependencies {
+    var dependencies: [String] { get }
+}
+
+struct IBViewControllerDependencies: Dependencies {
     let ibCompatibleViewController: IBCompatibleViewController
     
     var dependencies: [String] {

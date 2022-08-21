@@ -10,6 +10,7 @@ import Foundation
 extension String {
     static let end = "end"
     static let newLine = "newLine"
+    static let fileHeader = "fileHeader"
     func buildLines(relatedVariableName: String) -> [Line] {
         self
             .components(separatedBy: "\n")
