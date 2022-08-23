@@ -13,6 +13,7 @@ extension String {
     static let fileHeader = "fileHeader"
     static let `import` = "import"
     static let `class` = "class"
+    static let function = "function"
     
     func buildLines(relatedVariableName: String) -> [Line] {
         self

@@ -90,14 +90,23 @@ private extension SwiftCodeGenerator {
             Line.newLine
             generateImport(dependencies: dependencies)
             Line.newLine
-            Line(variableName: .class, lineType: .class(name: className, inheritances: [inheritance]))
+            Line(variableName: .class, lineType: .declareClass(name: className, inheritances: [inheritance]))
             Line.newLine
             ibView.subviews.flatMap { $0.generateSwiftCode() + [Line.newLine] }
+            generateViewDidLoad()
+            Line.newLine
             Line.end
         }
         .calculateIndent()
         .joined(separator: "\n")
-        
+    }
+    
+    func generateViewDidLoad() -> [Line] {
+        buildLines {
+            Line(function: .init(name: "viewDidLoad", arguments: [], accessLevel: nil, isOverride: true))
+            Line(variableName: "super", lineType: .function("super.viewDidLoad()"))
+            Line.end
+        }
     }
     
 }

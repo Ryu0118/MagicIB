@@ -8,13 +8,6 @@
 import Foundation
 
 struct Line {
-    enum LineType {
-        case declare(isMutating: Bool, type: String? = nil, operand: String)
-        case assign(propertyName: String, operand: String)
-        case function(String)
-        case custom(String)
-        case `class`(name: String, inheritances: [String])
-    }
     
     static let end = Line(relatedVariableName: .end, custom: "}")
     static let newLine = Line(relatedVariableName: .newLine, custom: "\n")
@@ -47,9 +40,17 @@ struct Line {
             return function.indent(indentCount)
         case .custom(let custom):
             return custom.indent(indentCount)
-        case .class(let name, let inheritances):
+        case .declareClass(let name, let inheritances):
             let inheritances = inheritances.joined(separator: ", ")
-            return "class \(name): \(inheritances) {"
+            return "class \(name): \(inheritances) {".indent(indentCount)
+        case .declareFunction(let function):
+            let `override` = function.isOverride ? "override " : ""
+            var accessLevel = function.accessLevel ?? ""
+            let arguments = function.arguments.map { $0.string }.joined(separator: ", ")
+            if !accessLevel.isEmpty {
+                accessLevel += " "
+            }
+            return "\(`override`)\(accessLevel)func \(function.name)(\(arguments)) {".indent(indentCount)
         }
     }
     
@@ -63,7 +64,9 @@ struct Line {
             return string
         case .custom(let custom):
             return custom
-        case .class(_, _):
+        case .declareClass(_, _):
+            return line
+        case .declareFunction(_):
             return line
         }
     }
@@ -76,6 +79,39 @@ struct Line {
     init(relatedVariableName: String, custom: String) {
         self.variableName = relatedVariableName
         self.lineType = .custom(custom)
+    }
+    
+    init(function: LineType.Function) {
+        self.variableName = .function
+        self.lineType = .declareFunction(function)
+    }
+    
+}
+
+extension Line {
+    
+    enum LineType {
+        struct Argument {
+            let argumentName: String
+            let argumentType: String
+            
+            var string: String {
+                "\(argumentName): \(argumentType)"
+            }
+        }
+        struct Function {
+            let name: String
+            let arguments: [Argument]
+            let accessLevel: String?
+            let isOverride: Bool
+        }
+        
+        case declare(isMutating: Bool, type: String? = nil, operand: String)
+        case assign(propertyName: String, operand: String)
+        case function(String)
+        case custom(String)
+        case declareClass(name: String, inheritances: [String])
+        case declareFunction(Function)
     }
     
 }
