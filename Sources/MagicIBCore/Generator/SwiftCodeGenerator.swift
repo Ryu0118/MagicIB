@@ -71,6 +71,16 @@ class SwiftCodeGenerator {
         """.buildLines(relatedVariableName: .fileHeader)
     }
     
+    private func generateSubviews(parentView: IBView) -> [Line] {
+        parentView
+            .subviews
+            .assignName()
+            .flatMap { uniqueName, view -> [Line] in
+                view.uniqueName = uniqueName
+                return view.generateSwiftCode() + [Line.newLine]
+            }
+    }
+    
 }
 
 //MARK: ViewController extension
@@ -89,7 +99,7 @@ private extension SwiftCodeGenerator {
             Line.newLine
             Line(variableName: .class, lineType: .declareClass(name: className, inheritances: [inheritance]))
             Line.newLine
-            ibView.subviews.flatMap { $0.generateSwiftCode() + [Line.newLine] }
+            generateSubviews(parentView: ibView)
             generateViewDidLoad()
             Line.newLine
             Line.end
@@ -134,6 +144,31 @@ private extension Array where Element == Line {
                 $0.indent(indentCount)
             }
             return $0.line
+        }
+    }
+    
+}
+
+private extension Array where Element == IBView {
+    
+    func assignName() -> [(String, IBView)] {
+        var classTypeCounts = [IBCompatibleView: Int]()
+        return self.map { view -> (String, IBView) in
+            if let count = classTypeCounts[view.classType] {
+                classTypeCounts.updateValue(count + 1, forKey: view.classType)
+            }
+            else {
+                classTypeCounts.updateValue(0, forKey: view.classType)
+            }
+            
+            guard let count = classTypeCounts[view.classType] else { fatalError() }
+            
+            if count == 0 {
+                return (view.classType.variableName, view)
+            }
+            else {
+                return (view.classType.variableName + "\(count)", view)
+            }
         }
     }
     

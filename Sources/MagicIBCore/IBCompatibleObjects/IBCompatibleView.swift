@@ -3,7 +3,7 @@
 
 import Foundation
 
-enum IBCompatibleView: String {
+enum IBCompatibleView: String, Hashable {
     case view
     case imageView
     case button
@@ -93,7 +93,7 @@ extension IBCompatibleView: CaseIterable, CustomStringConvertible {
         case .tableViewCell:
             return "UITableViewCell"
         case .collectionViewCell:
-            return "UICollectionView"
+            return "UICollectionViewCell"
         case .textView:
             return "UITextView"
         case .scrollView:
