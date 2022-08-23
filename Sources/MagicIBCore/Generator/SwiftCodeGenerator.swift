@@ -18,10 +18,7 @@ class SwiftCodeGenerator {
     let url: URL
     
     var fileName: String {
-        url
-            .deletingPathExtension()
-            .lastPathComponent
-            .insert(last: ".swift")
+        className + ".swift"
     }
     
     var className: String {
@@ -59,7 +56,7 @@ class SwiftCodeGenerator {
     }
     
     private func generateImport(dependencies: [Dependencies]) -> [Line] {
-        Set<String>(dependencies.flatMap { $0.dependencies })
+        Set(dependencies.flatMap { $0.dependencies })
             .sorted()
             .map { Line(relatedVariableName: .import, custom: "import \($0)") }
     }
