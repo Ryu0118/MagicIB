@@ -12,6 +12,7 @@ extension String {
     static let newLine = "newLine"
     static let fileHeader = "fileHeader"
     static let `import` = "import"
+    static let `class` = "class"
     
     func buildLines(relatedVariableName: String) -> [Line] {
         self

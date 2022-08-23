@@ -13,12 +13,14 @@ struct Line {
         case assign(propertyName: String, operand: String)
         case function(String)
         case custom(String)
+        case `class`(name: String, inheritances: [String])
     }
     
     static let end = Line(relatedVariableName: .end, custom: "}")
     static let newLine = Line(relatedVariableName: .newLine, custom: "\n")
     
     let variableName: String
+    
     private var lineType: LineType
     private var indentCount = 0
     
@@ -45,6 +47,9 @@ struct Line {
             return function.indent(indentCount)
         case .custom(let custom):
             return custom.indent(indentCount)
+        case .class(let name, let inheritances):
+            let inheritances = inheritances.joined(separator: ", ")
+            return "class \(name): \(inheritances) {"
         }
     }
     
@@ -58,6 +63,8 @@ struct Line {
             return string
         case .custom(let custom):
             return custom
+        case .class(_, _):
+            return line
         }
     }
     
@@ -70,6 +77,7 @@ struct Line {
         self.variableName = relatedVariableName
         self.lineType = .custom(custom)
     }
+    
 }
 
 extension Line {
