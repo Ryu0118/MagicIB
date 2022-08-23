@@ -125,19 +125,18 @@ private extension Array where Element == Line {
     func calculateIndent() -> [String] {
         var indentCount = 0
         return self.map {
-            var mutatingLine = $0
-            if mutatingLine.isStartOfBlock {
-                mutatingLine.indent(indentCount)
+            if $0.isStartOfBlock {
+                $0.indent(indentCount)
                 indentCount += 1
             }
-            else if mutatingLine.isEndOfBlock {
+            else if $0.isEndOfBlock {
                 indentCount -= 1
-                mutatingLine.indent(indentCount)
+                $0.indent(indentCount)
             }
             else {
-                mutatingLine.indent(indentCount)
+                $0.indent(indentCount)
             }
-            return mutatingLine.line
+            return $0.line
         }
     }
     

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Line {
+class Line: NSObject {
     
     static let end = Line(relatedVariableName: .end, custom: "}")
     static let newLine = Line(relatedVariableName: .newLine, custom: "\n")
@@ -119,7 +119,7 @@ extension Line {
 }
 
 extension Line {
-    mutating func explicitType(_ type: String) -> Line {
+    func explicitType(_ type: String) -> Line {
         if case .declare(let isMutating, let optionalType, let operand) = lineType,
            originalValue.first == "."
         {
@@ -128,7 +128,7 @@ extension Line {
         return self
     }
     
-    mutating func indent(_ indentCount: Int) {
+    func indent(_ indentCount: Int) {
         self.indentCount = indentCount
     }
 }

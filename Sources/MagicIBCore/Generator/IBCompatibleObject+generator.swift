@@ -41,3 +41,19 @@ extension IBCompatibleObject where Self: SwiftCodeGeneratable {
             .flatMap { $0 }
     }
 }
+
+extension IBCompatibleObject where Self: IBView {
+    
+    func generateBasicTypePropertyLines(except: [String] = []) -> [Line] {
+        generateBasicTypePropertyLines(variableName: classType.variableName, except: except)
+    }
+    
+    func generateNonCustomizablePropertyLines(except: [String] = []) -> [Line] {
+        generateNonCustomizablePropertyLines(variableName: classType.variableName, except: except)
+    }
+    
+    func generateCustomizablePropertyLines(except: [String] = []) -> [Line] {
+        generateCustomizablePropertyLines(variableName: classType.variableName, except: except)
+    }
+    
+}

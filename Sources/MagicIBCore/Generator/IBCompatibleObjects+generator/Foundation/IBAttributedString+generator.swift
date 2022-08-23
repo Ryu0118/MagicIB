@@ -100,7 +100,7 @@ extension IBAttributedString.Fragment: SwiftCodeGeneratable {
                         }
                         
                         guard let type = type,
-                              var firstLine = nonCustomizable.generateSwiftCode().first
+                              let firstLine = nonCustomizable.generateSwiftCode().first
                         else { fatalError("failed to get right operand") }
                         let rightOperand = firstLine.explicitType(type).originalValue
                         return Line(relatedVariableName: attributeName, custom: ".\(property.propertyName): \(rightOperand)")
