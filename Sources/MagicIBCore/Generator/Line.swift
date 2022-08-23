@@ -25,24 +25,25 @@ struct Line {
     }
     
     var line: String {
+        var line: String
         switch lineType {
         case .declare(let isMutating, let type, let operand):
             let varType = isMutating ? "var" : "let"
             if let type = type {
-                return "\(varType) \(variableName): \(type) = \(operand)".indent(indentCount)
+                line = "\(varType) \(variableName): \(type) = \(operand)"
             }
             else {
-                return "\(varType) \(variableName) = \(operand)".indent(indentCount)
+                line = "\(varType) \(variableName) = \(operand)"
             }
         case .assign(let propertyName, let operand):
-            return "\(variableName).\(propertyName) = \(operand)".indent(indentCount)
+            line = "\(variableName).\(propertyName) = \(operand)"
         case .function(let function):
-            return function.indent(indentCount)
+            line = function
         case .custom(let custom):
-            return custom.indent(indentCount)
+            line = custom
         case .declareClass(let name, let inheritances):
             let inheritances = inheritances.joined(separator: ", ")
-            return "class \(name): \(inheritances) {".indent(indentCount)
+            line = "class \(name): \(inheritances) {"
         case .declareFunction(let function):
             let `override` = function.isOverride ? "override " : ""
             var accessLevel = function.accessLevel ?? ""
@@ -50,8 +51,9 @@ struct Line {
             if !accessLevel.isEmpty {
                 accessLevel += " "
             }
-            return "\(`override`)\(accessLevel)func \(function.name)(\(arguments)) {".indent(indentCount)
+            line = "\(`override`)\(accessLevel)func \(function.name)(\(arguments)) {"
         }
+        return line.indent(indentCount)
     }
     
     var originalValue: String {
