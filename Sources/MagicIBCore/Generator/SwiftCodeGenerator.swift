@@ -51,17 +51,20 @@ class SwiftCodeGenerator {
         }
     }
     
-    private func buildLines(@ArrayBuilder<Line> _ builder: () -> [Line]) -> [Line] {
+}
+
+private extension SwiftCodeGeneratable {
+    func buildLines(@ArrayBuilder<Line> _ builder: () -> [Line]) -> [Line] {
         builder()
     }
     
-    private func generateImport(dependencies: [Dependencies]) -> [Line] {
+    func generateImport(dependencies: [Dependencies]) -> [Line] {
         Set(dependencies.flatMap { $0.dependencies })
             .sorted()
             .map { Line(relatedVariableName: .import, custom: "import \($0)") }
     }
     
-    private func generateFileHeader() -> [Line] {
+    func generateFileHeader() -> [Line] {
         """
         // \(fileName)
         //
@@ -71,9 +74,8 @@ class SwiftCodeGenerator {
         """.buildLines(relatedVariableName: .fileHeader)
     }
     
-    private func generateSubviews(parentView: IBView) -> [Line] {
-        parentView
-            .subviews
+    func generateSubviews(parentView: IBView) -> [Line] {
+        getAllViews(parentView: parentView)
             .assignName()
             .flatMap { uniqueName, view -> [Line] in
                 view.uniqueName = uniqueName
@@ -81,6 +83,9 @@ class SwiftCodeGenerator {
             }
     }
     
+    func getAllViews(parentView: IBView) -> [Line] {
+        return parentView.subviews.findSubviews()
+    }
 }
 
 //MARK: ViewController extension
@@ -170,6 +175,21 @@ private extension Array where Element == IBView {
                 return (view.classType.variableName + "\(count)", view)
             }
         }
+    }
+    
+    func findSubviews() -> [IBView] {
+        guard !self.isEmpty else { return self }
+        let arrangedSubviews = self
+            .compactMap { view -> [IBView] in
+                if let stackView = view as? IBStackView {
+                    return stackView.arrangedSubviews
+                }
+                else {
+                    return view.subviews
+                }
+            }
+            .flatMap { $0 }
+        return self + arrangedSubviews.findSubviews()
     }
     
 }
