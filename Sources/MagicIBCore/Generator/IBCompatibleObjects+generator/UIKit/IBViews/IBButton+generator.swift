@@ -9,10 +9,11 @@ import Foundation
 
 extension IBButton {
     override func generateSwiftCode() -> [Line] {
-        buildLines {
+        guard let uniqueName = uniqueName else { return [] }
+        return buildLines {
             let variableName = classType.variableName
             let className = classType.description
-            Line(variableName: variableName, lineType: .declare(isMutating: false, type: className, operand: "{"))
+            Line(variableName: uniqueName, lineType: .declare(isMutating: false, type: className, operand: "{"))
             
             generateButtonDeclaration()
             if let font = self.fontDescription as? IBFont,
