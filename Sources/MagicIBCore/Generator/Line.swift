@@ -16,6 +16,8 @@ class Line: NSObject {
     
     var lineType: LineType
     private var indentCount = 0
+    private var appendedString = ""
+    private var replacingOccurrence: (of: String, with: String)?
     
     var isStartOfBlock: Bool {
         originalValue.suffix(1) == "{" || originalValue.suffix(1) == "["
@@ -53,7 +55,12 @@ class Line: NSObject {
             }
             line = "\(`override`)\(accessLevel)func \(function.name)(\(arguments)) {"
         }
-        return line.indent(indentCount)
+        
+        if let (of, with) = replacingOccurrence {
+            line = line.replacingOccurrences(of: of, with: with)
+        }
+        
+        return line.indent(indentCount) + appendedString
     }
     
     var originalValue: String {
@@ -130,5 +137,15 @@ extension Line {
     
     func indent(_ indentCount: Int) {
         self.indentCount = indentCount
+    }
+    
+    @discardableResult
+    func appendString(_ string: String) -> Line {
+        self.appendedString = string
+        return self
+    }
+    
+    func replaceString(of: String, with: String) {
+        self.replacingOccurrence = (of: of, with: with)
     }
 }

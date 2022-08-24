@@ -89,8 +89,8 @@ private extension SwiftCodeGenerator {
     
     func generateConstraints(views: [IBView]) -> [Line] {
         //var constraints: [[IBLayoutConstraint]] = []
-        let generator = ConstraintGenerator(views: views)
-        
+        let generator = ConstraintsGenerator(views: views)
+        return generator.generateSwiftCode()
     }
 }
 
@@ -113,6 +113,7 @@ private extension SwiftCodeGenerator {
             Line.newLine
             generateSubviews(views: allViews)
             generateViewDidLoad()
+            generateConstraints(views: allViews)
             Line.newLine
             Line.end
         }
@@ -223,7 +224,7 @@ private extension Array where Element == IBLayoutConstraint {
     }
 }
 
-private struct ConstraintGenerator: SwiftCodeGeneratable {
+private struct ConstraintsGenerator: SwiftCodeGeneratable {
     
     let constraints: [[IBLayoutConstraint]]
     let views: [IBView]
@@ -236,7 +237,13 @@ private struct ConstraintGenerator: SwiftCodeGeneratable {
     }
     
     func generateSwiftCode() -> [Line] {
-        <#code#>
+        buildLines {
+            for viewConstraints in constraints {
+                viewConstraints
+                    .generateSwiftCode()
+                    .replaceIdToUniqueName(allViews: views, constraints: viewConstraints)
+            }
+        }
     }
     
 }
