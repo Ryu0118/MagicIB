@@ -241,7 +241,8 @@ private struct ConstraintsGenerator: SwiftCodeGeneratable {
             for viewConstraints in constraints {
                 viewConstraints
                     .generateSwiftCode()
-                    .replaceIdToUniqueName(allViews: views, constraints: viewConstraints)
+                    .replaceIdToUniqueName(allViews: views, constraints: [IBLayoutConstraint](constraints.joined()))
+                
             }
         }
     }

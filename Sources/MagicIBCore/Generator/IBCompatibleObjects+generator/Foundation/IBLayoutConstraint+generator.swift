@@ -36,7 +36,7 @@ extension IBLayoutConstraint: SwiftCodeGeneratable {
               let secondAttribute = secondAttribute
         else { return [] }
         var arguments = [String]()
-        arguments.append("\(relation)To: \(secondItem).\(secondAttribute.rawValue)")
+        arguments.append("\(relation)To: \(secondItem).\(secondAttribute.rawValue)Anchor")
         if let constant = constant {
             arguments.append("constant: \(constant)")
         }
@@ -49,7 +49,7 @@ extension IBLayoutConstraint: SwiftCodeGeneratable {
         if let secondAttribute = secondAttribute,
            let secondItem = secondItem
         {
-            arguments.append("\(relation.rawValue)To: \(secondItem).\(secondAttribute.rawValue)")
+            arguments.append("\(relation.rawValue)To: \(secondItem).\(secondAttribute.rawValue)Anchor")
             singleFlag = false
         }
         if let multiplier = multiplier {
@@ -97,23 +97,38 @@ extension Array where Element == Line {
     
     func replaceIdToUniqueName(allViews: [IBView], constraints: [IBLayoutConstraint]) -> [Line] {
         for line in self {
-            let viewIDs = constraints.reduce([String]()) { prev, element -> [String] in
-                var prev = prev
-                prev.append(element.firstItem)
-                if let secondItem = element.secondItem {
-                    prev.append(secondItem)
-                }
-                return prev
-            }
+            let viewIDs = getViewIDs(from: constraints)
+            let layoutGuides = allViews.flatMap { ($0.uniqueName, $0.layoutGuides) }
             
             for viewID in viewIDs {
                 if let uniqueName = allViews.getUniqueName(id: viewID), line.line.contains(viewID)
                 {
-                    line.replaceString(of: viewID, with: uniqueName)
+                    line.appendReplacingString(of: viewID, with: uniqueName)
+                }
+            }
+            
+            for (uniqueName, layoutGuide) in layoutGuides {
+                for viewLayoutGuide in layoutGuide {
+                    if let uniqueName = uniqueName,
+                       line.line.contains(viewLayoutGuide.id)
+                    {
+                        line.appendReplacingString(of: viewLayoutGuide.id, with: "\(uniqueName).\(viewLayoutGuide.key)")
+                    }
                 }
             }
         }
         return self
+    }
+    
+    private func getViewIDs(from constraints: [IBLayoutConstraint]) {
+        constraints.reduce([String]()) { prev, element -> [String] in
+            var prev = prev
+            prev.append(element.firstItem)
+            if let secondItem = element.secondItem {
+                prev.append(secondItem)
+            }
+            return prev
+        }
     }
     
 }

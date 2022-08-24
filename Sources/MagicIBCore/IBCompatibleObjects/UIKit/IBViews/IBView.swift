@@ -21,6 +21,7 @@ class IBView: NSObject, IBCompatibleObject, UniqueName, SwiftCodeGeneratable {
     }
     
     private(set) var constraints = [IBLayoutConstraint]()
+    private(set) var layoutGuides = [IBLayoutGuide]()
     private(set) var elementTree: String!//ex) attributedString->fragment->attributes->color
     
     var uniqueName: String? = "testView"
@@ -113,6 +114,8 @@ class IBView: NSObject, IBCompatibleObject, UniqueName, SwiftCodeGeneratable {
         case "constraints->constraint":
             guard let constraint = IBLayoutConstraint(attributes, parentViewID: id) else { return }
             constraints.append(constraint)
+        case "viewLayoutGuide":
+            layoutGuides.append(IBLayoutGuide(attributes: attributes))
         default:
             break
         }
