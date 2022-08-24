@@ -12,12 +12,12 @@ struct IBLayoutConstraint {
     let id: String
     let firstItem: String
     let firstAttribute: Attribute
+    let relation: Relation
     let secondItem: String?
     let secondAttribute: Attribute?
     let multiplier: Multiplier?// ex) 1.1 or 2:3
     let priority: Int?
     let constant: Double?
-    let relation: Relation?
     
     init?(_ attributes: [String: String], parentViewID: String) {
         guard let id = attributes["id"],
@@ -38,7 +38,7 @@ struct IBLayoutConstraint {
         self.secondItem = attributes["secondItem"]
         self.priority = Int(attributes["priority"] ?? "")
         self.constant = Double(attributes["constant"] ?? "")
-        self.relation = .init(rawValue: attributes["relation"] ?? "")
+        self.relation = .init(rawValue: attributes["relation"] ?? "equal") ?? .equal
     }
 }
 //MARK: Declare Enum
@@ -58,6 +58,7 @@ extension IBLayoutConstraint {
     enum Relation: String {
         case lessThanOrEqual
         case greaterThanOrEqual
+        case equal
     }
     
     enum Multiplier {

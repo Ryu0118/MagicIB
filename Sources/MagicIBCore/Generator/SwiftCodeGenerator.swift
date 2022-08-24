@@ -7,7 +7,7 @@
 
 import Foundation
 
-class SwiftCodeGenerator {
+final class SwiftCodeGenerator {
     
     enum IBType {
         case storyboard(ibViewController: IBViewController)
@@ -53,7 +53,7 @@ class SwiftCodeGenerator {
     
 }
 
-private extension SwiftCodeGeneratable {
+private extension SwiftCodeGenerator {
     func buildLines(@ArrayBuilder<Line> _ builder: () -> [Line]) -> [Line] {
         builder()
     }
@@ -74,8 +74,8 @@ private extension SwiftCodeGeneratable {
         """.buildLines(relatedVariableName: .fileHeader)
     }
     
-    func generateSubviews(parentView: IBView) -> [Line] {
-        getAllViews(parentView: parentView)
+    func generateSubviews(views: [IBView]) -> [Line] {
+        views
             .assignName()
             .flatMap { uniqueName, view -> [Line] in
                 view.uniqueName = uniqueName
@@ -83,8 +83,14 @@ private extension SwiftCodeGeneratable {
             }
     }
     
-    func getAllViews(parentView: IBView) -> [Line] {
-        return parentView.subviews.findSubviews()
+    func getAllViews(parentView: IBView) -> [IBView] {
+        return parentView.subviews.findAllSubviews()
+    }
+    
+    func generateConstraints(views: [IBView]) -> [Line] {
+        //var constraints: [[IBLayoutConstraint]] = []
+        let generator = ConstraintGenerator(views: views)
+        
     }
 }
 
@@ -96,6 +102,7 @@ private extension SwiftCodeGenerator {
         
         let dependencies: [Dependencies] = [ibViewController.dependencies] + ibViewController.ibView.subviews.compactMap { $0.dependencies }
         let inheritance = ibViewController.superClass.description
+        let allViews = getAllViews(parentView: ibView)
         
         return buildLines {
             generateFileHeader()
@@ -104,7 +111,7 @@ private extension SwiftCodeGenerator {
             Line.newLine
             Line(variableName: .class, lineType: .declareClass(name: className, inheritances: [inheritance]))
             Line.newLine
-            generateSubviews(parentView: ibView)
+            generateSubviews(views: allViews)
             generateViewDidLoad()
             Line.newLine
             Line.end
@@ -177,7 +184,7 @@ private extension Array where Element == IBView {
         }
     }
     
-    func findSubviews() -> [IBView] {
+    func findAllSubviews() -> [IBView] {
         guard !self.isEmpty else { return self }
         let arrangedSubviews = self
             .compactMap { view -> [IBView] in
@@ -189,7 +196,47 @@ private extension Array where Element == IBView {
                 }
             }
             .flatMap { $0 }
-        return self + arrangedSubviews.findSubviews()
+        return self + arrangedSubviews.findAllSubviews()
+    }
+    
+}
+
+private extension Array where Element == IBLayoutConstraint {
+    func grouped() -> [[IBLayoutConstraint]] {
+        var group: [[IBLayoutConstraint]] = []
+        var tmp: [IBLayoutConstraint] = []
+        var previousID: String?
+        let sorted = self.sorted { $0.firstItem < $1.firstItem }
+        
+        for constraint in sorted {
+            defer { previousID = constraint.firstItem }
+            guard let previousID = previousID else { continue }
+            if constraint.firstItem == previousID {
+                tmp.append(constraint)
+            }
+            else {
+                group.append(tmp)
+                tmp = [constraint]
+            }
+        }
+        return group
+    }
+}
+
+private struct ConstraintGenerator: SwiftCodeGeneratable {
+    
+    let constraints: [[IBLayoutConstraint]]
+    let views: [IBView]
+    
+    init(views: [IBView]) {
+        self.views = views
+        self.constraints = views
+            .flatMap { $0.constraints }
+            .grouped()
+    }
+    
+    func generateSwiftCode() -> [Line] {
+        <#code#>
     }
     
 }

@@ -14,7 +14,7 @@ class Line: NSObject {
     
     let variableName: String
     
-    private var lineType: LineType
+    var lineType: LineType
     private var indentCount = 0
     
     var isStartOfBlock: Bool {

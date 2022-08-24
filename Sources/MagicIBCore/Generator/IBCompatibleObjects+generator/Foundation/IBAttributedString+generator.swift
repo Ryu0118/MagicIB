@@ -103,11 +103,11 @@ extension IBAttributedString.Fragment: SwiftCodeGeneratable {
                               let firstLine = nonCustomizable.generateSwiftCode().first
                         else { fatalError("failed to get right operand") }
                         let rightOperand = firstLine.explicitType(type).originalValue
-                        return Line(relatedVariableName: attributeName, custom: ".\(property.propertyName): \(rightOperand)")
+                        return Line(relatedVariableName: attributeName, custom: ".\(property.propertyName): \(rightOperand),")
                     }
                     else if let _ = property.value as? IBParagraphStyle,
                             let variableName = paragraphStyleLines.last?.variableName {
-                        return Line(relatedVariableName: attributeName, custom: ".\(property.propertyName): \(variableName)")
+                        return Line(relatedVariableName: attributeName, custom: ".\(property.propertyName): \(variableName),")
                     }
                     else {
                         return nil
