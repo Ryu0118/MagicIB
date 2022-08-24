@@ -98,7 +98,7 @@ extension Array where Element == Line {
     func replaceIdToUniqueName(allViews: [IBView], constraints: [IBLayoutConstraint]) -> [Line] {
         for line in self {
             let viewIDs = getViewIDs(from: constraints)
-            let layoutGuides = allViews.flatMap { ($0.uniqueName, $0.layoutGuides) }
+            let layoutGuides = allViews.compactMap { ($0.uniqueName, $0.layoutGuides) }
             
             for viewID in viewIDs {
                 if let uniqueName = allViews.getUniqueName(id: viewID), line.line.contains(viewID)
@@ -120,7 +120,7 @@ extension Array where Element == Line {
         return self
     }
     
-    private func getViewIDs(from constraints: [IBLayoutConstraint]) {
+    private func getViewIDs(from constraints: [IBLayoutConstraint]) -> [String] {
         constraints.reduce([String]()) { prev, element -> [String] in
             var prev = prev
             prev.append(element.firstItem)
