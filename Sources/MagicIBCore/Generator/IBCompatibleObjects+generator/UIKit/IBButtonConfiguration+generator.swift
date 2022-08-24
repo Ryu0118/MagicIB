@@ -13,7 +13,7 @@ extension IBButtonConfiguration: SwiftCodeGeneratable {
         guard let style = self.style as? String else { return [] }
         
         return buildLines {
-            Line(variableName: "buttonConfiguration", lineType: .declare(isMutating: false, type: "UIButton.Configuration", operand: ".\(style)()"))
+            Line(variableName: "buttonConfiguration", lineType: .declare(isMutating: true, type: "UIButton.Configuration", operand: ".\(style)()"))
             
             generateCustomizablePropertyLines(variableName: "buttonConfiguration")
             generateBasicTypePropertyLines(variableName: "buttonConfiguration")

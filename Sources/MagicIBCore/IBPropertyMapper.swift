@@ -26,6 +26,9 @@ class IBPropertyMapper {
                     value = IBImage(named: imageName)
                 }
             }
+            else if propertyName == "lineBreakMode" {
+                
+            }
         }
     }
     
