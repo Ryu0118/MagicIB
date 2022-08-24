@@ -78,9 +78,7 @@ private extension SwiftCodeGenerator {
         views
             .assignName()
             .flatMap { uniqueName, view -> [Line] in
-                if view.uniqueName == nil {
-                    view.uniqueName = uniqueName
-                }
+                view.uniqueName = uniqueName
                 return view.generateSwiftCode() + [Line.newLine]
             }
     }
@@ -91,8 +89,37 @@ private extension SwiftCodeGenerator {
     
     func generateConstraints(views: [IBView]) -> [Line] {
         //var constraints: [[IBLayoutConstraint]] = []
-        let generator = ConstraintsGenerator(views: views)
-        return generator.generateSwiftCode()
+        generateFunction(name: "setupConstraints", accessLevel: "private") {
+            let generator = ConstraintsGenerator(views: views)
+            generator.generateSwiftCode()
+        }
+    }
+    
+    func generateSetupViews(views: [IBView]) -> [Line] {
+        generateFunction(name: "setupViews", accessLevel: "private") {
+            views.compactMap { view -> [Line]? in
+                let uniqueName = view.uniqueName ?? "view"
+                if !view.subviews.isEmpty {
+                    return view.subviews.map { subview -> Line in
+                        guard let subviewUniqueName = subview.uniqueName else { fatalError("uniqueName has not been assigned")}
+                        return Line(variableName: uniqueName, lineType: .function("\(uniqueName).addSubview(\(subviewUniqueName))"))
+                    }
+                }
+                else if let stackView = view as? IBStackView,
+                        !stackView.arrangedSubviews.isEmpty
+                {
+                    return stackView.arrangedSubviews.map { subview -> Line in
+                        guard let subviewUniqueName = subview.uniqueName else { fatalError("uniqueName has not been assigned")}
+                        return Line(variableName: uniqueName, lineType: .function("\(uniqueName).addArrangedSubview(\(subviewUniqueName))"))
+                    }
+                }
+                else {
+                    return nil
+                }
+            }
+            .flatMap { $0 }
+        }
+        
     }
 }
 
@@ -115,7 +142,10 @@ private extension SwiftCodeGenerator {
             Line.newLine
             generateSubviews(views: allViews)
             generateViewDidLoad()
+            Line.newLine
             generateConstraints(views: allViews)
+            Line.newLine
+            generateSetupViews(views: [ibView] + allViews)
             Line.newLine
             Line.end
         }
@@ -124,9 +154,24 @@ private extension SwiftCodeGenerator {
     }
     
     func generateViewDidLoad() -> [Line] {
-        buildLines {
-            Line(function: .init(name: "viewDidLoad", arguments: [], accessLevel: nil, isOverride: true))
+        generateFunction(name: "viewDidLoad", isOverride: true, arguments: [], accessLevel: nil) {
             Line(variableName: "super", lineType: .function("super.viewDidLoad()"))
+            Line(variableName: "self", lineType: .function("setupViews()"))
+            Line(variableName: "self", lineType: .function("setupConstraints()"))
+        }
+    }
+    
+    func generateFunction(
+        name: String,
+        isOverride: Bool = false,
+        arguments: [Line.LineType.Argument] = [],
+        accessLevel: String? = nil,
+        @ArrayBuilder<Line> component builder: () -> [Line]
+    ) -> [Line]
+    {
+        buildLines {
+            Line(function: .init(name: name, arguments: arguments, accessLevel: accessLevel, isOverride: isOverride))
+            builder()
             Line.end
         }
     }
@@ -169,11 +214,23 @@ private extension Array where Element == IBView {
     func assignName() -> [(String, IBView)] {
         var classTypeCounts = [IBCompatibleView: Int]()
         return self.map { view -> (String, IBView) in
+            if let uniqueName = view.uniqueName { return (uniqueName, view) }
+            
             if let count = classTypeCounts[view.classType] {
                 classTypeCounts.updateValue(count + 1, forKey: view.classType)
             }
             else {
-                classTypeCounts.updateValue(0, forKey: view.classType)
+                /*
+                 When classType is .view, the count is set from scratch instead of
+                 starting from zero to prevent name conflicts with view, which is a
+                 property of UIViewController.
+                 */
+                if view.classType == .view {
+                    classTypeCounts.updateValue(1, forKey: view.classType)
+                }
+                else {
+                    classTypeCounts.updateValue(0, forKey: view.classType)
+                }
             }
             
             guard let count = classTypeCounts[view.classType] else { fatalError() }
@@ -240,11 +297,13 @@ private struct ConstraintsGenerator: SwiftCodeGeneratable {
     
     func generateSwiftCode() -> [Line] {
         buildLines {
-            for viewConstraints in constraints {
+            for (index, viewConstraints) in constraints.enumerated() {
                 viewConstraints
                     .generateSwiftCode()
                     .replaceIdToUniqueName(allViews: views, constraints: [IBLayoutConstraint](constraints.joined()))
-                
+                if index != constraints.count - 1 {
+                    Line.newLine
+                }
             }
         }
     }

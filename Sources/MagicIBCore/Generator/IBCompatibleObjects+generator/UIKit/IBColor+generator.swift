@@ -17,7 +17,8 @@ extension IBColor: SwiftCodeGeneratable, NonCustomizable {
                let alpha = self.alpha as? String {
                 Line(variableName: "color", lineType: .declare(isMutating: false, operand: "UIColor(red: \(red), green: \(green), blue: \(blue), alpha: \(alpha))"))
             }
-            else if let systemColor = findProperty(ib: "systemColor")?.convertValidValue() {
+            else if var systemColor = findProperty(ib: "systemColor")?.convertValidValue() {
+                systemColor = systemColor.replacingOccurrences(of: "Color", with: "")
                 Line(variableName: "color", lineType: .declare(isMutating: false, operand: systemColor))
             }
             else if let name = self.name as? String {
