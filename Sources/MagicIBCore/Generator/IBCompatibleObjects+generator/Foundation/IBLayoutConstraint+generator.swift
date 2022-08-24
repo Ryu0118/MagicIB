@@ -9,16 +9,23 @@ import Foundation
 
 extension IBLayoutConstraint: SwiftCodeGeneratable {
     func generateSwiftCode() -> [Line] {
-        let variableName = [firstItem, firstAttribute.rawValue, "constraint"].camelized()
+        let variableName = getVariableName()
         let arguments = buildArgument()
         let anchor = "\(firstItem).\(firstAttribute)Anchor.constraint(\(arguments))"
         
         return buildLines {
             Line(variableName: variableName, lineType: .declare(isMutating: false, type: nil, operand: anchor))
             if let priority = self.priority {
-                Line(variableName: variableName, lineType: .assign(propertyName: "priority", operand: " UILayoutPriority(rawValue: \(priority))"))
+                Line(variableName: variableName, lineType: .assign(propertyName: "priority", operand: "UILayoutPriority(rawValue: \(priority))"))
             }
         }
+    }
+    
+    private func getVariableName() -> String {
+        let firstAttributeName = firstAttribute.rawValue
+        let dropFirst = firstAttributeName.dropFirst()
+        let initial = firstAttributeName.prefix(1).uppercased()
+        return firstItem + initial + dropFirst + "Constraint"
     }
     
     private func buildArgument() -> String {
@@ -52,7 +59,15 @@ extension IBLayoutConstraint: SwiftCodeGeneratable {
             singleFlag = false
         }
         if let multiplier = multiplier {
-            arguments.append("multiplier: \(multiplier)")
+            switch multiplier {
+            case .multiplier(let double):
+                arguments.append("multiplier: \(double)")
+            case .aspectRatio(let lhs, let rhs):
+                let double = rhs / lhs
+                if double != 1 {
+                    arguments.append("multiplier: \(double)")
+                }
+            }
         }
         if let constant = constant {
             if singleFlag {
@@ -105,6 +120,14 @@ extension Array where Element == Line {
                     line.appendReplacingString(of: viewID, with: uniqueName)
                 }
             }
+            
+            ///つまりconstraintsには"t0f-tn-fds"がない。
+            ///Viewのsubviewsが対応しているか怪しい。IBParserを要確認
+            
+//            if line.line.contains("t0f-tn-fds") {
+//                assert(allViews.getUniqueName(id: "t0f-tn-fds") != nil)
+//                print("通りました")
+//            }
             
             for (uniqueName, layoutGuide) in layoutGuides {
                 for viewLayoutGuide in layoutGuide {

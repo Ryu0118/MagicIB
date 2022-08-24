@@ -79,7 +79,9 @@ extension IBParser: XMLParserDelegate {
             switch elementName {
             case "subviews":
                 subviewFlags.append(lastIBView)
-                if parentView == nil { parentView = lastIBView }
+                if parentView == nil {
+                    parentView = lastIBView
+                }
             case "prototypes":
                 prototypesFlag = lastIBView as? IBTableView
             case "cells":
