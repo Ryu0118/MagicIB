@@ -121,14 +121,6 @@ extension Array where Element == Line {
                 }
             }
             
-            ///つまりconstraintsには"t0f-tn-fds"がない。
-            ///Viewのsubviewsが対応しているか怪しい。IBParserを要確認
-            
-//            if line.line.contains("t0f-tn-fds") {
-//                assert(allViews.getUniqueName(id: "t0f-tn-fds") != nil)
-//                print("通りました")
-//            }
-            
             for (uniqueName, layoutGuide) in layoutGuides {
                 for viewLayoutGuide in layoutGuide {
                     if let uniqueName = uniqueName,

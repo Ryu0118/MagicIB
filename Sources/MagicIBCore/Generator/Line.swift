@@ -57,9 +57,6 @@ class Line: NSObject {
         }
         
         for (of, with) in replacingOccurrences {
-            if of == "t0f-tn-fds" {
-                print("通りました")
-            }
             line = line.replacingOccurrences(of: of, with: with)
         }
         
