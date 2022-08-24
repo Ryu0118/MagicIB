@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import AppKit
 
 extension IBLayoutConstraint: SwiftCodeGeneratable {
     func generateSwiftCode() -> [Line] {
