@@ -23,6 +23,10 @@ extension IBCompatibleObject where Self: SwiftCodeGeneratable {
             .except(except)
             .compactMap { property -> Line? in
                 guard let nonCustomizable = property.value as? NonCustomizable else { return nil }
+                if let zeroDiscriminable = property.value as? ZeroDiscriminable,
+                   zeroDiscriminable.isZero {
+                    return nil
+                }
                 return nonCustomizable.generateSwiftCode(variableName: variableName, propertyName: property.propertyName)
             }
     }
@@ -34,6 +38,10 @@ extension IBCompatibleObject where Self: SwiftCodeGeneratable {
             .compactMap { property -> [Line]? in
                 guard let generator = property.value as? SwiftCodeGeneratable
                 else { return nil }
+                if let zeroDiscriminable = property.value as? ZeroDiscriminable,
+                   zeroDiscriminable.isZero {
+                    return nil
+                }
                 return generator
                     .generateSwiftCode()
                     .related(variableName: variableName, propertyName: property.propertyName)

@@ -24,7 +24,7 @@ class IBView: NSObject, IBCompatibleObject, UniqueName, SwiftCodeGeneratable {
     private(set) var layoutGuides = [IBLayoutGuide]()
     private(set) var elementTree: String!//ex) attributedString->fragment->attributes->color
     
-    var uniqueName: String? = "testView"
+    var uniqueName: String?
     
     var waitingElementList = [String]() {
         didSet {
@@ -89,6 +89,12 @@ class IBView: NSObject, IBCompatibleObject, UniqueName, SwiftCodeGeneratable {
         self.customClass = attributes["customClass"]
         super.init()
         self.mapping(attributes)
+        
+        if let userLabel = attributes["userLabel"] {
+            let dropFirst = userLabel.dropFirst()
+            let initial = userLabel.prefix(1).lowercased()
+            self.uniqueName = initial + dropFirst
+        }
     }
     
     subscript(dynamicMember key: String) -> Any? {

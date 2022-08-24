@@ -7,7 +7,14 @@
 
 import Foundation
 
-extension IBSize: SwiftCodeGeneratable, NonCustomizable {
+extension IBSize: SwiftCodeGeneratable, NonCustomizable, ZeroDiscriminable {
+    
+    var isZero: Bool {
+        guard let width = self.width as? String,
+              let height = self.height as? String
+        else { return false }
+        return width == height && Double(height) == 0
+    }
     
     func generateSwiftCode() -> [Line] {
         guard let width = self.width as? String,

@@ -78,7 +78,9 @@ private extension SwiftCodeGenerator {
         views
             .assignName()
             .flatMap { uniqueName, view -> [Line] in
-                view.uniqueName = uniqueName
+                if view.uniqueName == nil {
+                    view.uniqueName = uniqueName
+                }
                 return view.generateSwiftCode() + [Line.newLine]
             }
     }

@@ -7,7 +7,16 @@
 
 import Foundation
 
-extension IBRect: SwiftCodeGeneratable, NonCustomizable {
+extension IBRect: SwiftCodeGeneratable, NonCustomizable, ZeroDiscriminable {
+    
+    var isZero: Bool {
+        guard let x = self.x as? String,
+              let y = self.y as? String,
+              let width = self.width as? String,
+              let height = self.height as? String
+        else { return false }
+        return x == y && y == width && width == height && Double(height) == 0
+    }
     
     func generateSwiftCode() -> [Line] {
         guard let x = self.x as? String,
