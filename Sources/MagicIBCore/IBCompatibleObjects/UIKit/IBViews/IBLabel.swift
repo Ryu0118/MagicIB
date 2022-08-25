@@ -17,7 +17,9 @@ final class IBLabel: IBView {
         .init(ib: "highlightedColor", propertyName: "highlightedTextColor", type: .color),
         .init(propertyName: "shadowColor", type: .color),
         .init(propertyName: "shadowOffset", type: .size),
-        .init(propertyName: "attributedText", type: .attributedString)
+        .init(propertyName: "attributedText", type: .attributedString),
+        .init(ib: "adjustFontSizeToFit", propertyName: "adjustsFontSizeToFitWidth", type: .bool),
+        .init(propertyName: "text", type: .string),
     ]
     
     private var attributedString: IBAttributedString?

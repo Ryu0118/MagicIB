@@ -31,7 +31,7 @@ extension IBButton {
             if let font = self.fontDescription as? IBFont,
                let rightOperand = font.getRightOperand()
             {
-                Line(variableName: "\(variableName).titleLabel?", lineType: .assign(propertyName: "font", operand: rightOperand))
+                Line(variableName: "\(classType.variableName).titleLabel?", lineType: .assign(propertyName: "font", operand: rightOperand))
             }
         }
     }

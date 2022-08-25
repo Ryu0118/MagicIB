@@ -101,6 +101,14 @@ extension IBParser: XMLParserDelegate {
         if let textView = waitingIBViewList.last as? IBTextView {
             textView.addValueToProperty(ib: "text", value: string)
         }
+        else if let label = waitingIBViewList.last as? IBLabel {
+            if let text = label.text as? String {
+                label.addValueToProperty(ib: "text", value: text + string)
+            }
+            else {
+                label.addValueToProperty(ib: "text", value: string)
+            }
+        }
         else if let searchBar = waitingIBViewList.last as? IBSearchBar {
             if var array = searchBar.scopeButtonTitles as? [String] {
                 array.append(string)
