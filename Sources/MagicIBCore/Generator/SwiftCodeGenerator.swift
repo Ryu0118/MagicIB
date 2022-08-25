@@ -58,6 +58,21 @@ private extension SwiftCodeGenerator {
         builder()
     }
     
+    func generateFunction(
+        name: String,
+        isOverride: Bool = false,
+        arguments: [Line.LineType.Argument] = [],
+        accessLevel: String? = nil,
+        @ArrayBuilder<Line> component builder: () -> [Line]
+    ) -> [Line]
+    {
+        buildLines {
+            Line(function: .init(name: name, arguments: arguments, accessLevel: accessLevel, isOverride: isOverride))
+            builder()
+            Line.end
+        }
+    }
+    
     func generateImport(dependencies: [Dependencies]) -> [Line] {
         Set(dependencies.flatMap { $0.dependencies })
             .sorted()
@@ -143,9 +158,9 @@ private extension SwiftCodeGenerator {
             generateSubviews(views: allViews)
             generateViewDidLoad()
             Line.newLine
-            generateConstraints(views: [ibView] + allViews)
-            Line.newLine
             generateSetupViews(views: [ibView] + allViews)
+            Line.newLine
+            generateConstraints(views: [ibView] + allViews)
             Line.newLine
             Line.end
         }
@@ -158,21 +173,6 @@ private extension SwiftCodeGenerator {
             Line(variableName: "super", lineType: .function("super.viewDidLoad()"))
             Line(variableName: "self", lineType: .function("setupViews()"))
             Line(variableName: "self", lineType: .function("setupConstraints()"))
-        }
-    }
-    
-    func generateFunction(
-        name: String,
-        isOverride: Bool = false,
-        arguments: [Line.LineType.Argument] = [],
-        accessLevel: String? = nil,
-        @ArrayBuilder<Line> component builder: () -> [Line]
-    ) -> [Line]
-    {
-        buildLines {
-            Line(function: .init(name: name, arguments: arguments, accessLevel: accessLevel, isOverride: isOverride))
-            builder()
-            Line.end
         }
     }
     
