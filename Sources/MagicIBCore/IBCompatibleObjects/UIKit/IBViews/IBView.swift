@@ -46,7 +46,6 @@ class IBView: NSObject, IBCompatibleObject, UniqueName, SwiftCodeGeneratable {
         .init(ib: "clipsSubviews", propertyName: "clipsToBounds", type: .bool),
         .init(ib: "multipleTouchEnabled", propertyName: "isMultipleTouchEnabled", type: .bool),
         .init(ib: "alpha", propertyName: "alpha", type: .number),
-        .init(ib: "multipleTouchEnabled", propertyName: "isMultipleTouchEnabled", type: .bool),
         .init(ib: "translatesAutoresizingMaskIntoConstraints", propertyName: "translatesAutoresizingMaskIntoConstraints", type: .bool),
         .init(ib: "autoresizingMask", propertyName: "autoresizingMask", type: .optionSet),
         .init(ib: "contentMode", propertyName: "contentMode", type: .enum),
