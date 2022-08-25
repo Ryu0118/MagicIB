@@ -276,7 +276,10 @@ private extension Array where Element == IBLayoutConstraint {
                 }
             }
             
-            guard let previousID = previousID else { continue }
+            guard let previousID = previousID else {
+                tmp.append(constraint)
+                continue
+            }
             
             if constraint.firstItem == previousID {
                 tmp.append(constraint)
