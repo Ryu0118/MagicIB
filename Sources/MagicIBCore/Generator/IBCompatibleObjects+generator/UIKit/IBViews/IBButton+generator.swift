@@ -10,22 +10,29 @@ import Foundation
 extension IBButton {
     override func generateSwiftCode() -> [Line] {
         guard let uniqueName = uniqueName else { return [] }
+        let variableName = classType.variableName
+        let className = classType.description
+        
         return buildLines {
-            let variableName = classType.variableName
-            let className = classType.description
             Line(variableName: uniqueName, lineType: .declare(isMutating: false, type: className, operand: "{"))
             
             generateButtonDeclaration()
-            if let font = self.fontDescription as? IBFont,
-               let rightOperand = font.getRightOperand()
-            {
-                Line(variableName: "\(variableName).titleLabel?", lineType: .assign(propertyName: "font", operand: rightOperand))
-            }
+            generateLabelFont()
             generateCustomizablePropertyLines()
             generateBasicTypePropertyLines(except: ["buttonType", "lineBreakMode"])
             generateNonCustomizablePropertyLines(except: ["fontDescription"])
             Line(relatedVariableName: variableName, custom: "return \(variableName)")
             Line(relatedVariableName: variableName, custom: "}()")
+        }
+    }
+    
+    private func generateLabelFont() -> [Line] {
+        buildLines {
+            if let font = self.fontDescription as? IBFont,
+               let rightOperand = font.getRightOperand()
+            {
+                Line(variableName: "\(variableName).titleLabel?", lineType: .assign(propertyName: "font", operand: rightOperand))
+            }
         }
     }
     

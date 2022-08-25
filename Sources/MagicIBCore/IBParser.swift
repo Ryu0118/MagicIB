@@ -81,6 +81,7 @@ extension IBParser: XMLParserDelegate {
                 subviewFlags.append(lastIBView)
                 if parentView == nil {
                     parentView = lastIBView
+                    parentView?.uniqueName = type == .storyboard ? "view" : "self"
                 }
             case "prototypes":
                 prototypesFlag = lastIBView as? IBTableView

@@ -143,7 +143,7 @@ private extension SwiftCodeGenerator {
             generateSubviews(views: allViews)
             generateViewDidLoad()
             Line.newLine
-            generateConstraints(views: allViews)
+            generateConstraints(views: [ibView] + allViews)
             Line.newLine
             generateSetupViews(views: [ibView] + allViews)
             Line.newLine

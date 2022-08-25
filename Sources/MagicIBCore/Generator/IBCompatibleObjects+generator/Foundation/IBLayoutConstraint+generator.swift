@@ -123,8 +123,13 @@ extension Array where Element == Line {
             
             for (uniqueName, layoutGuide) in layoutGuides {
                 for viewLayoutGuide in layoutGuide {
-                    if let uniqueName = uniqueName,
-                       line.line.contains(viewLayoutGuide.id)
+                    guard let uniqueName = uniqueName else { continue }
+                    guard line.line.contains(viewLayoutGuide.id) else { continue }
+                    
+                    if viewLayoutGuide.key == "safeArea" {
+                        line.appendReplacingString(of: viewLayoutGuide.id, with: "\(uniqueName).\(viewLayoutGuide.key + "LayoutGuide")")
+                    }
+                    else
                     {
                         line.appendReplacingString(of: viewLayoutGuide.id, with: "\(uniqueName).\(viewLayoutGuide.key)")
                     }
