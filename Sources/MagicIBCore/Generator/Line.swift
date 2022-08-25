@@ -10,7 +10,7 @@ import Foundation
 class Line: NSObject {
     
     static let end = Line(relatedVariableName: .end, custom: "}")
-    static let newLine = Line(relatedVariableName: .newLine, custom: "\n")
+    static let newLine = Line(relatedVariableName: .newLine, custom: "")
     
     let variableName: String
     

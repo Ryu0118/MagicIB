@@ -101,6 +101,11 @@ extension Array: SwiftCodeGeneratable where Element == IBLayoutConstraint {
         }
         
         lines.append(Line(relatedVariableName: "NSLayoutConstraint", custom: "])"))
+        
+        //If none of the constraints are present, an empty array is returned
+        if lines.count == 2 {
+            return []
+        }
         return lines
     }
     

@@ -48,6 +48,28 @@ extension IBCompatibleObject where Self: SwiftCodeGeneratable {
             }
             .flatMap { $0 }
     }
+    
+    func generateFunctions(variableName: String) -> [Line] {
+        activatedFunctions
+            .compactMap { function -> Line? in
+                zip(function.argumentNames, function.argumentValues)
+                    .compactMap { name, value -> String? in
+                        guard let validValue = function.convertValidValue(argumentValue: value) else {
+                            return nil
+                        }
+                        if name.isEmpty {
+                            return validValue
+                        }
+                        else {
+                            return name + ": " + validValue
+                        }
+                    }
+                    .joined(separator: ", ")
+                    .insert(first: "\(variableName).\(function.functionName)(", last: ")")
+                    .buildLines(relatedVariableName: variableName)
+                    .first
+            }
+    }
 }
 
 extension IBCompatibleObject where Self: IBView {
@@ -62,6 +84,10 @@ extension IBCompatibleObject where Self: IBView {
     
     func generateCustomizablePropertyLines(except: [String] = []) -> [Line] {
         generateCustomizablePropertyLines(variableName: classType.variableName, except: except)
+    }
+    
+    func generateFunctions() -> [Line] {
+        generateFunctions(variableName: classType.variableName)
     }
     
 }

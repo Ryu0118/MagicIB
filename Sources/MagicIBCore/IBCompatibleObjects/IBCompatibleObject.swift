@@ -21,6 +21,10 @@ extension IBCompatibleObject {
         properties.filter { $0.value != nil }
     }
     
+    var activatedFunctions: [IBFunctionMapper] {
+        functions.filter { !$0.argumentValues.isEmpty }
+    }
+    
     var isAllPropertiesActivated: Bool {
         activatedProperties.count == properties.count
     }
@@ -57,7 +61,7 @@ extension IBCompatibleObject {
                 .forEach {
                     if $0.ib.contains("vertical") || $0.ib.contains("horizontal") {
                         let axis = $0.ib.contains("vertical") ? "vertical" : "horizontal"
-                        $0.putValueToArgument("init(rawValue: \(value)", type: .enum, at: 0)
+                        $0.putValueToArgument("init(rawValue: \(value))", type: .enum, at: 0)
                         $0.putValueToArgument(axis, type: .enum, at: 1)
                     }
                 }

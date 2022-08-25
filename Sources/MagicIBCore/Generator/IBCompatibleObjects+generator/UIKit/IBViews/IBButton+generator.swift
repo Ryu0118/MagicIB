@@ -21,6 +21,7 @@ extension IBButton {
             generateCustomizablePropertyLines()
             generateBasicTypePropertyLines(except: ["buttonType", "lineBreakMode"])
             generateNonCustomizablePropertyLines(except: ["fontDescription"])
+            generateFunctions()
             Line(relatedVariableName: variableName, custom: "return \(variableName)")
             Line(relatedVariableName: variableName, custom: "}()")
         }
