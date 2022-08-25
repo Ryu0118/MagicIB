@@ -7,44 +7,60 @@
 
 import Foundation
 
-struct Line {
-    enum LineType {
-        case declare(isMutating: Bool, type: String? = nil, operand: String)
-        case assign(propertyName: String, operand: String)
-        case function(String)
-        case custom(String)
-    }
+class Line: NSObject {
     
     static let end = Line(relatedVariableName: .end, custom: "}")
-    static let newLine = Line(relatedVariableName: .newLine, custom: "\n")
+    static let newLine = Line(relatedVariableName: .newLine, custom: "")
     
     let variableName: String
-    private var lineType: LineType
+    
+    var lineType: LineType
+    private var indentCount = 0
+    private var appendedString = ""
+    private var replacingOccurrences: [(of: String, with: String)] = []
     
     var isStartOfBlock: Bool {
-        originalValue.dropLast() == "{" || originalValue.dropLast() == "["
+        originalValue.suffix(1) == "{" || originalValue.suffix(1) == "["
     }
     var isEndOfBlock: Bool {
-        originalValue == "}" || originalValue == "]"
+        originalValue.prefix(1) == "}" || originalValue.prefix(1) == "]"
     }
     
     var line: String {
+        var line: String
         switch lineType {
         case .declare(let isMutating, let type, let operand):
             let varType = isMutating ? "var" : "let"
             if let type = type {
-                return "\(varType) \(variableName): \(type) = \(operand)"
+                line = "\(varType) \(variableName): \(type) = \(operand)"
             }
             else {
-                return "\(varType) \(variableName) = \(operand)"
+                line = "\(varType) \(variableName) = \(operand)"
             }
         case .assign(let propertyName, let operand):
-            return "\(variableName).\(propertyName) = \(operand)"
+            line = "\(variableName).\(propertyName) = \(operand)"
         case .function(let function):
-            return function
+            line = function
         case .custom(let custom):
-            return custom
+            line = custom
+        case .declareClass(let name, let inheritances):
+            let inheritances = inheritances.joined(separator: ", ")
+            line = "class \(name): \(inheritances) {"
+        case .declareFunction(let function):
+            let `override` = function.isOverride ? "override " : ""
+            var accessLevel = function.accessLevel ?? ""
+            let arguments = function.arguments.map { $0.string }.joined(separator: ", ")
+            if !accessLevel.isEmpty {
+                accessLevel += " "
+            }
+            line = "\(`override`)\(accessLevel)func \(function.name)(\(arguments)) {"
         }
+        
+        for (of, with) in replacingOccurrences {
+            line = line.replacingOccurrences(of: of, with: with)
+        }
+        
+        return line.indent(indentCount) + appendedString
     }
     
     var originalValue: String {
@@ -57,6 +73,10 @@ struct Line {
             return string
         case .custom(let custom):
             return custom
+        case .declareClass(_, _):
+            return line
+        case .declareFunction(_):
+            return line
         }
     }
     
@@ -70,15 +90,62 @@ struct Line {
         self.lineType = .custom(custom)
     }
     
+    init(function: LineType.Function) {
+        self.variableName = .function
+        self.lineType = .declareFunction(function)
+    }
+    
 }
 
 extension Line {
-    mutating func explicitType(_ type: String) -> Line {
+    
+    enum LineType {
+        struct Argument {
+            let argumentName: String
+            let argumentType: String
+            
+            var string: String {
+                "\(argumentName): \(argumentType)"
+            }
+        }
+        struct Function {
+            let name: String
+            let arguments: [Argument]
+            let accessLevel: String?
+            let isOverride: Bool
+        }
+        
+        case declare(isMutating: Bool, type: String? = nil, operand: String)
+        case assign(propertyName: String, operand: String)
+        case function(String)
+        case custom(String)
+        case declareClass(name: String, inheritances: [String])
+        case declareFunction(Function)
+    }
+    
+}
+
+extension Line {
+    func explicitType(_ type: String) -> Line {
         if case .declare(let isMutating, let optionalType, let operand) = lineType,
            originalValue.first == "."
         {
             lineType = .declare(isMutating: isMutating, type: optionalType, operand: type + operand)
         }
         return self
+    }
+    
+    func indent(_ indentCount: Int) {
+        self.indentCount = indentCount
+    }
+    
+    @discardableResult
+    func appendString(_ string: String) -> Line {
+        self.appendedString = string
+        return self
+    }
+    
+    func appendReplacingString(of: String, with: String) {
+        self.replacingOccurrences.append((of, with))
     }
 }

@@ -9,8 +9,10 @@ import CoreGraphics
 import Foundation
 
 public class IBParser: NSObject {
-
-    fileprivate var type: IBType?
+    
+    var url: URL!
+    var type: IBType!
+    
     private var waitingIBViewList = [IBView]()
     private var waitingElementList = [String]()
     private var ibViewControllers = [IBViewController]()
@@ -21,6 +23,7 @@ public class IBParser: NSObject {
     
     public func parse(_ absoluteURL: URL) throws {
         self.type = try IBType(url: absoluteURL)
+        self.url = absoluteURL
         let data = try Data(contentsOf: absoluteURL)
         let parser = XMLParser(data: data)
         parser.delegate = self
@@ -39,7 +42,11 @@ extension IBParser: XMLParserDelegate {
            let ibView = IBView.instance(attributes: attributeDict, ibCompatibleView: ibViewElement)
         {
             waitingIBViewList.append(ibView)
-            ibViewControllers.last?.appendView(ibView)
+            
+            if ibViewControllers.last?.ibView == nil {
+                ibViewControllers.last?.ibView = ibView
+            }
+            
             if let tableView = prototypesFlag,
                let cell = ibView as? IBTableViewCell {
                 tableView.prototypes.append(cell)
@@ -72,7 +79,10 @@ extension IBParser: XMLParserDelegate {
             switch elementName {
             case "subviews":
                 subviewFlags.append(lastIBView)
-                if parentView == nil { parentView = lastIBView }
+                if parentView == nil {
+                    parentView = lastIBView
+                    parentView?.uniqueName = type == .storyboard ? "view" : "self"
+                }
             case "prototypes":
                 prototypesFlag = lastIBView as? IBTableView
             case "cells":
@@ -89,7 +99,20 @@ extension IBParser: XMLParserDelegate {
         guard !trimmed.isEmpty else { return }
         
         if let textView = waitingIBViewList.last as? IBTextView {
-            textView.addValueToProperty(ib: "text", value: string)
+            if let text = textView.text as? String {
+                textView.addValueToProperty(ib: "text", value: text + string)
+            }
+            else {
+                textView.addValueToProperty(ib: "text", value: string)
+            }
+        }
+        else if let label = waitingIBViewList.last as? IBLabel {
+            if let text = label.text as? String {
+                label.addValueToProperty(ib: "text", value: text + string)
+            }
+            else {
+                label.addValueToProperty(ib: "text", value: string)
+            }
         }
         else if let searchBar = waitingIBViewList.last as? IBSearchBar {
             if var array = searchBar.scopeButtonTitles as? [String] {
@@ -128,7 +151,9 @@ extension IBParser: XMLParserDelegate {
     
     public func parserDidEndDocument(_ parser: XMLParser) {
         print("parse end")
-        print(parentView!.subviews.flatMap { $0.generateSwiftCode().map { $0.line } })
+        let generator = SwiftCodeGenerator(url: url, type: .storyboard(ibViewController: ibViewControllers.last!))
+        let string = try! generator.generate()
+        print(string)
     }
     
 }
@@ -147,7 +172,7 @@ extension IBParser {
         }
     }
     
-    fileprivate enum IBType: String {
+    enum IBType: String {
         case storyboard
         case xib
         
