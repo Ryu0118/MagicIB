@@ -53,7 +53,7 @@ class IBPropertyMapper {
         self.type = type
     }
     
-    func addValue(_ value: Any) {
+    func addValue(_ value: Any?) {
         self.value = value
         if let object = value as? UniqueName {
             object.uniqueName = propertyName

@@ -18,8 +18,9 @@ extension IBLabel {
             Line(variableName: variableName, lineType: .declare(isMutating: false, type: nil, operand: "\(className)()"))
             generateCustomizablePropertyLines(except: ["contentView", "attributedText"])
             generateAttributedTextLines()
-            generateBasicTypePropertyLines()
+            generateBasicTypePropertyLines(except: ["lineBreakMode"])
             generateNonCustomizablePropertyLines()
+            Line(relatedVariableName: variableName, custom: "return \(variableName)")
             Line(relatedVariableName: uniqueName, custom: "}()")
         }
 

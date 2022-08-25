@@ -8,6 +8,7 @@
 import Foundation
 
 extension IBRect: SwiftCodeGeneratable, NonCustomizable, ZeroDiscriminable {
+    static let zero = IBRect(attributes: ["x" : "0.0", "y": "0.0", "width": "0.0", "height": "0.0"])
     
     var isZero: Bool {
         guard let x = self.x as? String,

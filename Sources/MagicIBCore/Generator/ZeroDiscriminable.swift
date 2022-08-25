@@ -9,4 +9,5 @@ import Foundation
 
 protocol ZeroDiscriminable: IBCompatibleObject, SwiftCodeGeneratable {
     var isZero: Bool { get }
+    static var zero: Self? { get }
 }

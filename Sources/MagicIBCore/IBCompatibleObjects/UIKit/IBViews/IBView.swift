@@ -137,6 +137,7 @@ class IBView: NSObject, IBCompatibleObject, UniqueName, SwiftCodeGeneratable {
             generateCustomizablePropertyLines(variableName: variableName, except: ["contentView"])
             generateBasicTypePropertyLines(variableName: variableName)
             generateNonCustomizablePropertyLines(variableName: variableName)
+            Line(relatedVariableName: variableName, custom: "return \(variableName)")
             Line(relatedVariableName: uniqueName, custom: "}()")
         }
     }

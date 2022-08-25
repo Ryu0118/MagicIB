@@ -8,6 +8,7 @@
 import Foundation
 
 extension IBEdgeInsets: SwiftCodeGeneratable, NonCustomizable, ZeroDiscriminable {
+    static let zero = IBEdgeInsets(attributes: ["minY": "0.0", "maxY": "0.0", "minX": "0.0", "maxX": "0.0"])
     
     var isZero: Bool {
         if let top = self.top as? String,

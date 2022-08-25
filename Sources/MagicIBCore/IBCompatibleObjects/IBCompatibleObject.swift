@@ -26,7 +26,7 @@ extension IBCompatibleObject {
     }
     
     @discardableResult
-    func addValueToProperty(ib: String, value: Any) -> IBPropertyMapper? {
+    func addValueToProperty(ib: String, value: Any?) -> IBPropertyMapper? {
         let properties = properties.filter { $0.ib == ib }
         properties.forEach { $0.addValue(value) }
         return properties.last

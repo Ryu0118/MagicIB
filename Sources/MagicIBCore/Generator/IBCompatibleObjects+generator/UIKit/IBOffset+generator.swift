@@ -8,6 +8,8 @@
 import Foundation
 
 extension IBOffset: SwiftCodeGeneratable, NonCustomizable, ZeroDiscriminable {
+    static let zero = IBOffset(attributes: ["horizontal": "0.0", "width": "0.0"])
+    
     var isZero: Bool {
         guard let horizontal = self.horizontal as? String,
               let vertical = self.vertical as? String else { return false }

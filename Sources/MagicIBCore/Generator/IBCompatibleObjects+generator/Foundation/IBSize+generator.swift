@@ -9,6 +9,8 @@ import Foundation
 
 extension IBSize: SwiftCodeGeneratable, NonCustomizable, ZeroDiscriminable {
     
+    static let zero = IBSize(attributes: ["width": "0.0", "height": "0.0"])
+    
     var isZero: Bool {
         guard let width = self.width as? String,
               let height = self.height as? String

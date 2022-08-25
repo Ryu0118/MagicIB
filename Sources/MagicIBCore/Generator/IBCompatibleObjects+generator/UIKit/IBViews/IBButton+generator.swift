@@ -22,8 +22,9 @@ extension IBButton {
                 Line(variableName: "\(variableName).titleLabel?", lineType: .assign(propertyName: "font", operand: rightOperand))
             }
             generateCustomizablePropertyLines()
-            generateBasicTypePropertyLines(except: ["buttonType"])
+            generateBasicTypePropertyLines(except: ["buttonType", "lineBreakMode"])
             generateNonCustomizablePropertyLines(except: ["fontDescription"])
+            Line(relatedVariableName: variableName, custom: "return \(variableName)")
             Line(relatedVariableName: variableName, custom: "}()")
         }
     }
