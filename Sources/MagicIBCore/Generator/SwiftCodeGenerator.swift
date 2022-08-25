@@ -268,9 +268,16 @@ private extension Array where Element == IBLayoutConstraint {
         var previousID: String?
         let sorted = self.sorted { $0.firstItem < $1.firstItem }
         
-        for constraint in sorted {
-            defer { previousID = constraint.firstItem }
+        for (index, constraint) in sorted.enumerated() {
+            defer {
+                previousID = constraint.firstItem
+                if index == sorted.count - 1 {
+                    group.append(tmp)
+                }
+            }
+            
             guard let previousID = previousID else { continue }
+            
             if constraint.firstItem == previousID {
                 tmp.append(constraint)
             }
