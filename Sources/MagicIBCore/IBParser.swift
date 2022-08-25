@@ -99,7 +99,12 @@ extension IBParser: XMLParserDelegate {
         guard !trimmed.isEmpty else { return }
         
         if let textView = waitingIBViewList.last as? IBTextView {
-            textView.addValueToProperty(ib: "text", value: string)
+            if let text = textView.text as? String {
+                textView.addValueToProperty(ib: "text", value: text + string)
+            }
+            else {
+                textView.addValueToProperty(ib: "text", value: string)
+            }
         }
         else if let label = waitingIBViewList.last as? IBLabel {
             if let text = label.text as? String {
