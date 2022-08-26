@@ -20,6 +20,7 @@ public class IBParser: NSObject {
     private var prototypesFlag: IBTableView?
     private var cellFlag: IBCollectionView?
     private var parentView: IBView?
+    private var lastAttributes: [String: String] = [:]
     
     public func parse(_ absoluteURL: URL) throws {
         self.type = try IBType(url: absoluteURL)
@@ -37,7 +38,7 @@ extension IBParser: XMLParserDelegate {
     
     public func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
         waitingElementList.append(elementName)
-
+        lastAttributes = attributeDict
         if let ibViewElement = IBCompatibleView.init(rawValue: elementName),
            let ibView = IBView.instance(attributes: attributeDict, ibCompatibleView: ibViewElement)
         {
@@ -98,32 +99,10 @@ extension IBParser: XMLParserDelegate {
         let trimmed = string.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
         
-        if let textView = waitingIBViewList.last as? IBTextView {
-            if let text = textView.text as? String {
-                textView.addValueToProperty(ib: "text", value: text + string)
-            }
-            else {
-                textView.addValueToProperty(ib: "text", value: string)
-            }
+        if let anyView = waitingIBViewList.last as? LongCharactersContainable {
+            anyView.handleLongCharacters(key: lastAttributes["key"], characters: string)
         }
-        else if let label = waitingIBViewList.last as? IBLabel {
-            if let text = label.text as? String {
-                label.addValueToProperty(ib: "text", value: text + string)
-            }
-            else {
-                label.addValueToProperty(ib: "text", value: string)
-            }
-        }
-        else if let searchBar = waitingIBViewList.last as? IBSearchBar {
-            if var array = searchBar.scopeButtonTitles as? [String] {
-                array.append(string)
-                searchBar.addValueToProperty(ib: "scopeButtonTitles", value: array)
-            }
-            else {
-                let array = [string]
-                searchBar.addValueToProperty(ib: "scopeButtonTitles", value: array)
-            }
-        }
+
     }
     
     public func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
@@ -150,7 +129,7 @@ extension IBParser: XMLParserDelegate {
     }
     
     public func parserDidEndDocument(_ parser: XMLParser) {
-        print("parse end")
+        //print("parse end")
         let generator = SwiftCodeGenerator(url: url, type: .storyboard(ibViewController: ibViewControllers.last!))
         let string = try! generator.generate()
         print(string)

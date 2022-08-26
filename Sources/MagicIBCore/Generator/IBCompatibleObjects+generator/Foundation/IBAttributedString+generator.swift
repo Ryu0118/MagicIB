@@ -66,7 +66,7 @@ extension IBAttributedString.Fragment: SwiftCodeGeneratable {
                 Line(relatedVariableName: variableName, custom: "if let range = \(variableName).range(of: \"\(content)\") {")
                 generateCustomizablePropertyLines(variableName: "\(variableName)[range]")
                 generateNonCustomizablePropertyLines(variableName: "\(variableName)[range]")
-                Line.end
+                Line.end.changeVariableName(variableName)
             }
         case .legacy(let count):
             let attributeName = "stringAttributes\(count + 1)"
@@ -101,7 +101,7 @@ extension IBAttributedString.Fragment: SwiftCodeGeneratable {
                         
                         guard let type = type,
                               let firstLine = nonCustomizable.generateSwiftCode().first
-                        else { fatalError("failed to get right operand") }
+                        else { fatalError("failed to get right operand. propertyName: \(property.propertyName)") }
                         let rightOperand = firstLine.explicitType(type).originalValue
                         return Line(relatedVariableName: attributeName, custom: ".\(property.propertyName): \(rightOperand),")
                     }
