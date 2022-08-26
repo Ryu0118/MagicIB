@@ -30,7 +30,7 @@ class IBSearchBar: IBView, LongCharactersContainable {
         .init(propertyName: "keyboardAppearance", type: .enum),
         .init(propertyName: "returnKeyType", type: .enum),
         .init(propertyName: "enablesReturnKeyAutomatically", type: .bool),
-        .init(propertyName: "secureTextEntry", type: .bool),
+        .init(ib: "secureTextEntry", propertyName: "isSecureTextEntry", type: .bool),
         .init(propertyName: "smartDashesType", type: .enum),
         .init(propertyName: "smartInsertDeleteType", type: .enum),
         .init(propertyName: "smartQuotesType", type: .enum),

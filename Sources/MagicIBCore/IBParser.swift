@@ -129,10 +129,16 @@ extension IBParser: XMLParserDelegate {
     }
     
     public func parserDidEndDocument(_ parser: XMLParser) {
-        //print("parse end")
-        let generator = SwiftCodeGenerator(url: url, type: .storyboard(ibViewController: ibViewControllers.last!))
-        let string = try! generator.generate()
-        print(string)
+        if type == .storyboard {
+            for ibViewController in ibViewControllers {
+                let generator = SwiftCodeGenerator(url: url, type: .storyboard(ibViewController: ibViewController))
+                let string = try! generator.generate()
+                print(string)
+            }
+        }
+        else {
+            
+        }
     }
     
 }

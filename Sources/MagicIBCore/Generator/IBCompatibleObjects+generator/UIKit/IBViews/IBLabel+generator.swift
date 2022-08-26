@@ -31,9 +31,8 @@ extension IBLabel {
             if let property = findProperty(ib: "attributedText"),
                let attributedText = property.value as? IBAttributedString
             {
-                attributedText
-                    .generateSwiftCode(mode: .legacy)
-                    .related(variableName: classType.variableName, propertyName: property.propertyName)
+                var code = attributedText.generateSwiftCode(mode: .legacy)
+                code.related(variableName: classType.variableName, propertyName: property.propertyName)
             }
             
         }
