@@ -31,6 +31,10 @@ struct IBFont {
            let type = FontType(rawValue: typeString) {
             self.type = type
         }
+        if let typeString = attributes["metaFont"],
+           let type = FontType(rawValue: typeString) {
+            self.type = type
+        }
         if let style = attributes["style"] {
             self.style = style
         }

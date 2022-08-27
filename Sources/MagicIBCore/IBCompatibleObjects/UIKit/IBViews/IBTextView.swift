@@ -6,7 +6,7 @@
 //
 import Foundation
 
-class IBTextView: IBScrollView {
+class IBTextView: IBScrollView, LongCharactersContainable {
     private let textViewProperties: [IBPropertyMapper] = [
         .init(propertyName: "text", type: .string),
         .init(propertyName: "textColor", type: .color),
@@ -24,7 +24,10 @@ class IBTextView: IBScrollView {
         .init(propertyName: "smartQuotesType", type: .enum),
         .init(propertyName: "textContentType", type: .enum),
         .init(propertyName: "dataDetectorTypes", type: .optionSet),
+        .init(propertyName: "attributedText", type: .attributedString),
     ]
+    
+    private var attributedString: IBAttributedString?
     
     override var properties: [IBPropertyMapper] {
         super.properties + textViewProperties
@@ -41,8 +44,37 @@ class IBTextView: IBScrollView {
                   let optionSet = IBOptionSet(attributes: attributes)
             else { return }
             addValueToProperty(ib: propertyName, value: optionSet)
+        case "attributedString":
+            guard let propertyName = attributes["key"] else { return }
+            attributedString = IBAttributedString()
+            attributedString?.uniqueName = propertyName
+            addValueToProperty(ib: propertyName, value: attributedString!)
+        case "attributedString->fragment":
+            guard let content = attributes["content"] else { return }
+            attributedString?.addFragment(content)
+        case "attributedString->fragment->attributes->color":
+            attributedString?.addColorAttributes(attributes)
+        case "attributedString->fragment->attributes->font":
+            attributedString?.addFontAttributes(attributes)
+        case "attributedString->fragment->attributes->paragraphStyle":
+            attributedString?.addParagraphStyle(attributes)
         default:
             break
+        }
+    }
+    
+    func handleLongCharacters(key: String?, characters: String) {
+        guard let key = key else { return }
+        if key == "content" {
+            attributedString?.addFragment(characters)
+        }
+        else if key == "text" {
+            if let text = self.text as? String {
+                addValueToProperty(ib: "text", value: text + characters)
+            }
+            else {
+                addValueToProperty(ib: "text", value: characters)
+            }
         }
     }
 }

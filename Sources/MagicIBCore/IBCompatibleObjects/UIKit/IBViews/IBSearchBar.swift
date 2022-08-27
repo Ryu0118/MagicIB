@@ -7,7 +7,7 @@
 
 import Foundation
 
-class IBSearchBar: IBView {
+class IBSearchBar: IBView, LongCharactersContainable {
     private let searchBarProperties: [IBPropertyMapper] = [
         .init(propertyName: "barStyle", type: .enum),
         .init(propertyName: "searchBarStyle", type: .enum),
@@ -30,7 +30,7 @@ class IBSearchBar: IBView {
         .init(propertyName: "keyboardAppearance", type: .enum),
         .init(propertyName: "returnKeyType", type: .enum),
         .init(propertyName: "enablesReturnKeyAutomatically", type: .bool),
-        .init(propertyName: "secureTextEntry", type: .bool),
+        .init(ib: "secureTextEntry", propertyName: "isSecureTextEntry", type: .bool),
         .init(propertyName: "smartDashesType", type: .enum),
         .init(propertyName: "smartInsertDeleteType", type: .enum),
         .init(propertyName: "smartQuotesType", type: .enum),
@@ -60,6 +60,17 @@ class IBSearchBar: IBView {
             mapping(attributes)
         default:
             break
+        }
+    }
+    
+    func handleLongCharacters(key: String?, characters: String) {
+        if var array = self.scopeButtonTitles as? [String] {
+            array.append(characters)
+            addValueToProperty(ib: "scopeButtonTitles", value: array)
+        }
+        else {
+            let array = [characters]
+            addValueToProperty(ib: "scopeButtonTitles", value: array)
         }
     }
 }

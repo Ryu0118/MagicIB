@@ -2,13 +2,12 @@
 //  File.swift
 //  
 //
-//  Created by Ryu on 2022/08/23.
+//  Created by Ryu on 2022/08/27.
 //
 
 import Foundation
 
-extension IBLabel {
-    
+extension IBTextView {
     override func generateSwiftCode() -> [Line] {
         guard let uniqueName = uniqueName else { return [] }
         return buildLines {
@@ -18,7 +17,7 @@ extension IBLabel {
             Line(variableName: variableName, lineType: .declare(isMutating: false, type: nil, operand: "\(className)()"))
             generateCustomizablePropertyLines(except: ["contentView", "attributedText"])
             generateAttributedTextLines()
-            generateBasicTypePropertyLines(except: ["lineBreakMode"])
+            generateBasicTypePropertyLines()
             generateNonCustomizablePropertyLines()
             Line(relatedVariableName: variableName, custom: "return \(variableName)")
             Line(relatedVariableName: uniqueName, custom: "}()")
@@ -37,5 +36,4 @@ extension IBLabel {
             
         }
     }
-    
 }

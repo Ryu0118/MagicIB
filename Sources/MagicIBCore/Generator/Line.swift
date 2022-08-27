@@ -12,7 +12,7 @@ class Line: NSObject {
     static let end = Line(relatedVariableName: .end, custom: "}")
     static let newLine = Line(relatedVariableName: .newLine, custom: "")
     
-    let variableName: String
+    var variableName: String
     
     var lineType: LineType
     private var indentCount = 0
@@ -147,5 +147,11 @@ extension Line {
     
     func appendReplacingString(of: String, with: String) {
         self.replacingOccurrences.append((of, with))
+    }
+    
+    @discardableResult
+    func changeVariableName(_ variableName: String) -> Line {
+        self.variableName = variableName
+        return self
     }
 }

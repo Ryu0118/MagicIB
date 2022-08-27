@@ -42,9 +42,8 @@ extension IBCompatibleObject where Self: SwiftCodeGeneratable {
                    zeroDiscriminable.isZero {
                     return nil
                 }
-                return generator
-                    .generateSwiftCode()
-                    .related(variableName: variableName, propertyName: property.propertyName)
+                var code = generator.generateSwiftCode()
+                return code.related(variableName: variableName, propertyName: property.propertyName)
             }
             .flatMap { $0 }
     }

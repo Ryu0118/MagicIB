@@ -23,11 +23,16 @@ final class SwiftCodeGenerator {
     
     var className: String {
         switch type {
-        case .storyboard(_):
-            return url
-                .deletingPathExtension()
-                .lastPathComponent
-                .insert(last: "ViewController")
+        case .storyboard(let viewController):
+            if let customClass = viewController.customClassName {
+                return customClass
+            }
+            else {
+                return url
+                    .deletingPathExtension()
+                    .lastPathComponent
+                    .insert(last: "ViewController")
+            }
         case .xib(_):
             return url
                 .deletingPathExtension()
@@ -276,7 +281,10 @@ private extension Array where Element == IBLayoutConstraint {
                 }
             }
             
-            guard let previousID = previousID else { continue }
+            guard let previousID = previousID else {
+                tmp.append(constraint)
+                continue
+            }
             
             if constraint.firstItem == previousID {
                 tmp.append(constraint)

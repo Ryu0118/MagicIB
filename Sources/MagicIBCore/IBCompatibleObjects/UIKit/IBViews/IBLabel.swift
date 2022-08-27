@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class IBLabel: IBView {
+final class IBLabel: IBView, LongCharactersContainable {
     private let labelProperties: [IBPropertyMapper] = [
         .init(propertyName: "numberOfLines", type: .number),
         .init(propertyName: "lineBreakMode", type: .enum),
@@ -52,6 +52,15 @@ final class IBLabel: IBView {
             attributedString?.addParagraphStyle(attributes)
         default:
             break
+        }
+    }
+    
+    func handleLongCharacters(key: String?, characters: String) {
+        if let text = self.text as? String {
+            addValueToProperty(ib: "text", value: text + characters)
+        }
+        else {
+            addValueToProperty(ib: "text", value: characters)
         }
     }
     
