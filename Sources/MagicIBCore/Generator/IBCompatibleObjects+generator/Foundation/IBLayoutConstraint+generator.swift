@@ -77,6 +77,9 @@ extension IBLayoutConstraint: SwiftCodeGeneratable {
                 arguments.append("constant: \(constant)")
             }
         }
+        if arguments.isEmpty {
+            fatalError("arguments is empty")
+        }
         return arguments
     }
 }

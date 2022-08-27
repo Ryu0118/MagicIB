@@ -22,7 +22,7 @@ struct IBLayoutConstraint {
     init?(_ attributes: [String: String], parentViewID: String) {
         guard let id = attributes["id"],
               let firstAttributeString = attributes["firstAttribute"],
-              let firstAttribute: Attribute = .init(rawValue: firstAttributeString)
+              let firstAttribute: Attribute = .init(firstAttributeString)
         else { return nil }
         
         if let firstItem = attributes["firstItem"] {
@@ -31,7 +31,7 @@ struct IBLayoutConstraint {
         else {
             self.firstItem = parentViewID
         }
-        self.secondAttribute = .init(rawValue: attributes["secondAttribute"] ?? "")
+        self.secondAttribute = .init(attributes["secondAttribute"] ?? "")
         self.multiplier = .init(attributes["multiplier"] ?? "")
         self.id = id
         self.firstAttribute = firstAttribute
@@ -53,6 +53,16 @@ extension IBLayoutConstraint {
         case centerX
         case centerY
         case firstBaseline
+        
+        init?(_ rawValue: String) {
+            if rawValue == "topMargin" {
+                self = .top
+            }
+            else {
+                guard let attribute = Attribute(rawValue: rawValue) else { return nil }
+                self = attribute
+            }
+        }
     }
     
     enum Relation: String {
