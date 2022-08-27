@@ -15,7 +15,11 @@ public class IBParser: NSObject {
     
     private var waitingIBViewList = [IBView]()
     private var waitingElementList = [String]()
-    private var ibViewControllers = [IBViewController]()
+    private var ibViewControllers = [IBViewController]() {
+        didSet {
+            parentView = nil
+        }
+    }
     private var subviewFlags = [IBView]()
     private var prototypesFlag: IBTableView?
     private var cellFlag: IBCollectionView?
