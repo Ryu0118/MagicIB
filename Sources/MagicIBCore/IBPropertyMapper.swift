@@ -7,6 +7,13 @@
 
 import Foundation
 
+struct IBEnumMapper {
+    let type: IBInspectableType
+    let from: String
+    let to: String
+    let propertyName: String?
+}
+
 class IBPropertyMapper {
     let ib: String
     let propertyName: String
@@ -15,6 +22,7 @@ class IBPropertyMapper {
         didSet {
             imageValidation()
             autoresizingMaskValidation()
+            valueValidation()
             if propertyName == "lineBreakMode" {
                 
             }
@@ -29,6 +37,8 @@ class IBPropertyMapper {
             return false
         }
     }
+    
+    private var enumMappers = [IBEnumMapper]()
     
     private var recursionLock = false
     
@@ -48,6 +58,29 @@ class IBPropertyMapper {
         self.value = value
         if let object = value as? UniqueName {
             object.uniqueName = propertyName
+        }
+    }
+    
+    func addEnumMappers(_ mapper: [IBEnumMapper]) {
+        self.enumMappers += mapper
+    }
+    
+    private func valueValidation() {
+        guard let value = value as? String else { return }
+        
+        for enumMapper in enumMappers {
+            guard enumMapper.from == value,
+                  enumMapper.type == type
+            else { continue }
+            
+            if let propertyName = enumMapper.propertyName,
+               self.propertyName == propertyName
+            {
+                self.value = enumMapper.to
+            }
+            else if enumMapper.propertyName == nil {
+                self.value = enumMapper.to
+            }
         }
     }
     
