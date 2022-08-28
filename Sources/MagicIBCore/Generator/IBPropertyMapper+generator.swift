@@ -14,7 +14,7 @@ extension IBPropertyMapper {
         
         switch type {
         case .number:
-            return value as? String
+            return "\(value)"
         case .bool:
             guard let value = value as? String else { return nil }
             return value == "YES" ? "true" : "false"
