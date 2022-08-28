@@ -29,7 +29,7 @@ struct IBViewDependencies: Dependencies {
         case .arView:
             return ["UIKit", "RealityKit"]
         case .clLocationButton:
-            return ["UIKit", "CoreLocation"]
+            return ["UIKit", "CoreLocation", "CoreLocationUI"]
         default:
             return ["UIKit"]
         }
