@@ -19,7 +19,7 @@ extension IBLabel {
             Line(variableName: variableName, lineType: .declare(isMutating: false, type: nil, operand: "\(className)()"))
             generateCustomizablePropertyLines(except: ["contentView", "attributedText"])
             generateAttributedTextLines()
-            generateBasicTypePropertyLines(except: [])
+            generateBasicTypePropertyLines()
             generateNonCustomizablePropertyLines()
             Line(relatedVariableName: variableName, custom: "return \(variableName)")
             Line(relatedVariableName: uniqueName, custom: "}()")
@@ -29,7 +29,12 @@ extension IBLabel {
     
     private func addEnumMapper() {
         findProperty(ib: "lineBreakMode")?.addEnumMappers([
-            .init(from: "tailTruncation", to: "byTruncatingTail")
+            .init(from: "tailTruncation", to: "byTruncatingTail"),
+            .init(from: "middleTruncation", to: "byTruncatingMiddle"),
+            .init(from: "headTruncation", to: "byTruncatingHead"),
+            .init(from: "wordWrap", to: "byWordWrapping"),
+            .init(from: "characterWrap", to: "byCharWrapping"),
+            .init(from: "clip", to: "byClipping"),
         ])
     }
     

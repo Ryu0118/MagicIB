@@ -15,9 +15,6 @@ class IBPropertyMapper {
         didSet {
             imageValidation()
             autoresizingMaskValidation()
-            if propertyName == "lineBreakMode" {
-                
-            }
         }
     }
     
