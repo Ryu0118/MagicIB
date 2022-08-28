@@ -7,13 +7,6 @@
 
 import Foundation
 
-struct IBEnumMapper {
-    let type: IBInspectableType
-    let from: String
-    let to: String
-    let propertyName: String?
-}
-
 class IBPropertyMapper {
     let ib: String
     let propertyName: String
@@ -69,9 +62,7 @@ class IBPropertyMapper {
         guard let value = value as? String else { return }
         
         for enumMapper in enumMappers {
-            guard enumMapper.from == value,
-                  enumMapper.type == type
-            else { continue }
+            guard enumMapper.from == value else { continue }
             
             if let propertyName = enumMapper.propertyName,
                self.propertyName == propertyName
