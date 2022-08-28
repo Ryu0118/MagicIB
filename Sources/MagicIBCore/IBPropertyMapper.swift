@@ -13,20 +13,9 @@ class IBPropertyMapper {
     let type: IBInspectableType
     var value: Any? {
         didSet {
-            if let imageName = value as? String, type == .image {
-                guard let url = Bundle.module.url(forResource: "SFSymbols", withExtension: "txt"),
-                      let data = try? Data(contentsOf: url),
-                      let string = String(data: data, encoding: .utf8)
-                else { return }
-                let sfsymbols = string.components(separatedBy: "\n")
-                if sfsymbols.contains(imageName) {
-                    value = IBImage(systemName: imageName)
-                }
-                else {
-                    value = IBImage(named: imageName)
-                }
-            }
-            else if propertyName == "lineBreakMode" {
+            validation()
+            
+            if propertyName == "lineBreakMode" {
                 
             }
         }
@@ -57,6 +46,22 @@ class IBPropertyMapper {
         self.value = value
         if let object = value as? UniqueName {
             object.uniqueName = propertyName
+        }
+    }
+    
+    private func validation() {
+        guard let imageName = value as? String,
+              let url = Bundle.module.url(forResource: "SFSymbols", withExtension: "txt"),
+              let data = try? Data(contentsOf: url),
+              let string = String(data: data, encoding: .utf8),
+              type == .image
+        else { return }
+        let sfsymbols = string.components(separatedBy: "\n")
+        if sfsymbols.contains(imageName) {
+            value = IBImage(systemName: imageName)
+        }
+        else {
+            value = IBImage(named: imageName)
         }
     }
 }
