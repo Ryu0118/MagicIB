@@ -54,6 +54,62 @@ final class SwiftCodeGenerator {
     
 }
 
+//MARK: ViewController extension
+private extension SwiftCodeGenerator {
+    
+    func generateViewController(ibViewControllers: [IBViewController]) -> String {
+        
+        buildLines {
+            let dependencies: [Dependencies] = ibViewControllers.compactMap { $0.dependencies } + ibViewControllers.compactMap { $0.ibView.dependencies } +
+                ibViewControllers.flatMap { $0.ibView.subviews.findAllSubviews().map { $0.dependencies } }
+            generateFileHeader()
+            Line.newLine
+            generateImport(dependencies: dependencies)
+            
+            for ibViewController in ibViewControllers {
+                if let ibView = ibViewController.ibView {
+                    let inheritance = ibViewController.superClass.description
+                    let allViews = getAllViews(parentView: ibView)
+                    let className = ibViewController.customClassName ?? className
+                    
+                    Line.newLine
+                    Line(variableName: .class, lineType: .declareClass(name: className, inheritances: [inheritance]))
+                    Line.newLine
+                    generateSubviews(views: allViews)
+                    generateViewDidLoad()
+                    Line.newLine
+                    generateSetupViews(views: [ibView] + allViews)
+                    Line.newLine
+                    generateConstraints(views: [ibView] + allViews)
+                    Line.newLine
+                    Line.end
+                }
+            }
+        }
+        .calculateIndent()
+        .joined(separator: "\n")
+        
+    }
+    
+    func generateViewDidLoad() -> [Line] {
+        generateFunction(name: "viewDidLoad", isOverride: true, arguments: [], accessLevel: nil) {
+            Line(variableName: "super", lineType: .function("super.viewDidLoad()"))
+            Line(variableName: "self", lineType: .function("setupViews()"))
+            Line(variableName: "self", lineType: .function("setupConstraints()"))
+        }
+    }
+    
+}
+
+//MARK: View Extension
+private extension SwiftCodeGenerator {
+    
+    func generateView(ibView: IBView) -> String {
+        ""
+    }
+    
+}
+
 private extension SwiftCodeGenerator {
     func buildLines(@ArrayBuilder<Line> _ builder: () -> [Line]) -> [Line] {
         builder()
@@ -139,61 +195,36 @@ private extension SwiftCodeGenerator {
     }
 }
 
-//MARK: ViewController extension
-private extension SwiftCodeGenerator {
+//MARK: ConstraintsGenerator
+private struct ConstraintsGenerator: SwiftCodeGeneratable {
     
-    func generateViewController(ibViewControllers: [IBViewController]) -> String {
-        
-        buildLines {
-            let dependencies: [Dependencies] = ibViewControllers.compactMap { $0.dependencies } + ibViewControllers.compactMap { $0.ibView.dependencies } +
-                ibViewControllers.flatMap { $0.ibView.subviews.findAllSubviews().map { $0.dependencies } }
-            generateFileHeader()
-            Line.newLine
-            generateImport(dependencies: dependencies)
-            
-            for ibViewController in ibViewControllers {
-                if let ibView = ibViewController.ibView {
-                    let inheritance = ibViewController.superClass.description
-                    let allViews = getAllViews(parentView: ibView)
-                    let className = ibViewController.customClassName ?? className
-                    
-                    Line.newLine
-                    Line(variableName: .class, lineType: .declareClass(name: className, inheritances: [inheritance]))
-                    Line.newLine
-                    generateSubviews(views: allViews)
-                    generateViewDidLoad()
-                    Line.newLine
-                    generateSetupViews(views: [ibView] + allViews)
-                    Line.newLine
-                    generateConstraints(views: [ibView] + allViews)
-                    Line.newLine
-                    Line.end
-                }
-            }
-        }
-        .calculateIndent()
-        .joined(separator: "\n")
-        
+    let constraints: [[IBLayoutConstraint]]
+    let views: [IBView]
+    
+    init(views: [IBView]) {
+        self.views = views
+        self.constraints = views
+            .flatMap { $0.constraints }
+            .grouped()
     }
     
-    func generateViewDidLoad() -> [Line] {
-        generateFunction(name: "viewDidLoad", isOverride: true, arguments: [], accessLevel: nil) {
-            Line(variableName: "super", lineType: .function("super.viewDidLoad()"))
-            Line(variableName: "self", lineType: .function("setupViews()"))
-            Line(variableName: "self", lineType: .function("setupConstraints()"))
+    func generateSwiftCode() -> [Line] {
+        buildLines {
+            for (index, viewConstraints) in constraints.enumerated() {
+                viewConstraints
+                    .generateSwiftCode()
+                    .replaceIdToUniqueName(allViews: views, constraints: [IBLayoutConstraint](constraints.joined()))
+                if index != constraints.count - 1 {
+                    Line.newLine
+                }
+            }
         }
     }
     
 }
 
-//MARK: View Extension
-private extension SwiftCodeGenerator {
-    
-    func generateView(ibView: IBView) -> String {
-        ""
-    }
-    
-}
+
+//MARK: Private extensions
 
 private extension Array where Element == Line {
     
@@ -299,31 +330,4 @@ private extension Array where Element == IBLayoutConstraint {
         }
         return group
     }
-}
-
-private struct ConstraintsGenerator: SwiftCodeGeneratable {
-    
-    let constraints: [[IBLayoutConstraint]]
-    let views: [IBView]
-    
-    init(views: [IBView]) {
-        self.views = views
-        self.constraints = views
-            .flatMap { $0.constraints }
-            .grouped()
-    }
-    
-    func generateSwiftCode() -> [Line] {
-        buildLines {
-            for (index, viewConstraints) in constraints.enumerated() {
-                viewConstraints
-                    .generateSwiftCode()
-                    .replaceIdToUniqueName(allViews: views, constraints: [IBLayoutConstraint](constraints.joined()))
-                if index != constraints.count - 1 {
-                    Line.newLine
-                }
-            }
-        }
-    }
-    
 }
