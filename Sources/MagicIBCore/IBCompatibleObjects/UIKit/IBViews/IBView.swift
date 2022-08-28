@@ -54,7 +54,6 @@ class IBView: NSObject, IBCompatibleObject, UniqueName, SwiftCodeGeneratable {
         .init(ib: "tintColor", propertyName: "tintColor", type: .color),
         .init(ib: "opaque", propertyName: "isOpaque", type: .bool),
         .init(ib: "tag", propertyName: "tag", type: .number),
-        .init(ib: "ambiguous", propertyName: "hasAmbiguousLayout", type: .bool),
         .init(propertyName: "semanticContentAttribute", type: .enum),
     ]
         
@@ -133,9 +132,9 @@ class IBView: NSObject, IBCompatibleObject, UniqueName, SwiftCodeGeneratable {
             let className = classType.description
             Line(variableName: uniqueName, lineType: .declare(isMutating: false, type: className, operand: "{"))
             Line(variableName: variableName, lineType: .declare(isMutating: false, type: nil, operand: "\(className)()"))
-            generateCustomizablePropertyLines(variableName: variableName, except: ["contentView"])
-            generateBasicTypePropertyLines(variableName: variableName)
-            generateNonCustomizablePropertyLines(variableName: variableName)
+            generateCustomizablePropertyLines(except: ["contentView"])
+            generateBasicTypePropertyLines()
+            generateNonCustomizablePropertyLines()
             generateFunctions()
             Line(relatedVariableName: variableName, custom: "return \(variableName)")
             Line(relatedVariableName: uniqueName, custom: "}()")

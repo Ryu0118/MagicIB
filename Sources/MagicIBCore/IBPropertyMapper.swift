@@ -13,20 +13,9 @@ class IBPropertyMapper {
     let type: IBInspectableType
     var value: Any? {
         didSet {
-            if let imageName = value as? String, type == .image {
-                guard let url = Bundle.module.url(forResource: "SFSymbols", withExtension: "txt"),
-                      let data = try? Data(contentsOf: url),
-                      let string = String(data: data, encoding: .utf8)
-                else { return }
-                let sfsymbols = string.components(separatedBy: "\n")
-                if sfsymbols.contains(imageName) {
-                    value = IBImage(systemName: imageName)
-                }
-                else {
-                    value = IBImage(named: imageName)
-                }
-            }
-            else if propertyName == "lineBreakMode" {
+            imageValidation()
+            autoresizingMaskValidation()
+            if propertyName == "lineBreakMode" {
                 
             }
         }
@@ -40,6 +29,8 @@ class IBPropertyMapper {
             return false
         }
     }
+    
+    private var recursionLock = false
     
     init(ib: String, propertyName: String, type: IBInspectableType) {
         self.ib = ib
@@ -57,6 +48,38 @@ class IBPropertyMapper {
         self.value = value
         if let object = value as? UniqueName {
             object.uniqueName = propertyName
+        }
+    }
+    
+    private func autoresizingMaskValidation() {
+        guard var autoresizingMask = value as? IBOptionSet,
+              type == .optionSet,
+              propertyName == "autoresizingMask",
+              !recursionLock
+        else { return }
+        autoresizingMask.swap(from: ".widthSizable", to: ".flexibleWidth")
+        autoresizingMask.swap(from: ".heightSizable", to: ".flexibleHeight")
+        autoresizingMask.swap(from: ".flexibleMaxX", to: ".flexibleRightMargin")
+        autoresizingMask.swap(from: ".flexibleMaxY", to: ".flexibleBottomMargin")
+        autoresizingMask.swap(from: ".flexibleMinX", to: ".flexibleLeftMargin")
+        autoresizingMask.swap(from: ".flexibleMinY", to: ".flexibleTopMargin")
+        recursionLock = true
+        value = autoresizingMask
+    }
+    
+    private func imageValidation() {
+        guard let imageName = value as? String,
+              let url = Bundle.module.url(forResource: "SFSymbols", withExtension: "txt"),
+              let data = try? Data(contentsOf: url),
+              let string = String(data: data, encoding: .utf8),
+              type == .image
+        else { return }
+        let sfsymbols = string.components(separatedBy: "\n")
+        if sfsymbols.contains(imageName) {
+            value = IBImage(systemName: imageName)
+        }
+        else {
+            value = IBImage(named: imageName)
         }
     }
 }
