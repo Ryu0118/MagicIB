@@ -13,7 +13,7 @@ extension IBFont: SwiftCodeGeneratable, NonCustomizable {
         buildLines {
             if let name = fontName,
                let size = size {
-                Line(variableName: "font", lineType: .declare(isMutating: false, operand: "UIFont(name: \(name), size: \(size))"))
+                Line(variableName: "font", lineType: .declare(isMutating: false, operand: "UIFont(name: \"\(name)\", size: \(size))"))
             }
             else if let type = type,
                     let size = size {

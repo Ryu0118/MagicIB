@@ -15,9 +15,6 @@ class IBPropertyMapper {
         didSet {
             imageValidation()
             autoresizingMaskValidation()
-            if propertyName == "lineBreakMode" {
-                
-            }
         }
     }
     
@@ -27,6 +24,12 @@ class IBPropertyMapper {
             return true
         default:
             return false
+        }
+    }
+    
+    private var enumMappers = [IBEnumMapper]() {
+        didSet {
+            valueValidation()
         }
     }
     
@@ -48,6 +51,19 @@ class IBPropertyMapper {
         self.value = value
         if let object = value as? UniqueName {
             object.uniqueName = propertyName
+        }
+    }
+    
+    func addEnumMappers(_ mapper: [IBEnumMapper]) {
+        self.enumMappers += mapper
+    }
+    
+    private func valueValidation() {
+        guard let value = value as? String else { return }
+        
+        for enumMapper in enumMappers {
+            guard enumMapper.from == value else { continue }
+            self.value = enumMapper.to
         }
     }
     
