@@ -10,7 +10,7 @@ import Foundation
 final class SwiftCodeGenerator {
     
     enum IBType {
-        case storyboard(ibViewController: IBViewController)
+        case storyboard(ibViewControllers: [IBViewController])
         case xib(ibView: IBView)
     }
     
@@ -23,16 +23,12 @@ final class SwiftCodeGenerator {
     
     var className: String {
         switch type {
-        case .storyboard(let viewController):
-            if let customClass = viewController.customClassName {
-                return customClass
-            }
-            else {
-                return url
-                    .deletingPathExtension()
-                    .lastPathComponent
-                    .insert(last: "ViewController")
-            }
+        case .storyboard(_):
+            return url
+                .deletingPathExtension()
+                .lastPathComponent
+                .insert(last: "ViewController")
+            
         case .xib(_):
             return url
                 .deletingPathExtension()
@@ -49,8 +45,8 @@ final class SwiftCodeGenerator {
     
     func generate() throws -> String {
         switch type {
-        case .storyboard(let ibViewController):
-            return try generateViewController(ibViewController: ibViewController)
+        case .storyboard(let ibViewControllers):
+            return generateViewController(ibViewControllers: ibViewControllers)
         case .xib(let ibView):
             return generateView(ibView: ibView)
         }
@@ -146,31 +142,38 @@ private extension SwiftCodeGenerator {
 //MARK: ViewController extension
 private extension SwiftCodeGenerator {
     
-    func generateViewController(ibViewController: IBViewController) throws -> String {
-        guard let ibView = ibViewController.ibView else { throw "IBViewController property IBView is nil" }
+    func generateViewController(ibViewControllers: [IBViewController]) -> String {
         
-        let dependencies: [Dependencies] = [ibViewController.dependencies] + ibViewController.ibView.subviews.compactMap { $0.dependencies }
-        let inheritance = ibViewController.superClass.description
-        let allViews = getAllViews(parentView: ibView)
-        
-        return buildLines {
+        buildLines {
+            let dependencies: [Dependencies] = ibViewControllers.compactMap { $0.dependencies } + ibViewControllers.compactMap { $0.ibView.dependencies } +
+                ibViewControllers.flatMap { $0.ibView.subviews.findAllSubviews().map { $0.dependencies } }
             generateFileHeader()
             Line.newLine
             generateImport(dependencies: dependencies)
-            Line.newLine
-            Line(variableName: .class, lineType: .declareClass(name: className, inheritances: [inheritance]))
-            Line.newLine
-            generateSubviews(views: allViews)
-            generateViewDidLoad()
-            Line.newLine
-            generateSetupViews(views: [ibView] + allViews)
-            Line.newLine
-            generateConstraints(views: [ibView] + allViews)
-            Line.newLine
-            Line.end
+            
+            for ibViewController in ibViewControllers {
+                if let ibView = ibViewController.ibView {
+                    let inheritance = ibViewController.superClass.description
+                    let allViews = getAllViews(parentView: ibView)
+                    let className = ibViewController.customClassName ?? className
+                    
+                    Line.newLine
+                    Line(variableName: .class, lineType: .declareClass(name: className, inheritances: [inheritance]))
+                    Line.newLine
+                    generateSubviews(views: allViews)
+                    generateViewDidLoad()
+                    Line.newLine
+                    generateSetupViews(views: [ibView] + allViews)
+                    Line.newLine
+                    generateConstraints(views: [ibView] + allViews)
+                    Line.newLine
+                    Line.end
+                }
+            }
         }
         .calculateIndent()
         .joined(separator: "\n")
+        
     }
     
     func generateViewDidLoad() -> [Line] {
