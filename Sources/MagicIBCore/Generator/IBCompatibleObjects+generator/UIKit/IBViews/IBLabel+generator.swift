@@ -28,9 +28,9 @@ extension IBLabel {
     }
     
     private func addEnumMapper() {
-//        findProperty(ib: "lineBreakMode")?.addEnumMappers([
-//            .init(from: <#T##String#>, to: <#T##String#>, propertyName: <#T##String?#>)
-//        ])
+        findProperty(ib: "lineBreakMode")?.addEnumMappers([
+            .init(from: "tailTruncation", to: "byTruncatingTail")
+        ])
     }
     
     private func generateAttributedTextLines() -> [Line] {

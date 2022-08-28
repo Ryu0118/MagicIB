@@ -10,5 +10,4 @@ import Foundation
 struct IBEnumMapper {
     let from: String
     let to: String
-    let propertyName: String?
 }

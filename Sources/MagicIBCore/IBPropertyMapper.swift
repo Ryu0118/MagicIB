@@ -15,7 +15,6 @@ class IBPropertyMapper {
         didSet {
             imageValidation()
             autoresizingMaskValidation()
-            valueValidation()
             if propertyName == "lineBreakMode" {
                 
             }
@@ -31,7 +30,11 @@ class IBPropertyMapper {
         }
     }
     
-    private var enumMappers = [IBEnumMapper]()
+    private var enumMappers = [IBEnumMapper]() {
+        didSet {
+            valueValidation()
+        }
+    }
     
     private var recursionLock = false
     
@@ -63,15 +66,7 @@ class IBPropertyMapper {
         
         for enumMapper in enumMappers {
             guard enumMapper.from == value else { continue }
-            
-            if let propertyName = enumMapper.propertyName,
-               self.propertyName == propertyName
-            {
-                self.value = enumMapper.to
-            }
-            else if enumMapper.propertyName == nil {
-                self.value = enumMapper.to
-            }
+            self.value = enumMapper.to
         }
     }
     
