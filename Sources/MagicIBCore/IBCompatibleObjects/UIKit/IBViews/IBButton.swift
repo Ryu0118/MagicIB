@@ -23,7 +23,6 @@ final class IBButton: IBView {
         .init(ib: "reversesTitleShadowWhenHighlighted", propertyName: "reversesTitleShadowWhenHighlighted", type: .bool),
         .init(ib: "showsTouchWhenHighlighted", propertyName: "showsTouchWhenHighlighted", type: .bool),
         .init(ib: "adjustsImageSizeForAccessibilityContentSizeCategory", propertyName: "adjustsImageSizeForAccessibilityContentSizeCategory", type: .bool),
-        .init(ib: "lineBreakMode", propertyName: "lineBreakMode", type: .enum),
         .init(ib: "springLoaded", propertyName: "isSpringLoaded", type: .bool),
         .init(ib: "pointerInteraction", propertyName: "isPointerInteractionEnabled", type: .bool),
         .init(ib: "changesSelectionAsPrimaryAction", propertyName: "changesSelectionAsPrimaryAction", type: .bool),

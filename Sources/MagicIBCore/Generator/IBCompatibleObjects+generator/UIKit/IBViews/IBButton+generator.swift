@@ -12,7 +12,6 @@ extension IBButton {
         guard let uniqueName = uniqueName else { return [] }
         let variableName = classType.variableName
         let className = classType.description
-        addEnumMapper()
         
         return buildLines {
             Line(variableName: uniqueName, lineType: .declare(isMutating: false, type: className, operand: "{"))
@@ -26,17 +25,6 @@ extension IBButton {
             Line(relatedVariableName: variableName, custom: "return \(variableName)")
             Line(relatedVariableName: variableName, custom: "}()")
         }
-    }
-    
-    private func addEnumMapper() {
-        findProperty(ib: "lineBreakMode")?.addEnumMappers([
-            .init(from: "tailTruncation", to: "byTruncatingTail"),
-            .init(from: "middleTruncation", to: "byTruncatingMiddle"),
-            .init(from: "headTruncation", to: "byTruncatingHead"),
-            .init(from: "wordWrap", to: "byWordWrapping"),
-            .init(from: "characterWrap", to: "byCharWrapping"),
-            .init(from: "clip", to: "byClipping"),
-        ])
     }
     
     private func generateLabelFont() -> [Line] {
