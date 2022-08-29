@@ -60,11 +60,9 @@ private extension SwiftCodeGenerator {
     func generateViewController(ibViewControllers: [IBViewController]) -> String {
         
         buildLines {
-            let dependencies: [Dependencies] = ibViewControllers.compactMap { $0.dependencies } + ibViewControllers.compactMap { $0.ibView.dependencies } +
-                ibViewControllers.flatMap { $0.ibView.subviews.findAllSubviews().map { $0.dependencies } }
             generateFileHeader()
             Line.newLine
-            generateImport(dependencies: dependencies)
+            generateImport(ibViewControllers: ibViewControllers)
             
             for ibViewController in ibViewControllers {
                 if let ibView = ibViewController.ibView {
@@ -130,8 +128,10 @@ private extension SwiftCodeGenerator {
         }
     }
     
-    func generateImport(dependencies: [Dependencies]) -> [Line] {
-        Set(dependencies.flatMap { $0.dependencies })
+    func generateImport(ibViewControllers: [IBViewController]) -> [Line] {
+        let dependencies: [Dependencies] = ibViewControllers.compactMap { $0.dependencies } + ibViewControllers.compactMap { $0.ibView.dependencies } +
+        ibViewControllers.flatMap { $0.ibView.subviews.findAllSubviews().map { $0.dependencies } }
+        return Set(dependencies.flatMap { $0.dependencies })
             .sorted()
             .map { Line(relatedVariableName: .import, custom: "import \($0)") }
     }
