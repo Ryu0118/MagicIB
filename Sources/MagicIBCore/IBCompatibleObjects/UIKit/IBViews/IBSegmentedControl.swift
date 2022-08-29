@@ -28,7 +28,7 @@ class IBSegmentedControl: IBView {
     
     override var properties: [IBPropertyMapper] {
         super.properties + segmentedControlProperties
-    }
+     }
     
     override var functions: [IBFunctionMapper] {
         super.functions + segmentedControlFunctions

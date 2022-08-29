@@ -25,7 +25,6 @@ class IBParagraphStyle: IBCompatibleObject, UniqueName {
         .init(propertyName: "maximumLineHeight", type: .number),
         .init(propertyName: "defaultTabInterval", type: .number),
         .init(propertyName: "hyphenationFactor", type: .number),
-        .init(propertyName: "tighteningFactorForTruncation", type: .number),
         .init(propertyName: "headerLevel", type: .number),
     ]
     

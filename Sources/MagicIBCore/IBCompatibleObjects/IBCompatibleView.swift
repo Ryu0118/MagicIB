@@ -55,6 +55,8 @@ extension IBCompatibleView: CaseIterable, CustomStringConvertible {
             return "effectView"
         case .wkWebView:
             return "webView"
+        case .switch:
+            return "swch"
         default:
             return self.rawValue
         }

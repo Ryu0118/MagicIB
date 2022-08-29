@@ -17,7 +17,7 @@ extension IBImage: SwiftCodeGeneratable {
                     Line(variableName: "image", lineType: .declare(isMutating: false, operand: "UIImage(systemName: \"\(systemName))\", withConfiguration: symbolConfiguration)"))
                 }
                 else {
-                    Line(variableName: "image", lineType: .declare(isMutating: false, operand: "UIImage(systemName: \"\(systemName))\")"))
+                    Line(variableName: "image", lineType: .declare(isMutating: false, operand: "UIImage(systemName: \"\(systemName)\")"))
                 }
             }
             else if let name = self.name as? String {

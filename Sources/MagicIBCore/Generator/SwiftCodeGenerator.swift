@@ -148,6 +148,7 @@ private extension SwiftCodeGenerator {
     
     func generateSubviews(views: [IBView]) -> [Line] {
         views
+            .exceptCell()
             .assignName()
             .flatMap { uniqueName, view -> [Line] in
                 view.uniqueName = uniqueName
@@ -171,8 +172,9 @@ private extension SwiftCodeGenerator {
         generateFunction(name: "setupViews", accessLevel: "private") {
             views.compactMap { view -> [Line]? in
                 let uniqueName = view.uniqueName ?? "view"
-                if !view.subviews.isEmpty {
-                    return view.subviews.map { subview -> Line in
+                let excepted = view.subviews.exceptCell()
+                if !excepted.isEmpty {
+                    return excepted.map { subview -> Line in
                         guard let subviewUniqueName = subview.uniqueName else { fatalError("uniqueName has not been assigned")}
                         return Line(variableName: uniqueName, lineType: .function("\(uniqueName).addSubview(\(subviewUniqueName))"))
                     }
@@ -296,6 +298,13 @@ private extension Array where Element == IBView {
             }
             .flatMap { $0 }
         return self + arrangedSubviews.findAllSubviews()
+    }
+    
+    func exceptCell() -> [IBView] {
+        self.filter {
+            let excepts: [IBCompatibleView] = [.tableViewCell, .collectionViewCell, .collectionViewCellContentView]
+            return !excepts.contains($0.classType)
+        }
     }
     
 }

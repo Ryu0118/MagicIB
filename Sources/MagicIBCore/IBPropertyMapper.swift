@@ -15,6 +15,7 @@ class IBPropertyMapper {
         didSet {
             imageValidation()
             autoresizingMaskValidation()
+            colorValidation()
         }
     }
     
@@ -65,6 +66,17 @@ class IBPropertyMapper {
             guard enumMapper.from == value else { continue }
             self.value = enumMapper.to
         }
+    }
+    
+    private func colorValidation() {
+        guard let color = value as? IBColor,
+              let systemColor = color.systemColor as? String,
+              systemColor == "systemWhiteColor",
+              type == .color,
+              !recursionLock
+        else { return }
+        recursionLock = true
+        value = IBColor(attributes: ["systemColor": "white"])
     }
     
     private func autoresizingMaskValidation() {
