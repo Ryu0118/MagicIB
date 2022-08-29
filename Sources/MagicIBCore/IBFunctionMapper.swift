@@ -12,7 +12,7 @@ class IBFunctionMapper {
     let ib: String
     let functionName: String //setContentHuggingPriority
     let argumentNames: [String] //["", for]
-    var argumentValues = [(argument: Any, type: IBInspectableType)]()
+    var argumentValues = [(value: Any, type: IBInspectableType)]()
     
     init(ib: String, functionName: String, argumentNames: [String]) {
         self.ib = ib
@@ -24,46 +24,25 @@ class IBFunctionMapper {
         argumentValues.insert((value, type), at: at)
     }
     
-//    func generateSwiftCode() throws -> String { //setContentHuggingPriority(.init(rawValue: 256), for: .vertical)
-//        guard argumentValues.count == argumentNames.count else { throw "Number of argumentNames and argumentValues do not match" }
-//        return zip(argumentNames, argumentValues)
-//            .map { name, argumentValue in
-//                let value = convertValue(value: argumentValue.argument, type: argumentValue.type)
-//                if name.isEmpty {
-//                    return value ?? ""
-//                }
-//                else {
-//                    return name + ": " + (value ?? "")
-//                }
-//            }
-//            .joined(separator: ", ")
-//            .insert(first: "\(functionName)(", last: ")")
-//    }
-    
-//    private func convertValue(value: Any, type: IBInspectableType) -> String? {
-//        switch type {
-//        case .number, .initializer, .dynamicCode:
-//            return value as? String
-//        case .bool:
-//            guard let value = value as? String else { return nil }
-//            let convertedString = value == "YES" ? "true" : "false"
-//            return convertedString
-//        case .enum:
-//            guard let value = value as? String else { return nil }
-//            return ".\(value)"
-//        case .array:
-//            if let value = value as? [String] {
-//                return value
-//                    .joined(separator: ", ")
-//                    .insert(first: "[", last: "]")
-//            }
-//            else {
-//                return value as? String
-//            }
-//        case .fullCustom:
-//            return nil
-//        }
-//    }
+    func convertValidValue(argumentValue: (value: Any, type: IBInspectableType)) -> String? {
+        let (value, type) = argumentValue
+        switch type {
+        case .number:
+            return "\(value)"
+        case .bool:
+            guard let value = value as? String else { return nil }
+            return value == "YES" ? "true" : "false"
+        case .enum:
+            guard let value = value as? String else { return nil }
+            return ".\(value)"
+        case .string:
+            guard let value = value as? String else { return nil }
+            return "\"\(value)\""
+        default:
+            guard let nonCustomizable = value as? NonCustomizable else { return nil }
+            return nonCustomizable.getRightOperand()
+        }
+    }
     
 }
 

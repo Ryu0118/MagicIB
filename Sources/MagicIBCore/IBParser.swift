@@ -9,18 +9,26 @@ import CoreGraphics
 import Foundation
 
 public class IBParser: NSObject {
-
-    fileprivate var type: IBType?
+    
+    var url: URL!
+    var type: IBType!
+    
     private var waitingIBViewList = [IBView]()
     private var waitingElementList = [String]()
-    private var ibViewControllers = [IBViewController]()
+    private var ibViewControllers = [IBViewController]() {
+        didSet {
+            parentView = nil
+        }
+    }
     private var subviewFlags = [IBView]()
     private var prototypesFlag: IBTableView?
     private var cellFlag: IBCollectionView?
     private var parentView: IBView?
+    private var lastAttributes: [String: String] = [:]
     
     public func parse(_ absoluteURL: URL) throws {
         self.type = try IBType(url: absoluteURL)
+        self.url = absoluteURL
         let data = try Data(contentsOf: absoluteURL)
         let parser = XMLParser(data: data)
         parser.delegate = self
@@ -34,12 +42,16 @@ extension IBParser: XMLParserDelegate {
     
     public func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
         waitingElementList.append(elementName)
-
+        lastAttributes = attributeDict
         if let ibViewElement = IBCompatibleView.init(rawValue: elementName),
            let ibView = IBView.instance(attributes: attributeDict, ibCompatibleView: ibViewElement)
         {
             waitingIBViewList.append(ibView)
-            ibViewControllers.last?.appendView(ibView)
+            
+            if ibViewControllers.last?.ibView == nil {
+                ibViewControllers.last?.ibView = ibView
+            }
+            
             if let tableView = prototypesFlag,
                let cell = ibView as? IBTableViewCell {
                 tableView.prototypes.append(cell)
@@ -72,7 +84,10 @@ extension IBParser: XMLParserDelegate {
             switch elementName {
             case "subviews":
                 subviewFlags.append(lastIBView)
-                if parentView == nil { parentView = lastIBView }
+                if parentView == nil {
+                    parentView = lastIBView
+                    parentView?.uniqueName = type == .storyboard ? "view" : "self"
+                }
             case "prototypes":
                 prototypesFlag = lastIBView as? IBTableView
             case "cells":
@@ -88,19 +103,10 @@ extension IBParser: XMLParserDelegate {
         let trimmed = string.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
         
-        if let textView = waitingIBViewList.last as? IBTextView {
-            textView.addValueToProperty(ib: "text", value: string)
+        if let anyView = waitingIBViewList.last as? LongCharactersContainable {
+            anyView.handleLongCharacters(key: lastAttributes["key"], characters: string)
         }
-        else if let searchBar = waitingIBViewList.last as? IBSearchBar {
-            if var array = searchBar.scopeButtonTitles as? [String] {
-                array.append(string)
-                searchBar.addValueToProperty(ib: "scopeButtonTitles", value: array)
-            }
-            else {
-                let array = [string]
-                searchBar.addValueToProperty(ib: "scopeButtonTitles", value: array)
-            }
-        }
+
     }
     
     public func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
@@ -127,8 +133,14 @@ extension IBParser: XMLParserDelegate {
     }
     
     public func parserDidEndDocument(_ parser: XMLParser) {
-        print("parse end")
-        print(parentView!.subviews.flatMap { $0.generateSwiftCode().map { $0.line } })
+        if type == .storyboard {
+            let generator = SwiftCodeGenerator(url: url, type: .storyboard(ibViewControllers: ibViewControllers))
+            let string = try! generator.generate()
+            print(string)
+        }
+        else {
+            
+        }
     }
     
 }
@@ -147,7 +159,7 @@ extension IBParser {
         }
     }
     
-    fileprivate enum IBType: String {
+    enum IBType: String {
         case storyboard
         case xib
         
