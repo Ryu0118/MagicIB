@@ -11,7 +11,7 @@ class IBActivityIndicatorView: IBView {
     private let activityIndicatorProperties: [IBPropertyMapper] = [
         .init(propertyName: "hidesWhenStopped", type: .bool),
         .init(ib: "animating", propertyName: "isAnimating", type: .bool),
-        .init(propertyName: "style", type: .bool),
+        .init(propertyName: "style", type: .enum),
         .init(propertyName: "color", type: .color)
     ]
     
