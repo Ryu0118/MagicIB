@@ -12,6 +12,7 @@ class IBView: NSObject, IBCompatibleObject, UniqueName, SwiftCodeGeneratable {
     
     let id: String
     let customClass: String?
+    let customModule: String?
     let classType: IBCompatibleView
     let dependencies: IBViewDependencies
     
@@ -85,6 +86,7 @@ class IBView: NSObject, IBCompatibleObject, UniqueName, SwiftCodeGeneratable {
         self.classType = ibCompatibleView
         self.dependencies = IBViewDependencies(ibCompatibleView: classType)
         self.customClass = attributes["customClass"]
+        self.customModule = attributes["customModule"]
         super.init()
         self.mapping(attributes)
         
