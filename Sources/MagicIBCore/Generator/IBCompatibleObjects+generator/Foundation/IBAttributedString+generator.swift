@@ -81,16 +81,20 @@ extension IBAttributedString.Fragment: SwiftCodeGeneratable {
         let attributeName = "stringAttributes\(count + 1)"
         let stringName = "string\(count + 1)"
         
+        //NSMutableParagraphStyle
+        var paragraphStyleLines = [Line]()
+        if let paragraphStyle = findProperty(ib: "NSParagraphStyle")?.value as? IBParagraphStyle {
+            paragraphStyleLines = paragraphStyle.generateSwiftCode()
+            paragraphStyleLines.forEach {
+                $0.changeVariableName($0.variableName + "\(count + 1)")
+            }
+        }
+        
         return buildLines {
             //let stringAttributes1: [NSAttributedStringKey : Any] = [
+            paragraphStyleLines
             Line(variableName: attributeName, lineType: .declare(isMutating: false, type: "[NSAttributedString.Key : Any]", operand: "["))
             
-            //NSMutableParagraphStyle
-            var paragraphStyleLines = [Line]()
-            if let paragraphStyle = self.paragraphStyle as? IBParagraphStyle {
-                paragraphStyleLines = paragraphStyle.generateSwiftCode()
-                paragraphStyleLines
-            }
             /*
              let stringAttributes1: [NSAttributedStringKey : Any] = [
              .foregroundColor : UIColor.blue,
