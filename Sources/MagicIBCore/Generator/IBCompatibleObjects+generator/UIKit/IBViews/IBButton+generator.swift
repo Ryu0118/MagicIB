@@ -39,11 +39,12 @@ extension IBButton {
     
     private func generateButtonDeclaration() -> [Line] {
         buildLines {
+            let className = customClass ?? classType.description
             if let buttonType = self.buttonType as? String {
-                Line(variableName: classType.variableName, lineType: .declare(isMutating: false, type: nil, operand: "\(classType.description)(type: .\(buttonType))"))
+                Line(variableName: classType.variableName, lineType: .declare(isMutating: false, type: nil, operand: "\(className)(type: .\(buttonType))"))
             }
             else {
-                Line(variableName: classType.variableName, lineType: .declare(isMutating: false, type: nil, operand: "\(classType.description)()"))
+                Line(variableName: classType.variableName, lineType: .declare(isMutating: false, type: nil, operand: "\(className)()"))
             }
         }
     }

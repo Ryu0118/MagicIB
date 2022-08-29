@@ -27,7 +27,7 @@ extension IBCollectionView {
     private func generateInitializer() -> [Line] {
         buildLines {
             let variableName = classType.variableName
-            let className = classType.description
+            let className = customClass ?? classType.description
             
             if let layout = self.collectionViewLayout as? IBCollectionViewFlowLayout {
                 let layoutLines = layout.generateSwiftCode()

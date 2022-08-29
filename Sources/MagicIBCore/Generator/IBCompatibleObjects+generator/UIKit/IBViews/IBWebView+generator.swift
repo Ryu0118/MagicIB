@@ -26,15 +26,16 @@ extension IBWebView {
     
     private func generateInitializer() -> [Line] {
         buildLines {
+            let className = customClass ?? classType.description
             if let configuration = self.configuration as? IBWebViewConfiguration {
                 let configurationLines = configuration.generateSwiftCode()
                 let configurationVariableName = configurationLines.first?.variableName ?? "configuration"
                 
                 configurationLines
-                Line(variableName: classType.variableName, lineType: .declare(isMutating: false, type: nil, operand: "WKWebView(frame: .zero, configuration: \(configurationVariableName))"))
+                Line(variableName: classType.variableName, lineType: .declare(isMutating: false, type: nil, operand: "\(className)(frame: .zero, configuration: \(configurationVariableName))"))
             }
             else {
-                Line(variableName: classType.variableName, lineType: .declare(isMutating: false, type: nil, operand: "WKWebView()"))
+                Line(variableName: classType.variableName, lineType: .declare(isMutating: false, type: nil, operand: "\(className)()"))
             }
         }
     }
