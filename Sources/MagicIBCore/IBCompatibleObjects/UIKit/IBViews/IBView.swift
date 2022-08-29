@@ -129,7 +129,7 @@ class IBView: NSObject, IBCompatibleObject, UniqueName, SwiftCodeGeneratable {
         guard let uniqueName = uniqueName else { return [] }
         return buildLines {
             let variableName = classType.variableName
-            let className = classType.description
+            let className = customClass ?? classType.description
             Line(variableName: uniqueName, lineType: .declare(isMutating: false, type: className, operand: "{"))
             Line(variableName: variableName, lineType: .declare(isMutating: false, type: nil, operand: "\(className)()"))
             generateCustomizablePropertyLines(except: ["contentView"])

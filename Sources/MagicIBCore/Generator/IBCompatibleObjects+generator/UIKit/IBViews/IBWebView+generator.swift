@@ -12,7 +12,7 @@ extension IBWebView {
         guard let uniqueName = uniqueName else { return [] }
         return buildLines {
             let variableName = classType.variableName
-            let className = classType.description
+            let className = customClass ?? classType.description
             Line(variableName: uniqueName, lineType: .declare(isMutating: false, type: className, operand: "{"))
             generateInitializer()
             generateCustomizablePropertyLines(except: ["contentView", "configuration"])

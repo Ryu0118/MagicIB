@@ -11,7 +11,7 @@ extension IBButton {
     override func generateSwiftCode() -> [Line] {
         guard let uniqueName = uniqueName else { return [] }
         let variableName = classType.variableName
-        let className = classType.description
+        let className = customClass ?? classType.description
         
         return buildLines {
             Line(variableName: uniqueName, lineType: .declare(isMutating: false, type: className, operand: "{"))
