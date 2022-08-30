@@ -22,7 +22,6 @@ extension IBTextView {
             Line(relatedVariableName: variableName, custom: "return \(variableName)")
             Line(relatedVariableName: uniqueName, custom: "}()")
         }
-
     }
     
     private func generateAttributedTextLines() -> [Line] {
@@ -33,7 +32,6 @@ extension IBTextView {
                 var code = attributedText.generateSwiftCode(mode: .legacy)
                 code.related(variableName: classType.variableName, propertyName: property.propertyName)
             }
-            
         }
     }
 }

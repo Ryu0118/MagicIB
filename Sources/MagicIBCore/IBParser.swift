@@ -139,7 +139,10 @@ extension IBParser: XMLParserDelegate {
             print(string)
         }
         else {
-            
+            guard let ibView = parentView else { return }
+            let generator = SwiftCodeGenerator(url: url, type: .xib(ibView: ibView))
+            let string = try! generator.generate()
+            print(string)
         }
     }
     

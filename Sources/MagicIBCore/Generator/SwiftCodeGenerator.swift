@@ -103,7 +103,27 @@ private extension SwiftCodeGenerator {
 private extension SwiftCodeGenerator {
     
     func generateView(ibView: IBView) -> String {
-        ""
+        buildLines {
+            generateFileHeader()
+            Line.newLine
+            generateImport(parentView: ibView)
+            
+            let inheritance = ibView.classType.description
+            let allViews = self.getAllViews(parentView: ibView)
+            let className = ibView.customClass ?? self.className
+            Line.newLine
+            Line(variableName: .class, lineType: .declareClass(name: className, inheritances: [inheritance]))
+            Line.newLine
+            generateSubviews(views: allViews)
+            Line.newLine
+            generateSetupViews(views: [ibView] + allViews)
+            Line.newLine
+            generateConstraints(views: [ibView] + allViews)
+            Line.newLine
+            Line.end
+        }
+        .calculateIndent()
+        .joined(separator: "\n")
     }
     
 }
@@ -131,6 +151,13 @@ private extension SwiftCodeGenerator {
     func generateImport(ibViewControllers: [IBViewController]) -> [Line] {
         let dependencies: [Dependencies] = ibViewControllers.compactMap { $0.dependencies } + ibViewControllers.compactMap { $0.ibView.dependencies } +
         ibViewControllers.flatMap { $0.ibView.subviews.findAllSubviews().map { $0.dependencies } }
+        return Set(dependencies.flatMap { $0.dependencies })
+            .sorted()
+            .map { Line(relatedVariableName: .import, custom: "import \($0)") }
+    }
+    
+    func generateImport(parentView: IBView) -> [Line] {
+        let dependencies: [Dependencies] = parentView.subviews.findAllSubviews().compactMap { $0.dependencies } + [parentView.dependencies]
         return Set(dependencies.flatMap { $0.dependencies })
             .sorted()
             .map { Line(relatedVariableName: .import, custom: "import \($0)") }
