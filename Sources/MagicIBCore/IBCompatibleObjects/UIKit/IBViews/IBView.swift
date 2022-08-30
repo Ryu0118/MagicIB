@@ -93,7 +93,8 @@ class IBView: NSObject, IBCompatibleObject, UniqueName, SwiftCodeGeneratable {
         if let userLabel = attributes["userLabel"] {
             let dropFirst = userLabel.dropFirst()
             let initial = userLabel.prefix(1).lowercased()
-            self.uniqueName = initial + dropFirst
+            let uniqueName = initial + dropFirst
+            self.uniqueName = uniqueName.replacingOccurrences(of: " ", with: "")
         }
     }
     
