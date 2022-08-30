@@ -117,6 +117,8 @@ private extension SwiftCodeGenerator {
             Line.newLine
             generateSubviews(views: allViews)
             Line.newLine
+            generateInitializer()
+            Line.newLine
             generateSetupViews(views: [ibView] + allViews)
             Line.newLine
             generateConstraints(views: [ibView] + allViews)
@@ -125,6 +127,22 @@ private extension SwiftCodeGenerator {
         }
         .calculateIndent()
         .joined(separator: "\n")
+    }
+    
+    func generateInitializer() -> [Line] {
+        buildLines {
+            generateFunction(name: "", isOverride: true, isInit: true, arguments: [.init(argumentName: "frame", argumentType: "CGRect")]) {
+                Line(variableName: "super", lineType: .function("super.init(frame: frame)"))
+                Line(variableName: "self", lineType: .function("setupViews()"))
+                Line(variableName: "self", lineType: .function("setupConstraints()"))
+            }
+            Line.newLine
+            """
+            required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+            }
+            """.buildLines(relatedVariableName: .initializer)
+        }
     }
     
 }
@@ -137,15 +155,23 @@ private extension SwiftCodeGenerator {
     func generateFunction(
         name: String,
         isOverride: Bool = false,
+        isInit: Bool = false,
         arguments: [Line.LineType.Argument] = [],
         accessLevel: String? = nil,
         @ArrayBuilder<Line> component builder: () -> [Line]
     ) -> [Line]
     {
         buildLines {
-            Line(function: .init(name: name, arguments: arguments, accessLevel: accessLevel, isOverride: isOverride))
-            builder()
-            Line.end
+            if isInit {
+                Line(initializer: .init(arguments: arguments, accessLevel: accessLevel, isOverride: isOverride))
+                builder()
+                Line.end
+            }
+            else {
+                Line(function: .init(name: name, arguments: arguments, accessLevel: accessLevel, isOverride: isOverride))
+                builder()
+                Line.end
+            }
         }
     }
     
