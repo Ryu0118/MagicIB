@@ -111,6 +111,7 @@ private extension SwiftCodeGenerator {
             let inheritance = ibView.classType.description
             let allViews = self.getAllViews(parentView: ibView)
             let className = ibView.customClass ?? self.className
+            
             Line.newLine
             Line(variableName: .class, lineType: .declareClass(name: className, inheritances: [inheritance]))
             Line.newLine
