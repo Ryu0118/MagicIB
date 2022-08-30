@@ -14,6 +14,7 @@ extension String {
     static let `import` = "import"
     static let `class` = "class"
     static let function = "function"
+    static let initializer = "initializer"
     
     func buildLines(relatedVariableName: String) -> [Line] {
         self

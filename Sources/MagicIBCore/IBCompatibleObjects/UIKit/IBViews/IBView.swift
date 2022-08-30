@@ -12,6 +12,7 @@ class IBView: NSObject, IBCompatibleObject, UniqueName, SwiftCodeGeneratable {
     
     let id: String
     let customClass: String?
+    let customModule: String?
     let classType: IBCompatibleView
     let dependencies: IBViewDependencies
     
@@ -85,6 +86,7 @@ class IBView: NSObject, IBCompatibleObject, UniqueName, SwiftCodeGeneratable {
         self.classType = ibCompatibleView
         self.dependencies = IBViewDependencies(ibCompatibleView: classType)
         self.customClass = attributes["customClass"]
+        self.customModule = attributes["customModule"]
         super.init()
         self.mapping(attributes)
         
@@ -129,7 +131,7 @@ class IBView: NSObject, IBCompatibleObject, UniqueName, SwiftCodeGeneratable {
         guard let uniqueName = uniqueName else { return [] }
         return buildLines {
             let variableName = classType.variableName
-            let className = classType.description
+            let className = customClass ?? classType.description
             Line(variableName: uniqueName, lineType: .declare(isMutating: false, type: className, operand: "{"))
             Line(variableName: variableName, lineType: .declare(isMutating: false, type: nil, operand: "\(className)()"))
             generateCustomizablePropertyLines(except: ["contentView"])
