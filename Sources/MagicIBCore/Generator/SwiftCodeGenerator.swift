@@ -116,7 +116,6 @@ private extension SwiftCodeGenerator {
             Line(variableName: .class, lineType: .declareClass(name: className, inheritances: [inheritance]))
             Line.newLine
             generateSubviews(views: allViews)
-            Line.newLine
             generateInitializer()
             Line.newLine
             generateSetupViews(views: [ibView] + allViews)
