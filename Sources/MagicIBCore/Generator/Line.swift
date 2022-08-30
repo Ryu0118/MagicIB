@@ -54,6 +54,14 @@ class Line: NSObject {
                 accessLevel += " "
             }
             line = "\(`override`)\(accessLevel)func \(function.name)(\(arguments)) {"
+        case .declareInitializer(let initializer):
+            let `override` = initializer.isOverride ? "override " : ""
+            var accessLevel = initializer.accessLevel ?? ""
+            let arguments = initializer.arguments.map { $0.string }.joined(separator: ", ")
+            if !accessLevel.isEmpty {
+                accessLevel += " "
+            }
+            line = "\(accessLevel)\(`override`)init(\(arguments)) {"
         }
         
         for (of, with) in replacingOccurrences {
@@ -73,9 +81,7 @@ class Line: NSObject {
             return string
         case .custom(let custom):
             return custom
-        case .declareClass(_, _):
-            return line
-        case .declareFunction(_):
+        case .declareClass(_, _), .declareFunction(_), .declareInitializer(_):
             return line
         }
     }
@@ -95,6 +101,10 @@ class Line: NSObject {
         self.lineType = .declareFunction(function)
     }
     
+    init(initializer: LineType.Initializer) {
+        self.variableName = .initializer
+        self.lineType = .declareInitializer(initializer)
+    }
 }
 
 extension Line {
@@ -108,8 +118,15 @@ extension Line {
                 "\(argumentName): \(argumentType)"
             }
         }
+        
         struct Function {
             let name: String
+            let arguments: [Argument]
+            let accessLevel: String?
+            let isOverride: Bool
+        }
+        
+        struct Initializer {
             let arguments: [Argument]
             let accessLevel: String?
             let isOverride: Bool
@@ -121,6 +138,7 @@ extension Line {
         case custom(String)
         case declareClass(name: String, inheritances: [String])
         case declareFunction(Function)
+        case declareInitializer(Initializer)
     }
     
 }

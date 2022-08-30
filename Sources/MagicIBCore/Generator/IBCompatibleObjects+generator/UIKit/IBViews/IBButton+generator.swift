@@ -11,7 +11,7 @@ extension IBButton {
     override func generateSwiftCode() -> [Line] {
         guard let uniqueName = uniqueName else { return [] }
         let variableName = classType.variableName
-        let className = classType.description
+        let className = customClass ?? classType.description
         
         return buildLines {
             Line(variableName: uniqueName, lineType: .declare(isMutating: false, type: className, operand: "{"))
@@ -39,11 +39,12 @@ extension IBButton {
     
     private func generateButtonDeclaration() -> [Line] {
         buildLines {
+            let className = customClass ?? classType.description
             if let buttonType = self.buttonType as? String {
-                Line(variableName: classType.variableName, lineType: .declare(isMutating: false, type: nil, operand: "\(classType.description)(type: .\(buttonType))"))
+                Line(variableName: classType.variableName, lineType: .declare(isMutating: false, type: nil, operand: "\(className)(type: .\(buttonType))"))
             }
             else {
-                Line(variableName: classType.variableName, lineType: .declare(isMutating: false, type: nil, operand: "\(classType.description)()"))
+                Line(variableName: classType.variableName, lineType: .declare(isMutating: false, type: nil, operand: "\(className)()"))
             }
         }
     }
