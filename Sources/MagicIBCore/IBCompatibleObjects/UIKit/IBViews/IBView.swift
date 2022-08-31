@@ -125,7 +125,8 @@ class IBView: NSObject, IBCompatibleObject, UniqueName, SwiftCodeGeneratable {
         case "viewLayoutGuide":
             layoutGuides.append(IBLayoutGuide(attributes: attributes))
         case "connections->outletCollection":
-            
+            guard let gesture = IBGestureRecognizer(attributes: attributes) else { return }
+            gestures.append(gesture)
         default:
             break
         }
