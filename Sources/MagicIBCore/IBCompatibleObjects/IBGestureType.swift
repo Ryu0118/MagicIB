@@ -8,36 +8,56 @@
 import Foundation
 
 enum IBGestureType {
-    case tapGestureRecognizer
-    case pinchGestureRecognizer
-    case rotationGestureRecognizer
-    case swipeGestureRecognizer(direction: String)
-    case panGestureRecognizer(minimumNumberOfTouches: String)
-    case screenEdgePanGestureRecognizer(minimumNumberOfTouches: String)
-    case pongPressGestureRecognizer(allowableMovement: String, minimumPressDuration: String)
+    case tapGestureRecognizer(id: String)
+    case pinchGestureRecognizer(id: String)
+    case rotationGestureRecognizer(id: String)
+    case swipeGestureRecognizer(id: String, direction: String)
+    case panGestureRecognizer(id: String, minimumNumberOfTouches: String)
+    case screenEdgePanGestureRecognizer(id: String, minimumNumberOfTouches: String)
+    case pongPressGestureRecognizer(id: String, allowableMovement: String, minimumPressDuration: String)
+    
+    var id: String {
+        switch self {
+        case .tapGestureRecognizer(let id):
+            return id
+        case .pinchGestureRecognizer(let id):
+            return id
+        case .rotationGestureRecognizer(let id):
+            return id
+        case .swipeGestureRecognizer(let id, _):
+            return id
+        case .panGestureRecognizer(let id, _):
+            return id
+        case .screenEdgePanGestureRecognizer(let id, _):
+            return id
+        case .pongPressGestureRecognizer(let id, _, _):
+            return id
+        }
+    }
     
     init?(elementName: String, attributes: [String: String]) {
+        guard let id = attributes["id"] else { return nil }
         switch elementName {
         case "tapGestureRecognizer":
-            self = .tapGestureRecognizer
+            self = .tapGestureRecognizer(id: id)
         case "pinchGestureRecognizer":
-            self = .pinchGestureRecognizer
+            self = .pinchGestureRecognizer(id: id)
         case "rotationGestureRecognizer":
-            self = .rotationGestureRecognizer
+            self = .rotationGestureRecognizer(id: id)
         case "swipeGestureRecognizer":
             guard let direction = attributes["direction"] else { return nil }
-            self = .swipeGestureRecognizer(direction: direction)
+            self = .swipeGestureRecognizer(id: id, direction: direction)
         case "panGestureRecognizer":
             guard let minimumNumberOfTouches = attributes["minimumNumberOfTouches"] else { return nil }
-            self = .panGestureRecognizer(minimumNumberOfTouches: minimumNumberOfTouches)
+            self = .panGestureRecognizer(id: id, minimumNumberOfTouches: minimumNumberOfTouches)
         case "screenEdgePanGestureRecognizer":
             guard let minimumNumberOfTouches = attributes["minimumNumberOfTouches"] else { return nil }
-            self = .screenEdgePanGestureRecognizer(minimumNumberOfTouches: minimumNumberOfTouches)
+            self = .screenEdgePanGestureRecognizer(id: id, minimumNumberOfTouches: minimumNumberOfTouches)
         case "pongPressGestureRecognizer":
             guard let allowableMovement = attributes["allowableMovement"],
                   let minimumPressDuration = attributes["minimumPressDuration"]
             else { return nil }
-            self = .pongPressGestureRecognizer(allowableMovement: allowableMovement, minimumPressDuration: minimumPressDuration)
+            self = .pongPressGestureRecognizer(id: id, allowableMovement: allowableMovement, minimumPressDuration: minimumPressDuration)
         default:
             return nil
         }

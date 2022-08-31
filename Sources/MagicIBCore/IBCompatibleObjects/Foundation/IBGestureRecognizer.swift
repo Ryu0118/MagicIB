@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct IBGestureRecognizer {
+class IBGestureRecognizer {
     let destination: String
     var gestureType: IBGestureType?
     
