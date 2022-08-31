@@ -35,6 +35,63 @@ enum IBGestureType {
         }
     }
     
+    var variableName: String {
+        switch self {
+        case .tapGestureRecognizer(_):
+            return "tapGestureRecognizer"
+        case .pinchGestureRecognizer(_):
+            return "pinchGestureRecognizer"
+        case .rotationGestureRecognizer(_):
+            return "rotationGestureRecognizer"
+        case .swipeGestureRecognizer(_, _):
+            return "swipeGestureRecognizer"
+        case .panGestureRecognizer(_, _):
+            return "panGestureRecognizer"
+        case .screenEdgePanGestureRecognizer(_, _):
+            return "screenEdgePanGestureRecognizer"
+        case .pongPressGestureRecognizer(_, _, _):
+            return "longPressGestureRecognizer"
+        }
+    }
+    
+    var className: String {
+        switch self {
+        case .tapGestureRecognizer(_):
+            return "UITapGestureRecognizer"
+        case .pinchGestureRecognizer(_):
+            return "UIPinchGestureRecognizer"
+        case .rotationGestureRecognizer(_):
+            return "UIRotationGestureRecognizer"
+        case .swipeGestureRecognizer(_, _):
+            return "UISwipeGestureRecognizer"
+        case .panGestureRecognizer(_, _):
+            return "UIPanGestureRecognizer"
+        case .screenEdgePanGestureRecognizer(_, _):
+            return "UIScreenEdgePanGestureRecognizer"
+        case .pongPressGestureRecognizer(_, _, _):
+            return "UILongPressGestureRecognizer"
+        }
+    }
+    
+    var functionName: String {
+        switch self {
+        case .tapGestureRecognizer(_):
+            return "tapGesture"
+        case .pinchGestureRecognizer(_):
+            return "pinchGesture"
+        case .rotationGestureRecognizer(_):
+            return "rotationGesture"
+        case .swipeGestureRecognizer(_, _):
+            return "swipeGesture"
+        case .panGestureRecognizer(_, _):
+            return "panGesture"
+        case .screenEdgePanGestureRecognizer(_, _):
+            return "screenEdgePanGesture"
+        case .pongPressGestureRecognizer(_, _, _):
+            return "longPressGesture"
+        }
+    }
+    
     init?(elementName: String, attributes: [String: String]) {
         guard let id = attributes["id"] else { return nil }
         switch elementName {

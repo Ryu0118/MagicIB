@@ -7,9 +7,10 @@
 
 import Foundation
 
-class IBGestureRecognizer {
+class IBGestureRecognizer: UniqueName {
     let destination: String
     var gestureType: IBGestureType?
+    var uniqueName: String?
     
     init?(attributes: [String: String]) {
         guard let destination = attributes["destination"] else { return nil }
