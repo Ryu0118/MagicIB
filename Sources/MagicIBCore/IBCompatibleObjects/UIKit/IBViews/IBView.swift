@@ -22,6 +22,7 @@ class IBView: NSObject, IBCompatibleObject, UniqueName, SwiftCodeGeneratable {
     }
     
     private(set) var constraints = [IBLayoutConstraint]()
+    private(set) var gestures = [IBGestureRecognizer]()
     private(set) var layoutGuides = [IBLayoutGuide]()
     private(set) var elementTree: String!//ex) attributedString->fragment->attributes->color
     
@@ -123,6 +124,8 @@ class IBView: NSObject, IBCompatibleObject, UniqueName, SwiftCodeGeneratable {
             constraints.append(constraint)
         case "viewLayoutGuide":
             layoutGuides.append(IBLayoutGuide(attributes: attributes))
+        case "connections->outletCollection":
+            
         default:
             break
         }
