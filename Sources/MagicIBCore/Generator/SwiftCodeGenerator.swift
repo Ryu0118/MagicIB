@@ -161,6 +161,7 @@ private extension SwiftCodeGenerator {
     
 }
 
+//MARK: Private functions
 private extension SwiftCodeGenerator {
     func buildLines(@ArrayBuilder<Line> _ builder: () -> [Line]) -> [Line] {
         builder()
