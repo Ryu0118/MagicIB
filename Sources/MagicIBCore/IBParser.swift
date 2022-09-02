@@ -25,6 +25,7 @@ public class IBParser: NSObject {
     private var cellFlag: IBCollectionView?
     private var parentView: IBView?
     private var lastAttributes: [String: String] = [:]
+    private var gestureTypes = [IBGestureType]()
     
     public func parse(_ absoluteURL: URL) throws {
         self.type = try IBType(url: absoluteURL)
@@ -80,7 +81,13 @@ extension IBParser: XMLParserDelegate {
             ibViewControllers.append(ibViewController)
         }
         else {
-            guard let lastIBView = waitingIBViewList.last else { return }
+            guard let lastIBView = waitingIBViewList.last else {
+                if let gestureType = IBGestureType(elementName: elementName, attributes: attributeDict) {
+                    gestureTypes.append(gestureType)
+                }
+                return
+            }
+            
             switch elementName {
             case "subviews":
                 subviewFlags.append(lastIBView)
@@ -133,16 +140,32 @@ extension IBParser: XMLParserDelegate {
     }
     
     public func parserDidEndDocument(_ parser: XMLParser) {
+        setGestureType()
+        print(generateSwiftCode()!)
+    }
+    
+    private func generateSwiftCode() -> String? {
         if type == .storyboard {
             let generator = SwiftCodeGenerator(url: url, type: .storyboard(ibViewControllers: ibViewControllers))
             let string = try! generator.generate()
-            print(string)
+            return string
         }
         else {
-            guard let ibView = parentView else { return }
+            guard let ibView = parentView else { return nil }
             let generator = SwiftCodeGenerator(url: url, type: .xib(ibView: ibView))
             let string = try! generator.generate()
-            print(string)
+            return string
+        }
+    }
+    
+    private func setGestureType() {
+        let gestureRecognizers = ibViewControllers.findAllSubviews().flatMap { $0.gestures }
+        for gestureRecognizer in gestureRecognizers {
+            for gestureType in gestureTypes {
+                if gestureRecognizer.destination == gestureType.id {
+                    gestureRecognizer.gestureType = gestureType
+                }
+            }
         }
     }
     
@@ -175,3 +198,12 @@ extension IBParser {
     
 }
  
+private extension Array where Element == IBViewController {
+    
+    func findAllSubviews() -> [IBView] {
+        self.flatMap {
+            $0.ibView.subviews.findAllSubviews() + [$0.ibView].compactMap { $0 }
+        }
+    }
+    
+}

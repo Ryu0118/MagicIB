@@ -16,12 +16,27 @@ extension SwiftCodeGeneratable {
     func buildLines(@ArrayBuilder<Line> _ builder: () -> [Line]) -> [Line] {
         builder()
     }
-}
-
-extension SwiftCodeGeneratable {
-    func camelized(_ source1: String, _ source2: String) -> String {
-        let dropped = source2.dropFirst()
-        let initial = source2.prefix(1).uppercased()
-        return initial + dropped
+    
+    func generateFunction(
+        name: String,
+        isOverride: Bool = false,
+        isInit: Bool = false,
+        arguments: [Line.LineType.Argument] = [],
+        accessLevel: String? = nil,
+        @ArrayBuilder<Line> component builder: () -> [Line]
+    ) -> [Line]
+    {
+        buildLines {
+            if isInit {
+                Line(initializer: .init(arguments: arguments, accessLevel: accessLevel, isOverride: isOverride))
+                builder()
+                Line.end
+            }
+            else {
+                Line(function: .init(name: name, arguments: arguments, accessLevel: accessLevel, isOverride: isOverride))
+                builder()
+                Line.end
+            }
+        }
     }
 }

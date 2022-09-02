@@ -22,10 +22,17 @@ class IBView: NSObject, IBCompatibleObject, UniqueName, SwiftCodeGeneratable {
     }
     
     private(set) var constraints = [IBLayoutConstraint]()
+    private(set) var gestures = [IBGestureRecognizer]()
     private(set) var layoutGuides = [IBLayoutGuide]()
     private(set) var elementTree: String!//ex) attributedString->fragment->attributes->color
     
-    var uniqueName: String?
+    var uniqueName: String? {
+        didSet {
+            for gesture in gestures {
+                gesture.uniqueName = uniqueName
+            }
+        }
+    }
     
     var waitingElementList = [String]() {
         didSet {
@@ -123,6 +130,10 @@ class IBView: NSObject, IBCompatibleObject, UniqueName, SwiftCodeGeneratable {
             constraints.append(constraint)
         case "viewLayoutGuide":
             layoutGuides.append(IBLayoutGuide(attributes: attributes))
+        case "connections->outletCollection":
+            guard let gesture = IBGestureRecognizer(attributes: attributes) else { return }
+            gesture.uniqueName = uniqueName
+            gestures.append(gesture)
         default:
             break
         }
