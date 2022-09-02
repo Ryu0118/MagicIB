@@ -81,10 +81,11 @@ extension IBParser: XMLParserDelegate {
             ibViewControllers.append(ibViewController)
         }
         else {
-            guard let lastIBView = waitingIBViewList.last else { return }
-            
-            if let gestureType = IBGestureType(elementName: elementName, attributes: attributeDict) {
-                gestureTypes.append(gestureType)
+            guard let lastIBView = waitingIBViewList.last else {
+                if let gestureType = IBGestureType(elementName: elementName, attributes: attributeDict) {
+                    gestureTypes.append(gestureType)
+                }
+                return
             }
             
             switch elementName {

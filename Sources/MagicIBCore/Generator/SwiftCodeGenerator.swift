@@ -69,16 +69,21 @@ private extension SwiftCodeGenerator {
                     let inheritance = ibViewController.superClass.description
                     let allViews = getAllViews(parentView: ibView)
                     let className = ibViewController.customClassName ?? className
+                    let gestures = generateAddGestureRecognizer(views: [ibView] + allViews)
                     
                     Line.newLine
                     Line(variableName: .class, lineType: .declareClass(name: className, inheritances: [inheritance]))
                     Line.newLine
                     generateSubviews(views: allViews)
-                    generateViewDidLoad()
+                    generateViewDidLoad(setupGesture: !gestures.isEmpty)
                     Line.newLine
                     generateSetupViews(views: [ibView] + allViews)
                     Line.newLine
                     generateConstraints(views: [ibView] + allViews)
+                    Line.newLine
+                    gestures
+                    Line.newLine
+                    generateGestureObjcFunc(views: [ibView] + allViews)
                     Line.newLine
                     Line.end
                 }
@@ -89,11 +94,14 @@ private extension SwiftCodeGenerator {
         
     }
     
-    func generateViewDidLoad() -> [Line] {
+    func generateViewDidLoad(setupGesture: Bool) -> [Line] {
         generateFunction(name: "viewDidLoad", isOverride: true, arguments: [], accessLevel: nil) {
             Line(variableName: "super", lineType: .function("super.viewDidLoad()"))
             Line(variableName: "self", lineType: .function("setupViews()"))
             Line(variableName: "self", lineType: .function("setupConstraints()"))
+            if setupGesture {
+                Line(variableName: "self", lineType: .function("setupGestureRecognizers()"))
+            }
         }
     }
     
@@ -111,29 +119,36 @@ private extension SwiftCodeGenerator {
             let inheritance = ibView.classType.description
             let allViews = self.getAllViews(parentView: ibView)
             let className = ibView.customClass ?? self.className
+            let gestures = generateAddGestureRecognizer(views: [ibView] + allViews)
             
             Line.newLine
             Line(variableName: .class, lineType: .declareClass(name: className, inheritances: [inheritance]))
             Line.newLine
             generateSubviews(views: allViews)
-            generateInitializer()
+            generateInitializer(setupGesture: !gestures.isEmpty)
             Line.newLine
             generateSetupViews(views: [ibView] + allViews)
             Line.newLine
             generateConstraints(views: [ibView] + allViews)
             Line.newLine
+            gestures
+            Line.newLine
+            generateGestureObjcFunc(views: [ibView] + allViews)
             Line.end
         }
         .calculateIndent()
         .joined(separator: "\n")
     }
     
-    func generateInitializer() -> [Line] {
+    func generateInitializer(setupGesture: Bool) -> [Line] {
         buildLines {
             generateFunction(name: "", isOverride: true, isInit: true, arguments: [.init(argumentName: "frame", argumentType: "CGRect")]) {
                 Line(variableName: "super", lineType: .function("super.init(frame: frame)"))
                 Line(variableName: "self", lineType: .function("setupViews()"))
                 Line(variableName: "self", lineType: .function("setupConstraints()"))
+                if setupGesture {
+                    Line(variableName: "self", lineType: .function("setupGestureRecognizers()"))
+                }
             }
             Line.newLine
             """
@@ -202,15 +217,21 @@ private extension SwiftCodeGenerator {
     func generateSubviews(views: [IBView]) -> [Line] {
         views
             .exceptCell()
-            .assignName()
-            .flatMap { uniqueName, view -> [Line] in
-                view.uniqueName = uniqueName
+            .flatMap { view in
                 return view.generateSwiftCode() + [Line.newLine]
             }
     }
     
     func getAllViews(parentView: IBView) -> [IBView] {
-        return parentView.subviews.findAllSubviews()
+        return parentView
+            .subviews
+            .findAllSubviews()
+            .exceptCell()
+            .assignName()
+            .map { uniqueName, view -> IBView in
+                view.uniqueName = uniqueName
+                return view
+            }
     }
     
     func generateConstraints(views: [IBView]) -> [Line] {
@@ -247,6 +268,36 @@ private extension SwiftCodeGenerator {
             .flatMap { $0 }
         }
         
+    }
+    
+    func generateAddGestureRecognizer(views: [IBView]) -> [Line] {
+        let lines = views.enumerated().flatMap { viewIndex, view -> [Line] in
+            return view.gestures.enumerated().flatMap { gestureIndex, gesture -> [Line] in
+                if viewIndex == views.count - 1 && gestureIndex == view.gestures.count - 1 {
+                    return gesture.generateSwiftCode()
+                }
+                return gesture.generateSwiftCode() + [Line.newLine]
+            }
+        }
+        
+        guard !lines.isEmpty else { return [] }
+        
+        return generateFunction(name: "setupGestureRecognizers") {
+            lines
+        }
+    }
+    
+    func generateGestureObjcFunc(views: [IBView]) -> [Line] {
+        buildLines {
+            for (viewIndex, view) in views.enumerated() {
+                for (gestureIndex, gesture) in view.gestures.enumerated() {
+                    gesture.generateObjcFunction()
+                    if !(viewIndex == views.count - 1 && gestureIndex == view.gestures.count - 1) {
+                        Line.newLine
+                    }
+                }
+            }
+        }
     }
 }
 

@@ -10,19 +10,27 @@ import Foundation
 extension IBGestureRecognizer: SwiftCodeGeneratable {
     
     func generateSwiftCode() -> [Line] {
-        guard let uniqueName = uniqueName,
-              let gestureType = gestureType
-        else { return [] }
+        guard let gestureType = gestureType else {
+            return []
+        }
+        
+        let uniqueName = uniqueName ?? "view"
+        
         return buildLines {
-            Line(variableName: gestureType.variableName, lineType: .declare(isMutating: false, type: nil, operand: "\(gestureType.className)(target: self, action: #selector())"))
+            Line(variableName: gestureType.variableName, lineType: .declare(isMutating: false, type: nil, operand: "\(gestureType.className)(target: self, action: #selector(\(gestureType.functionName)(_:)))"))
             generateCustomizeCode()
-            Line(variableName: uniqueName, lineType: .function("\(uniqueName).addGestureRecognizer(\(gestureType.variableName)"))
+            Line(variableName: uniqueName, lineType: .function("\(uniqueName).addGestureRecognizer(\(gestureType.variableName))"))
         }
     }
     
     func generateObjcFunction() -> [Line] {
         guard let gestureType = gestureType else { return [] }
-        return generateFunction(name: gestureType.functionName, accessLevel: "private") { }
+        return generateFunction(name: gestureType.functionName,
+                                arguments: [
+                                    .init(argumentName: "_ \(gestureType.variableName)",
+                                          argumentType: gestureType.className)
+                                ],
+                                accessLevel: "@objc private") { }
     }
     
     private func generateCustomizeCode() -> [Line] {
@@ -32,7 +40,7 @@ extension IBGestureRecognizer: SwiftCodeGeneratable {
             return []
         case .swipeGestureRecognizer(_, let direction):
             return buildLines {
-                Line(variableName: gestureType.variableName, lineType: .assign(propertyName: "direction", operand: ".direction"))
+                Line(variableName: gestureType.variableName, lineType: .assign(propertyName: "direction", operand: ".\(direction)"))
             }
         case .panGestureRecognizer(_, let minimumNumberOfTouches):
             return buildLines {
