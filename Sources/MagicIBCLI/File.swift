@@ -29,7 +29,7 @@ struct IBFileSearcher {
                 urls.append(content)
             }
             else if content.hasDirectoryPath {
-                let directoryContent = try getContents(url: url, currentURLs: urls)
+                let directoryContent = try _getAllIBPaths(url: url, currentURLs: urls)
                 urls.append(contentsOf: directoryContent)
             }
         }
