@@ -118,7 +118,6 @@ private extension SwiftCodeGenerator {
             
             let inheritance = ibView.classType.description
             let allViews = self.getAllViews(parentView: ibView)
-            let className = ibView.customClass ?? self.className
             let gestures = generateAddGestureRecognizer(views: [ibView] + allViews)
             
             Line.newLine
