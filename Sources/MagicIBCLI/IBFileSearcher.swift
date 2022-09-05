@@ -22,8 +22,15 @@ struct IBFileSearcher {
     }
     
     private func _getAllIBPaths(url: URL, currentURLs: [URL] = []) throws -> [URL] {
-        let contents = try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
+        guard let contents = try? FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil, options: .skipsHiddenFiles) else {
+            if extensions.contains(url.pathExtension) {
+                return [url]
+            }
+            return []
+        }
+        
         var urls = currentURLs
+        
         for content in contents {
             if extensions.contains(content.pathExtension) {
                 urls.append(content)

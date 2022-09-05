@@ -23,7 +23,7 @@ struct MagicIB: ParsableCommand {
     private func generate(url: URL) throws {
         let fileFinder = IBFileSearcher(fileURLWithRoot: url)
         let allIBFiles = try fileFinder.getAllIBPaths()
-
+        
         for file in allIBFiles {
             try write(ibFile: file)
         }
