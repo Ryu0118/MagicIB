@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  IBFileSearcher.swift
 //  
 //
 //  Created by Ryu on 2022/09/04.
@@ -29,7 +29,7 @@ struct IBFileSearcher {
                 urls.append(content)
             }
             else if content.hasDirectoryPath {
-                let directoryContent = try _getAllIBPaths(url: url, currentURLs: urls)
+                let directoryContent = try _getAllIBPaths(url: content, currentURLs: urls)
                 urls.append(contentsOf: directoryContent)
             }
         }

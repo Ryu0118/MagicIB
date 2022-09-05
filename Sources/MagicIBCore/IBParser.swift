@@ -27,8 +27,11 @@ public class IBParser: NSObject {
     private var lastAttributes: [String: String] = [:]
     private var gestureTypes = [IBGestureType]()
     
-    public func parse(_ absoluteURL: URL) throws {
+    private var completion: ((String?) -> ())?
+    
+    public func parse(_ absoluteURL: URL, completion: @escaping (String?) -> ()) throws {
         self.type = try IBType(url: absoluteURL)
+        self.completion = completion
         self.url = absoluteURL
         let data = try Data(contentsOf: absoluteURL)
         let parser = XMLParser(data: data)
@@ -141,7 +144,7 @@ extension IBParser: XMLParserDelegate {
     
     public func parserDidEndDocument(_ parser: XMLParser) {
         setGestureType()
-        print(generateSwiftCode()!)
+        completion?(generateSwiftCode())
     }
     
     private func generateSwiftCode() -> String? {
