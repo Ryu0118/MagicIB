@@ -25,18 +25,26 @@ struct MagicIB: ParsableCommand {
         let allIBFiles = try fileFinder.getAllIBPaths()
         print(allIBFiles.map { $0.absoluteString }.joined(separator: "\n"))
         for file in allIBFiles {
-            write(ibFile: file)
+            try write(ibFile: file)
         }
     }
     
-    private func write(ibFile: URL) {
+    private func write(ibFile: URL) throws {
         let parser = IBParser()
         let semaphore = DispatchSemaphore(value: 0)
-        try? parser.parse(ibFile) { code in
-            // write
-            print(code ?? "")
+        try parser.parse(ibFile) { code in
+            if let code = code {
+                let writePath = getWritePath(ibFile: ibFile)
+                try? code.write(to: writePath, atomically: true, encoding: .utf8)
+            }
             semaphore.signal()
         }
         semaphore.wait()
+    }
+    
+    private func getWritePath(ibFile: URL) -> URL {
+        var mutating = ibFile.deletingPathExtension()
+        mutating.appendPathExtension("swift")
+        return mutating
     }
 }
