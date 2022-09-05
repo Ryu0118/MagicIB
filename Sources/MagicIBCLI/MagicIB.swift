@@ -18,28 +18,25 @@ struct MagicIB: ParsableCommand {
         
         let url = URL(fileURLWithPath: projectURL ?? projectURL ?? "", relativeTo: currentURL)
         try generate(url: url)
-        CFRunLoopRun()
     }
     
     private func generate(url: URL) throws {
         let fileFinder = IBFileSearcher(fileURLWithRoot: url)
         let allIBFiles = try fileFinder.getAllIBPaths()
-        let parser = IBParser()
-        let dispatchGroup = DispatchGroup()
-        let dispatchQueue = DispatchQueue(label: "queue", attributes: .concurrent)
+        print(allIBFiles.map { $0.absoluteString }.joined(separator: "\n"))
         for file in allIBFiles {
-            print(file)
-            dispatchQueue.async(group: dispatchGroup) {
-                try? parser.parse(file) { code in
-                    // write
-                    print(code)
-                }
-            }
+            write(ibFile: file)
         }
-        
-        dispatchGroup.notify(queue: .main) {
-            print(allIBFiles)
-            CFRunLoopStop(CFRunLoopGetCurrent())
+    }
+    
+    private func write(ibFile: URL) {
+        let parser = IBParser()
+        let semaphore = DispatchSemaphore(value: 0)
+        try? parser.parse(ibFile) { code in
+            // write
+            print(code ?? "")
+            semaphore.signal()
         }
+        semaphore.wait()
     }
 }
