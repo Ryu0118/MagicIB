@@ -14,7 +14,6 @@ struct IBFileSearcher {
     
     init(fileURLWithRoot: URL) {
         self.fileURLWithRoot = fileURLWithRoot
-        
     }
     
     func getAllIBPaths() throws -> [URL] {
