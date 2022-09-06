@@ -25,17 +25,29 @@ struct MagicIB: ParsableCommand {
         let allIBFiles = try fileFinder.getAllIBPaths()
         
         for file in allIBFiles {
-            try write(ibFile: file)
+            do {
+                try write(ibFile: file)
+            }
+            catch {
+                print("An error has occurred: \(error.localizedDescription)")
+            }
         }
     }
     
     private func write(ibFile: URL) throws {
         let parser = IBParser()
         let semaphore = DispatchSemaphore(value: 0)
+        print("Generating swift code from \(ibFile.lastPathComponent)")
         try parser.parse(ibFile) { code in
             if let code = code {
                 let writePath = getWritePath(ibFile: ibFile)
-                try? code.write(to: writePath, atomically: true, encoding: .utf8)
+                do {
+                    try code.write(to: writePath, atomically: true, encoding: .utf8)
+                    print("Successfully generated \(writePath.lastPathComponent)")
+                }
+                catch {
+                    print("Failed to generate \(writePath.lastPathComponent)")
+                }
             }
             semaphore.signal()
         }

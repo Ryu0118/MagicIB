@@ -15,17 +15,23 @@ extension IBGestureRecognizer: SwiftCodeGeneratable {
         }
         
         let uniqueName = uniqueName ?? "view"
+        let gestureVariableName = [uniqueName, gestureType.variableName].camelized()
+        let functionName = [uniqueName, gestureType.functionName].camelized()
         
         return buildLines {
-            Line(variableName: gestureType.variableName, lineType: .declare(isMutating: false, type: nil, operand: "\(gestureType.className)(target: self, action: #selector(\(gestureType.functionName)(_:)))"))
+            Line(variableName: gestureVariableName, lineType: .declare(isMutating: false, type: nil, operand: "\(gestureType.className)(target: self, action: #selector(\(functionName)(_:)))"))
             generateCustomizeCode()
-            Line(variableName: uniqueName, lineType: .function("\(uniqueName).addGestureRecognizer(\(gestureType.variableName))"))
+            Line(variableName: uniqueName, lineType: .function("\(uniqueName).addGestureRecognizer(\(gestureVariableName))"))
         }
     }
     
     func generateObjcFunction() -> [Line] {
         guard let gestureType = gestureType else { return [] }
-        return generateFunction(name: gestureType.functionName,
+        
+        let uniqueName = uniqueName ?? "view"
+        let functionName = [uniqueName, gestureType.functionName].camelized()
+        
+        return generateFunction(name: functionName,
                                 arguments: [
                                     .init(argumentName: "_ \(gestureType.variableName)",
                                           argumentType: gestureType.className)

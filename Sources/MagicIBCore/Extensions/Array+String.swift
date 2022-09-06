@@ -13,12 +13,13 @@ extension Array where Element == String {
             .enumerated()
             .map {
                 if $0 == 0 {
-                    return $1.lowercased()
+                    let dropFirst = $1.dropFirst()
+                    let initial = $1.prefix(1).lowercased()
+                    return initial + dropFirst
                 }
                 else {
-                    let lowercased = $1.lowercased()
-                    let dropFirst = lowercased.dropFirst()
-                    let initial = lowercased.prefix(1).uppercased()
+                    let dropFirst = $1.dropFirst()
+                    let initial = $1.prefix(1).uppercased()
                     return initial + dropFirst
                 }
             }
