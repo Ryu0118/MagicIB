@@ -8,7 +8,7 @@
 import CoreGraphics
 import Foundation
 
-public class IBParser: NSObject {
+class IBParser: NSObject {
     
     var url: URL!
     var type: IBType!
@@ -28,7 +28,7 @@ public class IBParser: NSObject {
         }
     }
     
-    public func parse(_ absoluteURL: URL, completion: @escaping (String?) -> ()) throws {
+    func parse(_ absoluteURL: URL, completion: @escaping (String?) -> ()) throws {
         self.type = try IBType(url: absoluteURL)
         self.completion = completion
         self.url = absoluteURL
@@ -43,11 +43,11 @@ public class IBParser: NSObject {
 // MARK: XMLParserDelegate
 extension IBParser: XMLParserDelegate {
     
-    public func parser(_ parser: XMLParser,
-                       didStartElement elementName: String,
-                       namespaceURI: String?,
-                       qualifiedName qName: String?,
-                       attributes attributeDict: [String : String] = [:]
+    func parser(_ parser: XMLParser,
+                didStartElement elementName: String,
+                namespaceURI: String?,
+                qualifiedName qName: String?,
+                attributes attributeDict: [String : String] = [:]
     ) {
         waitingElementList.append(elementName)
         lastAttributes = attributeDict
@@ -67,20 +67,20 @@ extension IBParser: XMLParserDelegate {
         }
     }
     
-    public func parser(_ parser: XMLParser, foundCharacters string: String) {
+    func parser(_ parser: XMLParser, foundCharacters string: String) {
         let trimmed = string.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
         
         if let anyView = waitingIBViewList.last as? LongCharactersContainable {
             anyView.handleLongCharacters(key: lastAttributes["key"], characters: string)
         }
-
+        
     }
     
-    public func parser(_ parser: XMLParser,
-                       didEndElement elementName: String,
-                       namespaceURI: String?,
-                       qualifiedName qName: String?
+    func parser(_ parser: XMLParser,
+                didEndElement elementName: String,
+                namespaceURI: String?,
+                qualifiedName qName: String?
     ) {
         
         if let lastIndex = waitingIBViewList.lastIndex(where: { $0.classType.rawValue == elementName }) {
@@ -104,7 +104,7 @@ extension IBParser: XMLParserDelegate {
         
     }
     
-    public func parserDidEndDocument(_ parser: XMLParser) {
+    func parserDidEndDocument(_ parser: XMLParser) {
         setGestureType()
         completion?(generateSwiftCode())
     }
@@ -205,7 +205,7 @@ extension IBParser {
     enum IBParserError: LocalizedError {
         case invalidExtension
         
-        public var errorDescription: String? {
+        var errorDescription: String? {
             switch self {
             case .invalidExtension:
                 return "File extensions must be xib and storyboard"
@@ -225,7 +225,7 @@ extension IBParser {
     }
     
 }
- 
+
 private extension Array where Element == IBViewController {
     
     func findAllSubviews() -> [IBView] {
