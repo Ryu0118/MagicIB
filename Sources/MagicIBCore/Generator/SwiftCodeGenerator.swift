@@ -279,14 +279,20 @@ private extension SwiftCodeGenerator {
     }
     
     func generateAddGestureRecognizer(views: [IBView]) -> [Line] {
-        let lines = views.enumerated().flatMap { viewIndex, view -> [Line] in
-            return view.gestures.enumerated().flatMap { gestureIndex, gesture -> [Line] in
-                if viewIndex == views.count - 1 && gestureIndex == view.gestures.count - 1 {
-                    return gesture.generateSwiftCode()
-                }
-                return gesture.generateSwiftCode() + [Line.newLine]
+        let lines = views
+            .enumerated()
+            .flatMap { viewIndex, view -> [Line] in
+                return view
+                    .gestures
+                    .filter { $0.gestureType != nil }
+                    .enumerated()
+                    .flatMap { gestureIndex, gesture -> [Line] in
+                        if viewIndex == views.count - 1 && gestureIndex == view.gestures.count - 1 {
+                            return gesture.generateSwiftCode()
+                        }
+                        return gesture.generateSwiftCode() + [Line.newLine]
+                    }
             }
-        }
         
         guard !lines.isEmpty else { return [] }
         
@@ -298,7 +304,7 @@ private extension SwiftCodeGenerator {
     func generateGestureObjcFunc(views: [IBView]) -> [Line] {
         buildLines {
             for (viewIndex, view) in views.enumerated() {
-                for (gestureIndex, gesture) in view.gestures.enumerated() {
+                for (gestureIndex, gesture) in view.gestures.filter({ $0.gestureType != nil }).enumerated() {
                     gesture.generateObjcFunction()
                     if !(viewIndex == views.count - 1 && gestureIndex == view.gestures.count - 1) {
                         Line.newLine
