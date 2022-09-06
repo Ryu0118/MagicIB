@@ -18,16 +18,24 @@ final class SwiftCodeGenerator {
     let url: URL
     
     var fileName: String {
-        className + ".swift"
+        url.deletingPathExtension().lastPathComponent + ".swift"
     }
     
     var className: String {
         switch type {
-        case .storyboard(_):
-            return url
+        case .storyboard(let viewControllers):
+            var className = url
                 .deletingPathExtension()
                 .lastPathComponent
-                .insert(last: "ViewController")
+            if !className.contains("ViewController") {
+                className += "ViewController"
+            }
+            if let firstVC = viewControllers.first,
+               viewControllers.count == 1
+            {
+                className = firstVC.customClassName ?? className
+            }
+            return className
             
         case .xib(_):
             return url
