@@ -43,9 +43,15 @@ public class IBParser: NSObject {
 // MARK: XMLParserDelegate
 extension IBParser: XMLParserDelegate {
     
-    public func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
+    public func parser(_ parser: XMLParser,
+                       didStartElement elementName: String,
+                       namespaceURI: String?,
+                       qualifiedName qName: String?,
+                       attributes attributeDict: [String : String] = [:]
+    ) {
         waitingElementList.append(elementName)
         lastAttributes = attributeDict
+        
         if let ibViewElement = IBCompatibleView.init(rawValue: elementName),
            let ibView = IBView.instance(attributes: attributeDict, ibCompatibleView: ibViewElement)
         {
@@ -71,7 +77,11 @@ extension IBParser: XMLParserDelegate {
 
     }
     
-    public func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+    public func parser(_ parser: XMLParser,
+                       didEndElement elementName: String,
+                       namespaceURI: String?,
+                       qualifiedName qName: String?
+    ) {
         
         if let lastIndex = waitingIBViewList.lastIndex(where: { $0.classType.rawValue == elementName }) {
             waitingIBViewList.remove(at: lastIndex)
