@@ -21,10 +21,10 @@ struct MagicIB: ParsableCommand {
         
         let url = URL(fileURLWithPath: projectURL ?? projectURL ?? "", relativeTo: currentURL)
         try mkdirIfNeeded()
-        try generate(url: url)
+        generate(url: url)
     }
     
-    private func generate(url: URL) throws {
+    private func generate(url: URL) {
         let fileFinder = IBFileSearcher(fileURLWithRoot: url)
         let allIBFiles = fileFinder.getAllIBPaths()
         
