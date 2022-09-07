@@ -11,10 +11,10 @@ extension IBBlurEffect: SwiftCodeGeneratable, NonCustomizable {
     func generateSwiftCode() -> [Line] {
         buildLines {
             if let style = self.style as? String {
-                Line(variableName: "effect", lineType: .declare(isMutating: false, type: nil, operand: "UIBlurEffect(style: .\(style))"))
+                Line(variableName: "blurEffect", lineType: .declare(isMutating: false, type: nil, operand: "UIBlurEffect(style: .\(style))"))
             }
             else {
-                Line(variableName: "effect", lineType: .declare(isMutating: false, type: nil, operand: "UIBlurEffect()"))
+                Line(variableName: "blurEffect", lineType: .declare(isMutating: false, type: nil, operand: "UIBlurEffect()"))
             }
         }
     }
