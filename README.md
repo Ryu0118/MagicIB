@@ -42,7 +42,6 @@ $ magicib .
 </p>
 
 ### Example2
-Current directory is the target iOS project <br>
 
 <p align="center"> 
   <img width="636" alt="スクリーンショット 2022-09-07 23 52 31" src="https://user-images.githubusercontent.com/87907656/188909606-bfd7cd25-f2fd-46d7-8ea0-0566c7db7cff.png">
@@ -56,6 +55,19 @@ $ magicib . --output-dir ./output/
   <img width="638" alt="スクリーンショット 2022-09-07 23 52 56" src="https://user-images.githubusercontent.com/87907656/188909698-603b90ab-1915-4859-9464-c4768cf61f33.png">
 </p>
 
+### Example3
+<p align="center"> 
+  <img width="640" alt="スクリーンショット 2022-09-08 0 00 33" src="https://user-images.githubusercontent.com/87907656/188911563-20d0787c-acea-468b-97b9-d9e0d3f73b13.png">
+</p>
+
+then run this.
+```
+$ magicib ./Storyboards/HomeViewController.storyboard
+```
+
+<p align="center"> 
+  <img width="640" alt="スクリーンショット 2022-09-08 0 00 57" src="https://user-images.githubusercontent.com/87907656/188911652-ca456aa5-685d-489a-b977-d41c2e80bd18.png">
+</p>
 
 
 
