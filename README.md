@@ -11,3 +11,17 @@
   [![Twitter](https://img.shields.io/twitter/follow/ryu_hu03?style=social)](https://twitter.com/ryu_hu03)
 </div>
 
+# Usage
+```
+USAGE: magicib [<project-url>] [<ib-url>] [--output-dir <output-dir>]
+
+ARGUMENTS:
+  <project-url>           The root directory of the project containing the IB files you want to
+                          convert to Swift
+  <ib-url>                Path of the Interface builder you want to convert to Swift
+
+OPTIONS:
+  -o, --output-dir <output-dir>
+                          Output directory for files converted to Swift
+  -h, --help              Show help information.
+```
