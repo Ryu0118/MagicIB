@@ -59,30 +59,6 @@ extension IBView {
             return IBWebView(attributes: attributes, ibCompatibleView: ibCompatibleView)
         default:
             return IBView(attributes: attributes, ibCompatibleView: ibCompatibleView)
-//        case .mtkView:
-//            <#code#>
-//        case .glkView:
-//            <#code#>
-//        case .sceneKitView:
-//            <#code#>
-//        case .skView:
-//            <#code#>
-//        case .arskView:
-//            <#code#>
-//        case .arscnView:
-//            <#code#>
-//        case .arView:
-//            <#code#>
-//        case .clLocationButton:
-//            <#code#>
-//        case .navigationBar:
-//            <#code#>
-//        case .toolbar:
-//            <#code#>
-//        case .tabBar:
-//            <#code#>
-//        case .containerView:
-//            <#code#>
         }
     }
 }
