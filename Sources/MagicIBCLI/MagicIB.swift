@@ -10,6 +10,9 @@ struct MagicIB: ParsableCommand {
     @Argument(help: "")
     var ibURL: String?
     
+    @Option(name: .shortAndLong, help: "")
+    var outputDir: String?
+    
     static let _commandName: String = "magicib"
     
     mutating func run() throws {
@@ -17,6 +20,7 @@ struct MagicIB: ParsableCommand {
         let currentURL = URL(fileURLWithPath: currentDirectory)
         
         let url = URL(fileURLWithPath: projectURL ?? projectURL ?? "", relativeTo: currentURL)
+        try mkdirIfNeeded()
         try generate(url: url)
     }
     
@@ -55,8 +59,29 @@ struct MagicIB: ParsableCommand {
     }
     
     private func getWritePath(ibFile: URL) -> URL {
-        var mutating = ibFile.deletingPathExtension()
-        mutating.appendPathExtension("swift")
-        return mutating
+        if let outputDir = outputDir {
+            let currentDirectory = FileManager.default.currentDirectoryPath
+            let currentURL = URL(fileURLWithPath: currentDirectory)
+            var outputURL = URL(fileURLWithPath: outputDir, relativeTo: currentURL)
+            outputURL.appendPathComponent(ibFile.deletingPathExtension().lastPathComponent)
+            outputURL.deletePathExtension()
+            outputURL.appendPathExtension("swift")
+            return outputURL
+        }
+        else {
+            var mutating = ibFile.deletingPathExtension()
+            mutating.appendPathExtension("swift")
+            return mutating
+        }
+    }
+    
+    private func mkdirIfNeeded() throws {
+        guard let outputDir = outputDir else {
+            return
+        }
+        let currentDirectory = FileManager.default.currentDirectoryPath
+        let currentURL = URL(fileURLWithPath: currentDirectory)
+        let outputURL = URL(fileURLWithPath: outputDir, relativeTo: currentURL)
+        try FileManager.default.createDirectory(at: outputURL, withIntermediateDirectories: true)
     }
 }
