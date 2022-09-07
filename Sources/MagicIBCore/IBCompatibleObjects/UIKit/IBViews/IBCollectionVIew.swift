@@ -13,6 +13,8 @@ final class IBCollectionView: IBScrollView {
         .init(ib: "springLoaded", propertyName: "isSpringLoaded", type: .bool),
         .init(propertyName: "dataMode", type: .enum),
         .init(propertyName: "collectionViewLayout", type: .flowLayout),
+        .init(propertyName: "delegate", type: .anyInstance),
+        .init(propertyName: "dataSource", type: .anyInstance),
     ]
     
     override var properties: [IBPropertyMapper] {
@@ -40,6 +42,9 @@ final class IBCollectionView: IBScrollView {
                   let inset = IBEdgeInsets(attributes: attributes)
             else { return }
             collectionViewFlowLayout?.addValueToProperty(ib: propertyName, value: inset)
+        case "connections->outlet":
+            guard let property = attributes["property"] else { return }
+            addValueToProperty(ib: property, value: "self")
         default:
             break
         }
