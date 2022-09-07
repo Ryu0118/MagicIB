@@ -11,7 +11,7 @@
   [![Twitter](https://img.shields.io/twitter/follow/ryu_hu03?style=social)](https://twitter.com/ryu_hu03)
 </div>
 
-# Usage
+## Usage
 ```
 USAGE: magicib [<project-url>] [<ib-url>] [--output-dir <output-dir>]
 
@@ -25,3 +25,18 @@ OPTIONS:
                           Output directory for files converted to Swift
   -h, --help              Show help information.
 ```
+### Example1
+Current directory is the target iOS project <br>
+
+<p align="center"> 
+  <img width="600" alt="スクリーンショット 2022-09-07 23 30 38" src="https://user-images.githubusercontent.com/87907656/188904416-fb38040d-ce91-4625-b934-2379865b5cb4.png"> 
+</p>
+
+then run this.
+```
+$ magicib .
+```
+
+<p align="center">
+    <img width="600" alt="スクリーンショット 2022-09-07 23 38 01" src="https://user-images.githubusercontent.com/87907656/188906085-1872751c-079c-4e17-b864-d314bf7c47e9.png">
+</p>
