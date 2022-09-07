@@ -4,13 +4,13 @@ import MagicIBCore
 
 @main
 struct MagicIB: ParsableCommand {
-    @Argument(help: "")
+    @Argument(help: "The root directory of the project containing the IB files you want to convert to Swift")
     var projectURL: String?
     
-    @Argument(help: "")
+    @Argument(help: "Path of the Interface builder you want to convert to Swift")
     var ibURL: String?
     
-    @Option(name: .shortAndLong, help: "")
+    @Option(name: .shortAndLong, help: "Output directory for files converted to Swift")
     var outputDir: String?
     
     static let _commandName: String = "magicib"
