@@ -40,3 +40,23 @@ $ magicib .
 <p align="center">
     <img width="600" alt="スクリーンショット 2022-09-07 23 38 01" src="https://user-images.githubusercontent.com/87907656/188906085-1872751c-079c-4e17-b864-d314bf7c47e9.png">
 </p>
+
+### Example2
+Current directory is the target iOS project <br>
+
+<p align="center"> 
+  <img width="636" alt="スクリーンショット 2022-09-07 23 52 31" src="https://user-images.githubusercontent.com/87907656/188909606-bfd7cd25-f2fd-46d7-8ea0-0566c7db7cff.png">
+</p>
+
+then run this.
+```
+$ magicib . --output-dir ./output/
+```
+<p align="center"> 
+  <img width="638" alt="スクリーンショット 2022-09-07 23 52 56" src="https://user-images.githubusercontent.com/87907656/188909698-603b90ab-1915-4859-9464-c4768cf61f33.png">
+</p>
+
+
+
+
+
