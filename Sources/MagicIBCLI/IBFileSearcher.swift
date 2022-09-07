@@ -16,11 +16,11 @@ struct IBFileSearcher {
         self.fileURLWithRoot = fileURLWithRoot
     }
     
-    func getAllIBPaths() throws -> [URL] {
-        try _getAllIBPaths(url: fileURLWithRoot)
+    func getAllIBPaths() -> [URL] {
+        _getAllIBPaths(url: fileURLWithRoot)
     }
     
-    private func _getAllIBPaths(url: URL, currentURLs: [URL] = []) throws -> [URL] {
+    private func _getAllIBPaths(url: URL, currentURLs: [URL] = []) -> [URL] {
         guard let contents = try? FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil, options: .skipsHiddenFiles) else {
             if extensions.contains(url.pathExtension) {
                 return [url]
@@ -35,7 +35,7 @@ struct IBFileSearcher {
                 urls.append(content)
             }
             else if content.hasDirectoryPath {
-                let directoryContent = try _getAllIBPaths(url: content, currentURLs: urls)
+                let directoryContent = _getAllIBPaths(url: content, currentURLs: urls)
                 urls = directoryContent
             }
         }
