@@ -43,7 +43,7 @@ struct IBLayoutConstraint {
 }
 //MARK: Declare Enum
 extension IBLayoutConstraint {
-    enum Attribute: String {
+    enum Attribute: String, Hashable {
         case top
         case bottom
         case width
@@ -55,8 +55,14 @@ extension IBLayoutConstraint {
         case firstBaseline
         
         init?(_ rawValue: String) {
-            if rawValue == "topMargin" {
-                self = .top
+            let margins: [Attribute: String] = [
+                .top: "topMargin",
+                .bottom: "bottomMargin",
+                .leading: "leadingMargin",
+                .trailing: "trailingMargin"
+            ]
+            if let first = margins.first(where: { _, value in value == rawValue }) {
+                self = first.key
             }
             else {
                 guard let attribute = Attribute(rawValue: rawValue) else { return nil }

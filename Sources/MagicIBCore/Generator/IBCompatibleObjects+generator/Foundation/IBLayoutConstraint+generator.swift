@@ -14,7 +14,9 @@ extension IBLayoutConstraint: SwiftCodeGeneratable {
         let anchor = "\(firstItem).\(firstAttribute)Anchor.constraint(\(arguments))"
         
         guard !arguments.isEmpty else {
-            print("arguments is empty")
+            #if DEBUG
+            print("arguments is empty: \(anchor)")
+            #endif
             return []
         }
         
