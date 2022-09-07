@@ -13,6 +13,13 @@ extension IBLayoutConstraint: SwiftCodeGeneratable {
         let arguments = buildArgument()
         let anchor = "\(firstItem).\(firstAttribute)Anchor.constraint(\(arguments))"
         
+        guard !arguments.isEmpty else {
+            #if DEBUG
+            print("arguments is empty: \(anchor)")
+            #endif
+            return []
+        }
+        
         return buildLines {
             Line(variableName: variableName, lineType: .declare(isMutating: false, type: nil, operand: anchor))
             if let priority = self.priority {
@@ -76,9 +83,6 @@ extension IBLayoutConstraint: SwiftCodeGeneratable {
             else {
                 arguments.append("constant: \(constant)")
             }
-        }
-        if arguments.isEmpty {
-            fatalError("arguments is empty")
         }
         return arguments
     }

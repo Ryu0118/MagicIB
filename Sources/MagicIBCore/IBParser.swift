@@ -15,19 +15,22 @@ public class IBParser: NSObject {
     
     private var waitingIBViewList = [IBView]()
     private var waitingElementList = [String]()
-    private var ibViewControllers = [IBViewController]() {
-        didSet {
-            parentView = nil
-        }
-    }
     private var subviewFlags = [IBView]()
     private var prototypesFlag: IBTableView?
     private var cellFlag: IBCollectionView?
     private var parentView: IBView?
     private var lastAttributes: [String: String] = [:]
+    private var gestureTypes = [IBGestureType]()
+    private var completion: ((String?) -> ())?
+    private var ibViewControllers = [IBViewController]() {
+        didSet {
+            parentView = nil
+        }
+    }
     
-    public func parse(_ absoluteURL: URL) throws {
+    public func parse(_ absoluteURL: URL, completion: @escaping (String?) -> ()) throws {
         self.type = try IBType(url: absoluteURL)
+        self.completion = completion
         self.url = absoluteURL
         let data = try Data(contentsOf: absoluteURL)
         let parser = XMLParser(data: data)
@@ -40,39 +43,19 @@ public class IBParser: NSObject {
 // MARK: XMLParserDelegate
 extension IBParser: XMLParserDelegate {
     
-    public func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
+    public func parser(_ parser: XMLParser,
+                       didStartElement elementName: String,
+                       namespaceURI: String?,
+                       qualifiedName qName: String?,
+                       attributes attributeDict: [String : String] = [:]
+    ) {
         waitingElementList.append(elementName)
         lastAttributes = attributeDict
+        
         if let ibViewElement = IBCompatibleView.init(rawValue: elementName),
            let ibView = IBView.instance(attributes: attributeDict, ibCompatibleView: ibViewElement)
         {
-            waitingIBViewList.append(ibView)
-            
-            if ibViewControllers.last?.ibView == nil {
-                ibViewControllers.last?.ibView = ibView
-            }
-            
-            if let tableView = prototypesFlag,
-               let cell = ibView as? IBTableViewCell {
-                tableView.prototypes.append(cell)
-            }
-            else if let parentView = subviewFlags.last {
-                if let stackView = parentView as? IBStackView {
-                    stackView.arrangedSubviews.append(ibView)
-                }
-                else if attributeDict["key"] == nil {
-                    parentView.subviews.append(ibView)
-                }
-                else if let propertyName = attributeDict["key"] {
-                    guard let previousIBView = waitingIBViewList[safe: waitingIBViewList.count - 2] else { return }
-                    previousIBView.addValueToProperty(ib: propertyName, value: ibView)
-                }
-            }
-            else if let collectionView = cellFlag,
-                    let cell = ibView as? IBCollectionViewCell
-            {
-                collectionView.cells.append(cell)
-            }
+            parseIBView(ibView: ibView, attributeDict: attributeDict)
         }
         else if let ibCompatibleViewController: IBCompatibleViewController = .init(rawValue: elementName),
                 let ibViewController = IBViewController(attributes: attributeDict, ibCompatibleViewController: ibCompatibleViewController)
@@ -80,22 +63,7 @@ extension IBParser: XMLParserDelegate {
             ibViewControllers.append(ibViewController)
         }
         else {
-            guard let lastIBView = waitingIBViewList.last else { return }
-            switch elementName {
-            case "subviews":
-                subviewFlags.append(lastIBView)
-                if parentView == nil {
-                    parentView = lastIBView
-                    parentView?.uniqueName = type == .storyboard ? "view" : "self"
-                }
-            case "prototypes":
-                prototypesFlag = lastIBView as? IBTableView
-            case "cells":
-                cellFlag = lastIBView as? IBCollectionView
-            default:
-                lastIBView.waitingElementList = waitingElementList
-                lastIBView.addValueToProperties(attributes: attributeDict)
-            }
+            handleNonInspectableElement(elementName: elementName, attributeDict: attributeDict)
         }
     }
     
@@ -109,7 +77,11 @@ extension IBParser: XMLParserDelegate {
 
     }
     
-    public func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+    public func parser(_ parser: XMLParser,
+                       didEndElement elementName: String,
+                       namespaceURI: String?,
+                       qualifiedName qName: String?
+    ) {
         
         if let lastIndex = waitingIBViewList.lastIndex(where: { $0.classType.rawValue == elementName }) {
             waitingIBViewList.remove(at: lastIndex)
@@ -133,19 +105,98 @@ extension IBParser: XMLParserDelegate {
     }
     
     public func parserDidEndDocument(_ parser: XMLParser) {
-        if type == .storyboard {
-            let generator = SwiftCodeGenerator(url: url, type: .storyboard(ibViewControllers: ibViewControllers))
-            let string = try! generator.generate()
-            print(string)
+        setGestureType()
+        completion?(generateSwiftCode())
+    }
+    
+}
+
+//MARK: private extension
+private extension IBParser {
+    
+    func handleNonInspectableElement(elementName: String, attributeDict: [String: String]) {
+        guard let lastIBView = waitingIBViewList.last else {
+            if let gestureType = IBGestureType(elementName: elementName, attributes: attributeDict) {
+                gestureTypes.append(gestureType)
+            }
+            return
         }
-        else {
-            guard let ibView = parentView else { return }
-            let generator = SwiftCodeGenerator(url: url, type: .xib(ibView: ibView))
-            let string = try! generator.generate()
-            print(string)
+        
+        switch elementName {
+        case "subviews":
+            subviewFlags.append(lastIBView)
+            if parentView == nil {
+                parentView = lastIBView
+                parentView?.uniqueName = type == .storyboard ? "view" : "self"
+            }
+        case "prototypes":
+            prototypesFlag = lastIBView as? IBTableView
+        case "cells":
+            cellFlag = lastIBView as? IBCollectionView
+        default:
+            lastIBView.waitingElementList = waitingElementList
+            lastIBView.addValueToProperties(attributes: attributeDict)
         }
     }
     
+    func parseIBView(ibView: IBView, attributeDict: [String: String]) {
+        waitingIBViewList.append(ibView)
+        
+        if ibViewControllers.last?.ibView == nil {
+            ibViewControllers.last?.ibView = ibView
+        }
+        
+        if let tableView = prototypesFlag,
+           let cell = ibView as? IBTableViewCell {
+            tableView.prototypes.append(cell)
+        }
+        else if let parentView = subviewFlags.last {
+            handleSubviewFlag(ibView: ibView, parentView: parentView, attributeDict: attributeDict)
+        }
+        else if let collectionView = cellFlag,
+                let cell = ibView as? IBCollectionViewCell
+        {
+            collectionView.cells.append(cell)
+        }
+    }
+    
+    func handleSubviewFlag(ibView: IBView, parentView: IBView, attributeDict: [String: String]) {
+        if let stackView = parentView as? IBStackView {
+            stackView.arrangedSubviews.append(ibView)
+        }
+        else if attributeDict["key"] == nil {
+            parentView.subviews.append(ibView)
+        }
+        else if let propertyName = attributeDict["key"] {
+            guard let previousIBView = waitingIBViewList[safe: waitingIBViewList.count - 2] else { return }
+            previousIBView.addValueToProperty(ib: propertyName, value: ibView)
+        }
+    }
+    
+    func generateSwiftCode() -> String? {
+        if type == .storyboard {
+            let generator = SwiftCodeGenerator(url: url, type: .storyboard(ibViewControllers: ibViewControllers))
+            let string = try! generator.generate()
+            return string
+        }
+        else {
+            guard let ibView = parentView else { return nil }
+            let generator = SwiftCodeGenerator(url: url, type: .xib(ibView: ibView))
+            let string = try! generator.generate()
+            return string
+        }
+    }
+    
+    func setGestureType() {
+        let gestureRecognizers = ibViewControllers.findAllSubviews().flatMap { $0.gestures }
+        for gestureRecognizer in gestureRecognizers {
+            for gestureType in gestureTypes {
+                if gestureRecognizer.destination == gestureType.id {
+                    gestureRecognizer.gestureType = gestureType
+                }
+            }
+        }
+    }
 }
 
 // MARK: Enum
@@ -175,3 +226,12 @@ extension IBParser {
     
 }
  
+private extension Array where Element == IBViewController {
+    
+    func findAllSubviews() -> [IBView] {
+        self.flatMap {
+            $0.ibView.subviews.findAllSubviews() + [$0.ibView].compactMap { $0 }
+        }
+    }
+    
+}

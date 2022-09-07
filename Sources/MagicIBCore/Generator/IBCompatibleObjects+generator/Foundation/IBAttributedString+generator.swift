@@ -125,7 +125,12 @@ extension IBAttributedString.Fragment: SwiftCodeGeneratable {
                     
                     guard let type = type,
                           let firstLine = nonCustomizable.generateSwiftCode().first
-                    else { fatalError("failed to get right operand. propertyName: \(property.propertyName)") }
+                    else {
+                        return nil
+                        /*
+                        fatalError("failed to get right operand. propertyName: \(property.propertyName)")
+                         */
+                    }
                     let rightOperand = firstLine.explicitType(type).originalValue
                     return Line(relatedVariableName: attributeName, custom: ".\(property.propertyName): \(rightOperand),")
                 }
