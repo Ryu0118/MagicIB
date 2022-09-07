@@ -42,6 +42,7 @@ $ magicib .
 </p>
 
 ### Example2
+Specify the output directory for the generated Swift files.
 
 <p align="center"> 
   <img width="636" alt="スクリーンショット 2022-09-07 23 52 31" src="https://user-images.githubusercontent.com/87907656/188909606-bfd7cd25-f2fd-46d7-8ea0-0566c7db7cff.png">
@@ -56,6 +57,7 @@ $ magicib . --output-dir ./output/
 </p>
 
 ### Example3
+Generate Swift code from a single storyboard file.
 <p align="center"> 
   <img width="640" alt="スクリーンショット 2022-09-08 0 00 33" src="https://user-images.githubusercontent.com/87907656/188911563-20d0787c-acea-468b-97b9-d9e0d3f73b13.png">
 </p>
