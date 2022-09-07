@@ -13,7 +13,7 @@ extension IBPropertyMapper {
         guard let value = value else { return nil }
         
         switch type {
-        case .number:
+        case .number, .anyInstance:
             return "\(value)"
         case .bool:
             guard let value = value as? String else { return nil }

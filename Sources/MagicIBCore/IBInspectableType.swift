@@ -31,5 +31,6 @@ enum IBInspectableType {
     case wkWebViewConfiguration
     case wkPreferences
     case offsetWrapper
+    case anyInstance
 }
 
