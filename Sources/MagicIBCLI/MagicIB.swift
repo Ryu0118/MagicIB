@@ -53,6 +53,9 @@ struct MagicIB: ParsableCommand {
                     print("Failed to generate \(writePath.lastPathComponent)")
                 }
             }
+            else {
+                print("Failed to generate Swift code, please add a UI component and run again")
+            }
             semaphore.signal()
         }
         semaphore.wait()
