@@ -17,12 +17,12 @@ extension Array where Element == IBPropertyMapper {
     }
     
     func basicType() -> [Element] {
-        let basicTypes: [IBInspectableType] = [.enum, .number, .bool, .string]
+        let basicTypes: [IBInspectableType] = [.enum, .number, .bool, .string, .anyInstance]
         return self.filter { basicTypes.contains($0.type) }
     }
     
     func customType() -> [Element] {
-        let basicTypes: [IBInspectableType] = [.enum, .number, .bool, .string]
+        let basicTypes: [IBInspectableType] = [.enum, .number, .bool, .string, .anyInstance]
         return self.filter {
             !basicTypes.contains($0.type) && $0.value as? NonCustomizable == nil
         }

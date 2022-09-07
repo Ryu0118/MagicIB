@@ -81,8 +81,8 @@ enum IBGestureType {
             return "pinchGesture"
         case .rotationGestureRecognizer(_):
             return "rotationGesture"
-        case .swipeGestureRecognizer(_, _):
-            return "swipeGesture"
+        case .swipeGestureRecognizer(_, let direction):
+            return "\(direction)SwipeGesture"
         case .panGestureRecognizer(_, _):
             return "panGesture"
         case .screenEdgePanGestureRecognizer(_, _):
