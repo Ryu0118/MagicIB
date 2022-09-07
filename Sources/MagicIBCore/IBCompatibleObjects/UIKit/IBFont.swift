@@ -14,11 +14,25 @@ struct IBFont {
         case boldSystem
     }
     
+    private let styles = [
+        "UICTFontTextStyleTitle0": "largeTitle",
+        "UICTFontTextStyleTitle1": "title1",
+        "UICTFontTextStyleTitle2": "title2",
+        "UICTFontTextStyleTitle3": "title3",
+        "UICTFontTextStyleHeadline": "headline",
+        "UICTFontTextStyleSubhead": "subheadline",
+        "UICTFontTextStyleBody": "body",
+        "UICTFontTextStyleCallout": "callout",
+        "UICTFontTextStyleFootnote": "footnote",
+        "UICTFontTextStyleCaption1": "caption1",
+        "UICTFontTextStyleCaption2": "caption2",
+    ]
+    
     private(set) var size: String?
     private(set) var fontName: String?
     private(set) var fontFamily: String?
-    private(set) var style: String?
     private(set) var type: FontType?
+    private(set) var style: String?
     
     init?(attributes: [String: String]) {
         if let size = attributes["size"] {
@@ -36,7 +50,7 @@ struct IBFont {
             self.type = type
         }
         if let style = attributes["style"] {
-            self.style = style
+            self.style = styles[style]
         }
         if let fontName = attributes["name"] {
             self.fontName = fontName
