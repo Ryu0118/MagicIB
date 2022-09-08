@@ -176,13 +176,13 @@ private extension IBParser {
     func generateSwiftCode() -> String? {
         if type == .storyboard {
             let generator = SwiftCodeGenerator(url: url, type: .storyboard(ibViewControllers: ibViewControllers))
-            let string = try! generator.generate()
+            let string = generator.generate()
             return string
         }
         else {
             guard let ibView = parentView else { return nil }
             let generator = SwiftCodeGenerator(url: url, type: .xib(ibView: ibView))
-            let string = try! generator.generate()
+            let string = generator.generate()
             return string
         }
     }

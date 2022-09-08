@@ -51,7 +51,7 @@ final class SwiftCodeGenerator {
         self.url = url
     }
     
-    func generate() throws -> String {
+    func generate() -> String {
         switch type {
         case .storyboard(let ibViewControllers):
             return generateViewController(ibViewControllers: ibViewControllers)
