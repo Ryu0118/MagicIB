@@ -3,7 +3,9 @@ VERSION = 0.0.1
 
 .PHONY: release
 release:
-	mkdir -p release
+	mkdir -p releases
 	swift build -c release
-	cp $(BINARY_PATH) release/magicib
-	zip release/MagicIB_$(VERSION).zip release/magicib
+	cp $(BINARY_PATH) magicib
+	tar acvf releases/MagicIB_$(VERSION).tar.gz magicib
+	cp magicib releases/magicib
+	rm magicib
