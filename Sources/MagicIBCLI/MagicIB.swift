@@ -34,6 +34,11 @@ struct MagicIB: ParsableCommand {
         let fileFinder = IBFileSearcher(fileURLWithRoot: url)
         let allIBFiles = fileFinder.getAllIBPaths()
         
+        guard !allIBFiles.isEmpty else {
+            print("Could not find Interface Builder file")
+            return
+        }
+        
         for file in allIBFiles {
             do {
                 try write(ibFile: file)
