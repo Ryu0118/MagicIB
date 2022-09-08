@@ -13,7 +13,7 @@ class IBView: NSObject, IBCompatibleObject, UniqueName, SwiftCodeGeneratable {
     let id: String
     let customClass: String?
     let customModule: String?
-    let classType: IBCompatibleView
+    let classType: IBCompatibleViewType
     let dependencies: IBViewDependencies
     
     var subviews = [IBView]()
@@ -38,7 +38,7 @@ class IBView: NSObject, IBCompatibleObject, UniqueName, SwiftCodeGeneratable {
         didSet {
             var lastViewIndex: Int?
             for (i, element) in waitingElementList.reversed().enumerated() {
-                if let _ = IBCompatibleView(rawValue: element) {
+                if let _ = IBCompatibleViewType(rawValue: element) {
                     lastViewIndex = i
                     break
                 }
@@ -88,7 +88,7 @@ class IBView: NSObject, IBCompatibleObject, UniqueName, SwiftCodeGeneratable {
     }
     
     init?(attributes: [String: String],
-          ibCompatibleView: IBCompatibleView
+          ibCompatibleView: IBCompatibleViewType
     ) {
         guard let id = attributes["id"] else { return nil }
         self.id = id

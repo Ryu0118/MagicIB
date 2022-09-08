@@ -3,7 +3,7 @@
 
 import Foundation
 
-enum IBCompatibleView: String, Hashable {
+enum IBCompatibleViewType: String, Hashable {
     case view
     case imageView
     case button
@@ -44,7 +44,7 @@ enum IBCompatibleView: String, Hashable {
     case collectionReusableView
 }
 
-extension IBCompatibleView: CaseIterable, CustomStringConvertible {
+extension IBCompatibleViewType: CaseIterable, CustomStringConvertible {
     
     var variableName: String {
         switch self {

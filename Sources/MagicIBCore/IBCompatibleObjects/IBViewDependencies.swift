@@ -8,7 +8,7 @@
 import Foundation
 
 struct IBViewDependencies: Dependencies {
-    let ibCompatibleView: IBCompatibleView
+    let ibCompatibleView: IBCompatibleViewType
     
     var dependencies: [String] {
         switch ibCompatibleView {

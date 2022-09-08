@@ -52,7 +52,7 @@ extension IBParser: XMLParserDelegate {
         waitingElementList.append(elementName)
         lastAttributes = attributeDict
         
-        if let ibViewElement = IBCompatibleView.init(rawValue: elementName),
+        if let ibViewElement = IBCompatibleViewType.init(rawValue: elementName),
            let ibView = IBView.instance(attributes: attributeDict, ibCompatibleView: ibViewElement)
         {
             parseIBView(ibView: ibView, attributeDict: attributeDict)

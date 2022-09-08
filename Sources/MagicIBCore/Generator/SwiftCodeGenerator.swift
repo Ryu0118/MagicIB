@@ -371,7 +371,7 @@ private extension Array where Element == Line {
 private extension Array where Element == IBView {
     
     func assignName() -> [(String, IBView)] {
-        var classTypeCounts = [IBCompatibleView: Int]()
+        var classTypeCounts = [IBCompatibleViewType: Int]()
         return self.map { view -> (String, IBView) in
             if let uniqueName = view.uniqueName { return (uniqueName, view) }
             
@@ -405,7 +405,7 @@ private extension Array where Element == IBView {
     
     func exceptCell() -> [IBView] {
         self.filter {
-            let excepts: [IBCompatibleView] = [.tableViewCell, .collectionViewCell, .collectionViewCellContentView]
+            let excepts: [IBCompatibleViewType] = [.tableViewCell, .collectionViewCell, .collectionViewCellContentView]
             return !excepts.contains($0.classType)
         }
     }

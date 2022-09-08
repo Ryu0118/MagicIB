@@ -9,7 +9,7 @@ import Foundation
 
 extension IBView {
     
-    static func instance(attributes: [String: String], ibCompatibleView: IBCompatibleView) -> IBView? {
+    static func instance(attributes: [String: String], ibCompatibleView: IBCompatibleViewType) -> IBView? {
         switch ibCompatibleView {
         case .view:
             return IBView(attributes: attributes, ibCompatibleView: ibCompatibleView)
