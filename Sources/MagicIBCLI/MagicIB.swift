@@ -5,10 +5,10 @@ import MagicIBCore
 @main
 struct MagicIB: ParsableCommand {
     @Argument(help: "The root directory of the project containing the IB files you want to convert to Swift")
-    var projectURL: String?
+    var projectPath: String?
     
     @Argument(help: "Path of the Interface builder you want to convert to Swift")
-    var ibURL: String?
+    var ibPath: String?
     
     @Option(name: .shortAndLong, help: "Output directory for files converted to Swift")
     var outputDir: String?
@@ -19,9 +19,15 @@ struct MagicIB: ParsableCommand {
         let currentDirectory = FileManager.default.currentDirectoryPath
         let currentURL = URL(fileURLWithPath: currentDirectory)
         
-        let url = URL(fileURLWithPath: projectURL ?? projectURL ?? "", relativeTo: currentURL)
+        let url = URL(fileURLWithPath: projectPath ?? projectPath ?? "", relativeTo: currentURL)
         try mkdirIfNeeded()
         generate(url: url)
+    }
+    
+    func validate() throws {
+        if ibPath == nil && projectPath == nil {
+            throw ValidationError("Arguments not entered")
+        }
     }
     
     private func generate(url: URL) {
