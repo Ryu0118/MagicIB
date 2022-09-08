@@ -11,6 +11,11 @@
   [![Twitter](https://img.shields.io/twitter/follow/ryu_hu03?style=social)](https://twitter.com/ryu_hu03)
 </div>
 
+## Installation
+```
+$ brew install ryu0118/magicib/magicib
+```
+
 ## Usage
 ```
 USAGE: magicib [<project-path>] [<ib-path>] [--output-dir <output-dir>]
