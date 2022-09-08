@@ -26,7 +26,7 @@ final class IBButton: IBView {
         .init(ib: "springLoaded", propertyName: "isSpringLoaded", type: .bool),
         .init(ib: "pointerInteraction", propertyName: "isPointerInteractionEnabled", type: .bool),
         .init(ib: "changesSelectionAsPrimaryAction", propertyName: "changesSelectionAsPrimaryAction", type: .bool),
-        .init(ib: "role", propertyName: "role", type: .bool),
+        .init(ib: "role", propertyName: "role", type: .enum),
         .init(ib: "configuration", propertyName: "configuration", type: .buttonConfiguration),
         .init(propertyName: "fontDescription", type: .font),
     ]

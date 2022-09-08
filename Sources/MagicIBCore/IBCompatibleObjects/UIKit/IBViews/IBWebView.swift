@@ -12,7 +12,6 @@ class IBWebView: IBView {
         .init(propertyName: "allowsBackForwardNavigationGestures", type: .bool),
         .init(propertyName: "allowsLinkPreview", type: .bool),
         .init(propertyName: "customUserAgent", type: .string),
-        .init(propertyName: "customUserAgent", type: .string),
         .init(propertyName: "configuration", type: .wkWebViewConfiguration) //getter
     ]
     

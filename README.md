@@ -15,6 +15,11 @@
 ```
 $ brew install ryu0118/magicib/magicib
 ```
+or
+```
+$ brew tap ryu0118/magicib
+$ brew install --build-from-source magicib
+```
 
 ## Usage
 ```

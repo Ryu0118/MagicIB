@@ -1,6 +1,6 @@
 //
 //  IBPropertyMapping.swift
-//  
+//
 //
 //  Created by Ryu on 2022/07/30.
 //
@@ -97,12 +97,9 @@ class IBPropertyMapper {
     
     private func imageValidation() {
         guard let imageName = value as? String,
-              let url = Bundle.module.url(forResource: "SFSymbols", withExtension: "txt"),
-              let data = try? Data(contentsOf: url),
-              let string = String(data: data, encoding: .utf8),
               type == .image
         else { return }
-        let sfsymbols = string.components(separatedBy: "\n")
+        let sfsymbols = SFSymbols.sfsymbols
         if sfsymbols.contains(imageName) {
             value = IBImage(systemName: imageName)
         }
@@ -111,5 +108,3 @@ class IBPropertyMapper {
         }
     }
 }
-
-

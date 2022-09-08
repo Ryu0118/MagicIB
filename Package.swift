@@ -25,10 +25,7 @@ let package = Package(
             name: "MagicIBCLI",
             dependencies: ["MagicIBCore", .product(name: "ArgumentParser", package: "swift-argument-parser")]
         ),
-        .target(name: "MagicIBCore",
-                resources: [
-                    .process("Resources")
-                ]),
+        .target(name: "MagicIBCore"),
         .testTarget(
             name: "MagicIBTests",
             dependencies: ["MagicIBCore"]),
