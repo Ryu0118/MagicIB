@@ -23,8 +23,8 @@ extension IBImage: SwiftCodeGeneratable {
             else if let name = self.name as? String {
                 Line(variableName: "image", lineType: .declare(isMutating: false, operand: "UIImage(named: \"\(name)\")"))
             }
-            if let renderingMode = self.renderingMode as? String {
-                Line(variableName: "image", lineType: .function("image?.withRenderingMode(.\(renderingMode))"))
+            if let _ = self.renderingMode as? String {
+                Line(variableName: "image", lineType: .function("image?.withRenderingMode(.alwaysTemplate))"))
             }
         }
     }
