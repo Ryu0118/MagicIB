@@ -7,7 +7,7 @@ struct MagicIB: ParsableCommand {
     @Argument(help: "The root directory of the project containing the IB files you want to convert to Swift")
     var projectPath: String?
     
-    @Argument(help: "Path of the Interface builder you want to convert to Swift")
+    @Argument(help: "Path of the Interface builder file you want to convert to Swift")
     var ibPath: String?
     
     @Option(name: .shortAndLong, help: "Output directory for files converted to Swift")
