@@ -13,12 +13,13 @@
 
 ## Usage
 ```
-USAGE: magicib [<project-url>] [<ib-url>] [--output-dir <output-dir>]
+USAGE: magicib [<project-path>] [<ib-path>] [--output-dir <output-dir>]
 
 ARGUMENTS:
-  <project-url>           The root directory of the project containing the IB files you want to
+  <project-path>          The root directory of the project containing the IB
+                          files you want to convert to Swift
+  <ib-path>               Path of the Interface builder file you want to
                           convert to Swift
-  <ib-url>                Path of the Interface builder you want to convert to Swift
 
 OPTIONS:
   -o, --output-dir <output-dir>
