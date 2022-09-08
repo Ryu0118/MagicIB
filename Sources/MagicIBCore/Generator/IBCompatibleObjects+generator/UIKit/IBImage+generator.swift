@@ -24,7 +24,7 @@ extension IBImage: SwiftCodeGeneratable {
                 Line(variableName: "image", lineType: .declare(isMutating: false, operand: "UIImage(named: \"\(name)\")"))
             }
             if let _ = self.renderingMode as? String {
-                Line(variableName: "image", lineType: .function("image?.withRenderingMode(.alwaysTemplate))"))
+                Line(variableName: "image", lineType: .function("image?.withRenderingMode(.alwaysTemplate)"))
             }
         }
     }

@@ -62,6 +62,8 @@ class IBView: NSObject, IBCompatibleObject, UniqueName, SwiftCodeGeneratable {
         .init(ib: "tintColor", propertyName: "tintColor", type: .color),
         .init(ib: "opaque", propertyName: "isOpaque", type: .bool),
         .init(ib: "tag", propertyName: "tag", type: .number),
+        .init(ib: "highlighted", propertyName: "isHighlighted", type: .bool),
+        .init(ib: "selected", propertyName: "isSelected", type: .bool),
         .init(propertyName: "semanticContentAttribute", type: .enum),
     ]
         

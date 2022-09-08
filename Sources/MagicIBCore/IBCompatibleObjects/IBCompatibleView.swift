@@ -21,6 +21,7 @@ enum IBCompatibleView: String, Hashable {
     case tableViewCell
     case collectionViewCell
     case textView
+    case textField
     case scrollView
     case pickerView
     case visualEffectView
@@ -98,6 +99,8 @@ extension IBCompatibleView: CaseIterable, CustomStringConvertible {
             return "UICollectionViewCell"
         case .textView:
             return "UITextView"
+        case .textField:
+            return "UITextField"
         case .scrollView:
             return "UIScrollView"
         case .pickerView:

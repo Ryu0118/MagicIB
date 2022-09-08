@@ -47,6 +47,8 @@ extension IBView {
             return IBCollectionViewCell(attributes: attributes, ibCompatibleView: ibCompatibleView)
         case .textView:
             return IBTextView(attributes: attributes, ibCompatibleView: ibCompatibleView)
+        case .textField:
+            return IBTextField(attributes: attributes, ibCompatibleView: ibCompatibleView)
         case .pickerView:
             return IBPickerView(attributes: attributes, ibCompatibleView: ibCompatibleView)
         case .visualEffectView:
