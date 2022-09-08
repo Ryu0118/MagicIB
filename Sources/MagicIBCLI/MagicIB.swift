@@ -54,20 +54,21 @@ struct MagicIB: ParsableCommand {
         let semaphore = DispatchSemaphore(value: 0)
         print("Generating swift code from \(ibFile.lastPathComponent)")
         try parser.parse(ibFile) { code in
-            if let code = code {
-                let writePath = getWritePath(ibFile: ibFile)
-                do {
-                    try code.write(to: writePath, atomically: true, encoding: .utf8)
-                    print("Successfully generated \(writePath.lastPathComponent)")
-                }
-                catch {
-                    print("Failed to generate \(writePath.lastPathComponent)")
-                }
-            }
-            else {
+            defer { semaphore.signal() }
+            
+            guard let code = code else {
                 print("Failed to generate Swift code, please add a UI component and run again")
+                return
             }
-            semaphore.signal()
+            
+            let writePath = getWritePath(ibFile: ibFile)
+            do {
+                try code.write(to: writePath, atomically: true, encoding: .utf8)
+                print("Successfully generated \(writePath.lastPathComponent)")
+            }
+            catch {
+                print("Failed to generate \(writePath.lastPathComponent)")
+            }
         }
         semaphore.wait()
     }
