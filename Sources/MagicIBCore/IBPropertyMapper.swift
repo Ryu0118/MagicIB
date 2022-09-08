@@ -19,15 +19,6 @@ class IBPropertyMapper {
         }
     }
     
-    var isRequireInitializer: Bool {
-        switch type {
-        case .font, .color, .cgRect, .image, .buttonConfiguration, .paragraphStyle, .optionSet:
-            return true
-        default:
-            return false
-        }
-    }
-    
     private var enumMappers = [IBEnumMapper]() {
         didSet {
             valueValidation()
