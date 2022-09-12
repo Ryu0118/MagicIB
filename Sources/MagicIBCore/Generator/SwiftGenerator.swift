@@ -75,23 +75,24 @@ private extension SwiftGenerator {
             for ibViewController in ibViewControllers {
                 if let ibView = ibViewController.ibView {
                     let inheritance = ibViewController.superClass.description
-                    let allViews = getAllViews(parentView: ibView)
+                    let subviews = getAllViews(parentView: ibView)
+                    let allViews = [ibView] + subviews
                     let className = ibViewController.customClassName ?? className
-                    let gestures = generateAddGestureRecognizer(views: [ibView] + allViews)
+                    let gestures = generateAddGestureRecognizer(views: allViews)
                     
                     Line.newLine
                     Line(variableName: .class, lineType: .declareClass(name: className, inheritances: [inheritance]))
                     Line.newLine
-                    generateSubviews(views: allViews)
+                    generateSubviews(views: subviews)
                     generateViewDidLoad(setupGesture: !gestures.isEmpty)
                     Line.newLine
-                    generateSetupViews(views: [ibView] + allViews)
+                    generateSetupViews(views: allViews)
                     Line.newLine
-                    generateConstraints(views: [ibView] + allViews)
+                    generateConstraints(views: allViews)
                     Line.newLine
                     gestures
                     Line.newLine
-                    generateGestureObjcFunc(views: [ibView] + allViews)
+                    generateGestureObjcFunc(views: allViews)
                     Line.newLine
                     Line.end
                 }
@@ -125,22 +126,23 @@ private extension SwiftGenerator {
             generateImport(parentView: ibView)
             
             let inheritance = ibView.classType.description
-            let allViews = self.getAllViews(parentView: ibView)
-            let gestures = generateAddGestureRecognizer(views: [ibView] + allViews)
+            let subviews = self.getAllViews(parentView: ibView)
+            let allViews = [ibView] + subviews
+            let gestures = generateAddGestureRecognizer(views: allViews)
             
             Line.newLine
             Line(variableName: .class, lineType: .declareClass(name: className, inheritances: [inheritance]))
             Line.newLine
-            generateSubviews(views: allViews)
+            generateSubviews(views: subviews)
             generateInitializer(setupGesture: !gestures.isEmpty)
             Line.newLine
-            generateSetupViews(views: [ibView] + allViews)
+            generateSetupViews(views: allViews)
             Line.newLine
-            generateConstraints(views: [ibView] + allViews)
+            generateConstraints(views: allViews)
             Line.newLine
             gestures
             Line.newLine
-            generateGestureObjcFunc(views: [ibView] + allViews)
+            generateGestureObjcFunc(views: allViews)
             Line.end
         }
         .calculateIndent()
