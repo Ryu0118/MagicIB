@@ -157,12 +157,12 @@ private extension SwiftGenerator {
                     Line(variableName: "self", lineType: .function("setupGestureRecognizers()"))
                 }
             }
+            
             Line.newLine
-            """
-            required init?(coder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
+            
+            generateFunction(name: "", isFailable: true, isInit: true, arguments: [.init(argumentName: "coder", argumentType: "NSCoder")], accessLevel: "required") {
+                Line(variableName: "", lineType: .function("fatalError(\"init(coder:) has not been implemented\")"))
             }
-            """.buildLines(relatedVariableName: .initializer)
         }
     }
     
@@ -176,6 +176,7 @@ private extension SwiftGenerator {
     
     func generateFunction(
         name: String,
+        isFailable: Bool = false,
         isOverride: Bool = false,
         isInit: Bool = false,
         arguments: [Line.LineType.Argument] = [],
@@ -185,7 +186,7 @@ private extension SwiftGenerator {
     {
         buildLines {
             if isInit {
-                Line(initializer: .init(arguments: arguments, accessLevel: accessLevel, isOverride: isOverride))
+                Line(initializer: .init(arguments: arguments, accessLevel: accessLevel, isFailable: isFailable, isOverride: isOverride))
                 builder()
                 Line.end
             }

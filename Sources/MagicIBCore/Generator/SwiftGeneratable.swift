@@ -19,6 +19,7 @@ extension SwiftGeneratable {
     
     func generateFunction(
         name: String,
+        isFailable: Bool = false,
         isOverride: Bool = false,
         isInit: Bool = false,
         arguments: [Line.LineType.Argument] = [],
@@ -28,7 +29,7 @@ extension SwiftGeneratable {
     {
         buildLines {
             if isInit {
-                Line(initializer: .init(arguments: arguments, accessLevel: accessLevel, isOverride: isOverride))
+                Line(initializer: .init(arguments: arguments, accessLevel: accessLevel, isFailable: isFailable, isOverride: isOverride))
                 builder()
                 Line.end
             }

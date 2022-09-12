@@ -50,18 +50,23 @@ class Line: NSObject {
             let `override` = function.isOverride ? "override " : ""
             var accessLevel = function.accessLevel ?? ""
             let arguments = function.arguments.map { $0.string }.joined(separator: ", ")
+            
             if !accessLevel.isEmpty {
                 accessLevel += " "
             }
+            
             line = "\(`override`)\(accessLevel)func \(function.name)(\(arguments)) {"
         case .declareInitializer(let initializer):
             let `override` = initializer.isOverride ? "override " : ""
             var accessLevel = initializer.accessLevel ?? ""
             let arguments = initializer.arguments.map { $0.string }.joined(separator: ", ")
+            let failable = initializer.isFailable ? "?" : ""
+            
             if !accessLevel.isEmpty {
                 accessLevel += " "
             }
-            line = "\(accessLevel)\(`override`)init(\(arguments)) {"
+            
+            line = "\(accessLevel)\(`override`)init\(failable)(\(arguments)) {"
         }
         
         for (of, with) in replacingOccurrences {
@@ -129,6 +134,7 @@ extension Line {
         struct Initializer {
             let arguments: [Argument]
             let accessLevel: String?
+            let isFailable: Bool
             let isOverride: Bool
         }
         
