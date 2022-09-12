@@ -23,7 +23,7 @@ extension IBPropertyMapper {
             return ".\(value)"
         case .string:
             guard let value = value as? String else { return nil }
-            return "\"\(value)\""
+            return "\"\(value.escapingSequence())\""
         default:
             guard let nonCustomizable = value as? NonCustomizable else { return nil }
             return nonCustomizable.getRightOperand()
