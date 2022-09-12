@@ -136,7 +136,7 @@ extension IBCompatibleViewType: CaseIterable, CustomStringConvertible {
         case .searchBar:
             return "UISearchBar"
         case .containerView:
-            return "UIViewController"
+            return "UIView"
         case .collectionViewCellContentView:
             return "UIView"
         case .collectionReusableView:
