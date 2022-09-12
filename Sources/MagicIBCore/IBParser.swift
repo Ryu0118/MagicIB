@@ -86,22 +86,13 @@ extension IBParser: XMLParserDelegate {
         if let lastIndex = waitingIBViewList.lastIndex(where: { $0.classType.rawValue == elementName }) {
             waitingIBViewList.remove(at: lastIndex)
         }
+        
         if let lastIndex = waitingElementList.lastIndex(of: elementName) {
             waitingElementList.remove(at: lastIndex)
             waitingIBViewList.last?.waitingElementList = waitingElementList
         }
         
-        switch elementName {
-        case "subviews":
-            subviewFlags.removeLast()
-        case "prototypes":
-            prototypesFlag = nil
-        case "cells":
-            cellFlag = nil
-        default:
-            break
-        }
-        
+        resetFlagsIfNeeded(elementName: elementName)
     }
     
     public func parserDidEndDocument(_ parser: XMLParser) {
@@ -195,6 +186,19 @@ private extension IBParser {
                     gestureRecognizer.gestureType = gestureType
                 }
             }
+        }
+    }
+    
+    func resetFlagsIfNeeded(elementName: String) {
+        switch elementName {
+        case "subviews":
+            subviewFlags.removeLast()
+        case "prototypes":
+            prototypesFlag = nil
+        case "cells":
+            cellFlag = nil
+        default:
+            break
         }
     }
 }
