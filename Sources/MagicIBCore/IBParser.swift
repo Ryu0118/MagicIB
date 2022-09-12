@@ -43,11 +43,12 @@ public class IBParser: NSObject {
 // MARK: XMLParserDelegate
 extension IBParser: XMLParserDelegate {
     
-    public func parser(_ parser: XMLParser,
-                       didStartElement elementName: String,
-                       namespaceURI: String?,
-                       qualifiedName qName: String?,
-                       attributes attributeDict: [String : String] = [:]
+    public func parser(
+        _ parser: XMLParser,
+        didStartElement elementName: String,
+        namespaceURI: String?,
+        qualifiedName qName: String?,
+        attributes attributeDict: [String : String] = [:]
     ) {
         waitingElementList.append(elementName)
         lastAttributes = attributeDict
@@ -68,19 +69,18 @@ extension IBParser: XMLParserDelegate {
     }
     
     public func parser(_ parser: XMLParser, foundCharacters string: String) {
-        let trimmed = string.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty else { return }
+        guard let anyView = waitingIBViewList.last as? LongCharactersContainable,
+              !string.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        else { return }
         
-        if let anyView = waitingIBViewList.last as? LongCharactersContainable {
-            anyView.handleLongCharacters(key: lastAttributes["key"], characters: string)
-        }
-
+        anyView.handleLongCharacters(key: lastAttributes["key"], characters: string)
     }
     
-    public func parser(_ parser: XMLParser,
-                       didEndElement elementName: String,
-                       namespaceURI: String?,
-                       qualifiedName qName: String?
+    public func parser(
+        _ parser: XMLParser,
+        didEndElement elementName: String,
+        namespaceURI: String?,
+        qualifiedName qName: String?
     ) {
         
         if let lastIndex = waitingIBViewList.lastIndex(where: { $0.classType.rawValue == elementName }) {
