@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IBSize: SwiftCodeGeneratable, NonCustomizable, ZeroDiscriminable {
+extension IBSize: SwiftGeneratable, NonCustomizable, ZeroDiscriminable {
     
     static let zero = IBSize(attributes: ["width": "0.0", "height": "0.0"])
     

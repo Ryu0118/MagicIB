@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IBBackgroundConfiguration: SwiftCodeGeneratable {
+extension IBBackgroundConfiguration: SwiftGeneratable {
     func generateSwiftCode() -> [Line] {
         buildLines {
             Line(variableName: "backgroundConfiguration", lineType: .declare(isMutating: true, operand: "UIBackgroundConfiguration.clear()"))

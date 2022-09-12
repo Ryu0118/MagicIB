@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IBOptionSet: SwiftCodeGeneratable, NonCustomizable {
+extension IBOptionSet: SwiftGeneratable, NonCustomizable {
     func generateSwiftCode() -> [Line] {
         buildLines {
             if optionSet.count == 1, let first = optionSet.first {

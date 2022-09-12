@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IBOffset: SwiftCodeGeneratable, NonCustomizable, ZeroDiscriminable {
+extension IBOffset: SwiftGeneratable, NonCustomizable, ZeroDiscriminable {
     static let zero = IBOffset(attributes: ["horizontal": "0.0", "width": "0.0"])
     
     var isZero: Bool {

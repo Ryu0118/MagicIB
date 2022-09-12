@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IBAttributedString: SwiftCodeGeneratable {
+extension IBAttributedString: SwiftGeneratable {
     
     enum Mode {
         case modern
@@ -40,7 +40,7 @@ extension IBAttributedString: SwiftCodeGeneratable {
     
 }
 
-extension IBAttributedString.Fragment: SwiftCodeGeneratable {
+extension IBAttributedString.Fragment: SwiftGeneratable {
     enum Mode {
         case modern
         case legacy(fragmentCount: Int)

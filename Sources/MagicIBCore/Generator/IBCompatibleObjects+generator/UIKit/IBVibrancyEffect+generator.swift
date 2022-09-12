@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IBVibrancyEffect: SwiftCodeGeneratable, NonCustomizable {
+extension IBVibrancyEffect: SwiftGeneratable, NonCustomizable {
     
     func generateSwiftCode() -> [Line] {
         guard let blurEffect = self.blurEffect as? IBBlurEffect,

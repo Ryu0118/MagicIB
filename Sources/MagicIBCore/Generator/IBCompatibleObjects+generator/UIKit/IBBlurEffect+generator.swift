@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IBBlurEffect: SwiftCodeGeneratable, NonCustomizable {
+extension IBBlurEffect: SwiftGeneratable, NonCustomizable {
     func generateSwiftCode() -> [Line] {
         buildLines {
             if let style = self.style as? String {

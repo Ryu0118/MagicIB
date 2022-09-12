@@ -7,12 +7,12 @@
 
 import Foundation
 
-protocol SwiftCodeGeneratable {
+protocol SwiftGeneratable {
     func generateSwiftCode() -> [Line]
     func buildLines(@ArrayBuilder<Line> _ builder: () -> [Line]) -> [Line]
 }
 
-extension SwiftCodeGeneratable {
+extension SwiftGeneratable {
     func buildLines(@ArrayBuilder<Line> _ builder: () -> [Line]) -> [Line] {
         builder()
     }

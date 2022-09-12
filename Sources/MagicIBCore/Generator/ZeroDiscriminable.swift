@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol ZeroDiscriminable: IBCompatibleObject, SwiftCodeGeneratable {
+protocol ZeroDiscriminable: IBCompatibleObject, SwiftGeneratable {
     var isZero: Bool { get }
     static var zero: Self? { get }
 }

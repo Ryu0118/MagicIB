@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol NonCustomizable: SwiftCodeGeneratable {
+protocol NonCustomizable: SwiftGeneratable {
     func generateSwiftCode(variableName: String, propertyName: String) -> Line?
 }
 

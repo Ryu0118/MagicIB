@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IBLayoutConstraint: SwiftCodeGeneratable {
+extension IBLayoutConstraint: SwiftGeneratable {
     func generateSwiftCode() -> [Line] {
         let variableName = getVariableName()
         let arguments = buildArgument()
@@ -88,7 +88,7 @@ extension IBLayoutConstraint: SwiftCodeGeneratable {
     }
 }
 
-extension Array: SwiftCodeGeneratable where Element == IBLayoutConstraint {
+extension Array: SwiftGeneratable where Element == IBLayoutConstraint {
     
     func generateSwiftCode() -> [Line] {
         var lines = [Line]()

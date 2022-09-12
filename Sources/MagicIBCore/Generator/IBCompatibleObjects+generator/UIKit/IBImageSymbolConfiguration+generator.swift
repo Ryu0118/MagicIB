@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IBImageSymbolConfiguration: SwiftCodeGeneratable, NonCustomizable {
+extension IBImageSymbolConfiguration: SwiftGeneratable, NonCustomizable {
     func generateSwiftCode() -> [Line] {
         buildLines {
             if let configurationType = self.configurationType as? String {

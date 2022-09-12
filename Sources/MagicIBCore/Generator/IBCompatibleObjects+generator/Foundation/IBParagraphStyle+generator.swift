@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IBParagraphStyle: SwiftCodeGeneratable {
+extension IBParagraphStyle: SwiftGeneratable {
     func generateSwiftCode() -> [Line] {
         let variableName = "paragraphStyle"
         addEnumMapper()

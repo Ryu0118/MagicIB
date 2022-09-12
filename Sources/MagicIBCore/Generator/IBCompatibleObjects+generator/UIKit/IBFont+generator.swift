@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IBFont: SwiftCodeGeneratable, NonCustomizable {
+extension IBFont: SwiftGeneratable, NonCustomizable {
     
     func generateSwiftCode() -> [Line] {
         buildLines {

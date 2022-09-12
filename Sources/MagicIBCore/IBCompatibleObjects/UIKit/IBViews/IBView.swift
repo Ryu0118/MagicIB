@@ -8,7 +8,7 @@
 import Foundation
 
 @dynamicMemberLookup
-class IBView: NSObject, IBCompatibleObject, UniqueName, SwiftCodeGeneratable {
+class IBView: NSObject, IBCompatibleObject, UniqueName, SwiftGeneratable {
     
     let id: String
     let customClass: String?

@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IBCompatibleObject where Self: SwiftCodeGeneratable {
+extension IBCompatibleObject where Self: SwiftGeneratable {
     func generateBasicTypePropertyLines(variableName: String, except: [String] = []) -> [Line] {
         activatedProperties
             .basicType()
@@ -36,7 +36,7 @@ extension IBCompatibleObject where Self: SwiftCodeGeneratable {
             .customType()
             .except(except)
             .compactMap { property -> [Line]? in
-                guard let generator = property.value as? SwiftCodeGeneratable
+                guard let generator = property.value as? SwiftGeneratable
                 else { return nil }
                 if let zeroDiscriminable = property.value as? ZeroDiscriminable,
                    zeroDiscriminable.isZero {

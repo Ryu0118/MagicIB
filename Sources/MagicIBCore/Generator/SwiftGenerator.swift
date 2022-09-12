@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class SwiftCodeGenerator {
+final class SwiftGenerator {
     
     enum IBType {
         case storyboard(ibViewControllers: [IBViewController])
@@ -63,7 +63,7 @@ final class SwiftCodeGenerator {
 }
 
 //MARK: ViewController extension
-private extension SwiftCodeGenerator {
+private extension SwiftGenerator {
     
     func generateViewController(ibViewControllers: [IBViewController]) -> String {
         
@@ -116,7 +116,7 @@ private extension SwiftCodeGenerator {
 }
 
 //MARK: View Extension
-private extension SwiftCodeGenerator {
+private extension SwiftGenerator {
     
     func generateView(ibView: IBView) -> String {
         buildLines {
@@ -169,7 +169,7 @@ private extension SwiftCodeGenerator {
 }
 
 //MARK: Private functions
-private extension SwiftCodeGenerator {
+private extension SwiftGenerator {
     func buildLines(@ArrayBuilder<Line> _ builder: () -> [Line]) -> [Line] {
         builder()
     }
@@ -316,7 +316,7 @@ private extension SwiftCodeGenerator {
 }
 
 //MARK: ConstraintsGenerator
-private struct ConstraintsGenerator: SwiftCodeGeneratable {
+private struct ConstraintsGenerator: SwiftGeneratable {
     
     let constraints: [[IBLayoutConstraint]]
     let views: [IBView]

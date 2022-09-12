@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IBCollectionViewFlowLayout: SwiftCodeGeneratable {
+extension IBCollectionViewFlowLayout: SwiftGeneratable {
     
     func generateSwiftCode() -> [Line] {
         buildLines {

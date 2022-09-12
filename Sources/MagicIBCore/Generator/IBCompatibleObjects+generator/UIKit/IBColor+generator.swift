@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IBColor: SwiftCodeGeneratable, NonCustomizable {
+extension IBColor: SwiftGeneratable, NonCustomizable {
     
     func generateSwiftCode() -> [Line] {
         buildLines {

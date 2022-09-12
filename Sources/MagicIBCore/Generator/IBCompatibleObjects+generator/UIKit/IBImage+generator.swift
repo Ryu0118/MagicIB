@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IBImage: SwiftCodeGeneratable {
+extension IBImage: SwiftGeneratable {
     
     func generateSwiftCode() -> [Line] {
         buildLines {

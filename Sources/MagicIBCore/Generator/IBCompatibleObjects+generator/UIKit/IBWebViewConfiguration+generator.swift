@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IBWebViewConfiguration: SwiftCodeGeneratable {
+extension IBWebViewConfiguration: SwiftGeneratable {
     
     func generateSwiftCode() -> [Line] {
         buildLines {

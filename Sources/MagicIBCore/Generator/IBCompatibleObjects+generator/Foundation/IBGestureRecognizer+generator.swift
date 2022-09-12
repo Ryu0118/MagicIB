@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension IBGestureRecognizer: SwiftCodeGeneratable {
+extension IBGestureRecognizer: SwiftGeneratable {
     
     func generateSwiftCode() -> [Line] {
         guard let gestureType = gestureType else {
