@@ -4,6 +4,8 @@
 
   #### MagicIB is a CLI tool that quickly and automatically generates Swift code from Interface Builder files.
   
+  ![IMG_0848](https://user-images.githubusercontent.com/87907656/189729513-96ef175e-c481-4e54-a3a0-e5d6608c1df3.PNG)
+  
   ![Language:Swift](https://img.shields.io/static/v1?label=Language&message=Swift&color=orange&style=flat-square)
   ![License:MIT](https://img.shields.io/static/v1?label=License&message=MIT&color=blue&style=flat-square)
   [![Latest Release](https://img.shields.io/github/v/release/Ryu0118/MagicIB?style=flat-square)](https://github.com/Ryu0118/MagicIB/releases/latest)
