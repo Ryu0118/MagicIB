@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  IBLabel+generator.swift
 //  
 //
 //  Created by Ryu on 2022/08/23.

@@ -5,7 +5,6 @@
 //  Created by Ryu on 2022/07/28.
 //
 
-import CoreGraphics
 import Foundation
 
 public class IBParser: NSObject {
